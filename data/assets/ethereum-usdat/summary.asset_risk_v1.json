@@ -24,8 +24,8 @@
       "selected_option": "partial_attestations_or_issuer_dashboards",
       "answer": "Docs support a treasury-backed launch model, but reserve/redemption freshness was not independently verified in the run.",
       "evidence": [
-        "RESULT.md §USDat review",
-        "USDat analyst report §Backing and NAV quality"
+        "research.md#usdat-review",
+        "research.md#backing-and-nav-quality"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -41,8 +41,8 @@
       "selected_option": "holder_specific_unknown_or_blocking",
       "answer": "Saturn onboarding, freeze/pause surfaces, and Credit Account/liquidator/recipient eligibility must be proven before automation.",
       "evidence": [
-        "RESULT.md §USDat review",
-        "RESULT.md §Missing before decision-grade proposal"
+        "research.md#usdat-review",
+        "research.md#missing-before-decision-grade-proposal"
       ],
       "confidence": "medium/high",
       "missing_behavior": "block_automation",
@@ -58,7 +58,7 @@
       "selected_option": "observable_but_not_size_checked",
       "answer": "The observed Curve USDat/USDC venue had about $15.7M displayed liquidity and roughly balanced USDC/USDat reserves, but exact position size and route capacity were missing.",
       "evidence": [
-        "RESULT.md §USDat review"
+        "research.md#usdat-review"
       ],
       "confidence": "medium/high",
       "missing_behavior": "review_required",
@@ -74,8 +74,8 @@
       "selected_option": "strong_or_poorly_mapped_controls",
       "answer": "USDat exposes issuer-controlled freeze and pause surfaces; wallet, Credit Account, liquidator, and recipient state must be checked.",
       "evidence": [
-        "RESULT.md §USDat review",
-        "USDat analyst report §Controls, governance, and legal restrictions"
+        "research.md#usdat-review",
+        "research.md#controls-governance-and-legal-restrictions"
       ],
       "confidence": "medium",
       "missing_behavior": "block_automation",
@@ -91,7 +91,7 @@
       "selected_option": "oracle_tracks_executable_value",
       "answer": "The supplied Gearbox feed reads a Curve USDat/USDC market primitive plus bounded USDC/USD child quote rather than a hardcoded 1.00 peg.",
       "evidence": [
-        "RESULT.md §USDat review"
+        "research.md#usdat-review"
       ],
       "confidence": "high for run snapshot",
       "missing_behavior": "review_required",
@@ -107,8 +107,8 @@
       "selected_option": "weak_missing_or_unknown_security_review",
       "answer": "The public package does not establish deployed-scope audit coverage for the issuer/control/redemption surface.",
       "evidence": [
-        "RESULT.md §Missing before decision-grade proposal",
-        "USDat analyst report §Evidence quality"
+        "research.md#missing-before-decision-grade-proposal",
+        "research.md#evidence-quality"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -122,9 +122,9 @@
       "score": 6,
       "max_score": 10,
       "selected_option": "some_stress_or_incomplete_history",
-      "answer": "The old X/social layer frames USDat as Saturn’s stable/risk-off leg but still flags whitelist/freeze/issuer controls, holder eligibility, reserve evidence, and live route depth.",
+      "answer": "The old X/social layer frames USDat as Saturn\u2019s stable/risk-off leg but still flags whitelist/freeze/issuer controls, holder eligibility, reserve evidence, and live route depth.",
       "evidence": [
-        "RESULT.md §X / social research layer"
+        "research.md#x--social-research-layer"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -141,7 +141,7 @@
     "size-specific route or liquidation quote",
     "user risk policy: HF floor, max drawdown, automation policy"
   ],
-  "source_report": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/RESULT.md",
+  "source_report": "research.md",
   "generated_from": {
     "source_repo": "de-snake/front-knowledge-base",
     "source_ref": "docs/rich-token-reports",
@@ -226,8 +226,8 @@
       "basis": "USDat direct hold is modeled as a conditional fresh Saturn Gravity Points farming route, not the old cheap points-prior. Saturn docs confirm Season 1 dates and 7x hold-USDat accrual; the 5% token allocation remains a conditional third-party airdrop thesis, so confidence is low until official tokenomics/claim docs or a live points denominator are fetched. DefiLlama Saturn SUSDAT TVL is used only as a live raw-TVL proxy and converted to 1x-equivalent weighted-denominator scenarios.",
       "confidence": "medium for date/multiplier inputs; low for 5% allocation and denominator scenario until official allocation and live total points denominator are fetched",
       "evidence": [
-        "Saturn docs §Season 1: campaign started Apr 8 2026 and ends Aug 8 2026 or $500M TVL",
-        "Saturn docs §Point allocations / Allocations: Hold USDat earns 7x Gravity Points",
+        "Saturn docs \u00a7Season 1: campaign started Apr 8 2026 and ends Aug 8 2026 or $500M TVL",
+        "Saturn docs \u00a7Point allocations / Allocations: Hold USDat earns 7x Gravity Points",
         "Airdrops.io Saturn Credit: reports potential up-to-5% allocation, proportional to Gravity Points, conditional on governance token launch",
         "DefiLlama yields API fetched 2026-06-07: Saturn SUSDAT TVL $94,913,240"
       ],
@@ -260,7 +260,7 @@
         },
         "raw_tvl_proxy_usd": 94913240,
         "raw_tvl_proxy_source": "DefiLlama yields API Saturn SUSDAT TVL fetched 2026-06-07",
-        "weighted_denominator_scenario_method": "raw_tvl_proxy_usd × denominator_multiplier; denominator is 1x-equivalent weighted Gravity Points TVL, not raw TVL",
+        "weighted_denominator_scenario_method": "raw_tvl_proxy_usd \u00d7 denominator_multiplier; denominator is 1x-equivalent weighted Gravity Points TVL, not raw TVL",
         "weighted_denominator_multipliers": {
           "low": 30,
           "base": 10,
@@ -311,8 +311,8 @@
     "basis": "USDat direct hold is modeled as a conditional fresh Saturn Gravity Points farming route, not the old cheap points-prior. Saturn docs confirm Season 1 dates and 7x hold-USDat accrual; the 5% token allocation remains a conditional third-party airdrop thesis, so confidence is low until official tokenomics/claim docs or a live points denominator are fetched. DefiLlama Saturn SUSDAT TVL is used only as a live raw-TVL proxy and converted to 1x-equivalent weighted-denominator scenarios.",
     "confidence": "medium for date/multiplier inputs; low for 5% allocation and denominator scenario until official allocation and live total points denominator are fetched",
     "evidence": [
-      "Saturn docs §Season 1: campaign started Apr 8 2026 and ends Aug 8 2026 or $500M TVL",
-      "Saturn docs §Point allocations / Allocations: Hold USDat earns 7x Gravity Points",
+      "Saturn docs \u00a7Season 1: campaign started Apr 8 2026 and ends Aug 8 2026 or $500M TVL",
+      "Saturn docs \u00a7Point allocations / Allocations: Hold USDat earns 7x Gravity Points",
       "Airdrops.io Saturn Credit: reports potential up-to-5% allocation, proportional to Gravity Points, conditional on governance token launch",
       "DefiLlama yields API fetched 2026-06-07: Saturn SUSDAT TVL $94,913,240"
     ],
@@ -345,7 +345,7 @@
       },
       "raw_tvl_proxy_usd": 94913240,
       "raw_tvl_proxy_source": "DefiLlama yields API Saturn SUSDAT TVL fetched 2026-06-07",
-      "weighted_denominator_scenario_method": "raw_tvl_proxy_usd × denominator_multiplier; denominator is 1x-equivalent weighted Gravity Points TVL, not raw TVL",
+      "weighted_denominator_scenario_method": "raw_tvl_proxy_usd \u00d7 denominator_multiplier; denominator is 1x-equivalent weighted Gravity Points TVL, not raw TVL",
       "weighted_denominator_multipliers": {
         "low": 30,
         "base": 10,

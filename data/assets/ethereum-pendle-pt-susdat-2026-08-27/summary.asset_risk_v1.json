@@ -2,7 +2,7 @@
   "asset_id": "pendle:ethereum:market:0x91bc86899c8391b6caaf26535b9cd82efe49a189",
   "asset_type": "pendle_pt",
   "symbol": "PT-sUSDat-2026-08-27",
-  "display_name": "Pendle PT sUSDat — 27 Aug 2026",
+  "display_name": "Pendle PT sUSDat \u2014 27 Aug 2026",
   "chain": "ethereum",
   "chain_id": 1,
   "rubric": {
@@ -24,8 +24,8 @@
       "selected_option": "partial_attestations_or_issuer_dashboards",
       "answer": "sUSDat is an ERC-4626 yield-bearing vault over USDat with STRC/digital-credit/NAV/queue exposure; the run treats this as review-required rather than ordinary liquid stablecoin collateral.",
       "evidence": [
-        "RESULT.md §sUSDat review",
-        "sUSDat analyst report §Backing and NAV quality"
+        "research.md#susdat-review",
+        "research.md#backing-and-nav-quality"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -41,8 +41,8 @@
       "selected_option": "holder_specific_unknown_or_blocking",
       "answer": "Realization can depend on queue processing, issuer controls, blacklist/pause state, and inherited USDat eligibility.",
       "evidence": [
-        "RESULT.md §sUSDat review",
-        "RESULT.md §Missing before decision-grade proposal"
+        "research.md#susdat-review",
+        "research.md#missing-before-decision-grade-proposal"
       ],
       "confidence": "medium/high",
       "missing_behavior": "block_automation",
@@ -58,7 +58,7 @@
       "selected_option": "thin_discounted_or_unknown",
       "answer": "The observed sUSDat/USDC Curve venue was much smaller than USDat, about $1.8M displayed liquidity with roughly 296,560 USDC against 1.62M sUSDat.",
       "evidence": [
-        "RESULT.md §sUSDat review"
+        "research.md#susdat-review"
       ],
       "confidence": "medium/high",
       "missing_behavior": "review_required",
@@ -74,8 +74,8 @@
       "selected_option": "strong_or_poorly_mapped_controls",
       "answer": "sUSDat exposes blacklist and pause surfaces and inherits USDat permissioning concerns.",
       "evidence": [
-        "RESULT.md §sUSDat review",
-        "sUSDat analyst report §Controls, governance, and legal restrictions"
+        "research.md#susdat-review",
+        "research.md#controls-governance-and-legal-restrictions"
       ],
       "confidence": "medium",
       "missing_behavior": "block_automation",
@@ -91,8 +91,8 @@
       "selected_option": "accounting_model_known_but_not_use_verified",
       "answer": "The Gearbox feed recursively values sUSDat through ERC-4626 exchange-rate accounting times the USDat feed, but accounting value may not equal immediate recovery under stress.",
       "evidence": [
-        "RESULT.md §sUSDat review",
-        "RESULT.md §Oracle and liquidation implication"
+        "research.md#susdat-review",
+        "research.md#oracle-and-liquidation-implication"
       ],
       "confidence": "medium/high",
       "missing_behavior": "review_required",
@@ -108,7 +108,7 @@
       "selected_option": "weak_missing_or_unknown_security_review",
       "answer": "The package does not establish deployed-scope audit coverage for the vault/issuer/control/redemption surface.",
       "evidence": [
-        "sUSDat analyst report §Evidence quality"
+        "research.md#evidence-quality"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -124,7 +124,7 @@
       "selected_option": "some_stress_or_incomplete_history",
       "answer": "The social layer frames sUSDat as yield-bearing STRC/NAV/queue-exposed Saturn collateral and emphasizes whether accounting/NAV value can be realized during stress.",
       "evidence": [
-        "RESULT.md §X / social research layer"
+        "research.md#x--social-research-layer"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -144,7 +144,7 @@
     "Pendle PT/SY/YT support and Gearbox PT oracle/feed design",
     "Fresh fixed-return expected-loss and exit-cost recalibration against live reserve, redemption, maturity, and market-discount evidence"
   ],
-  "source_report": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/pt-markets/pendle-pt-eth-mainnet-susdat-2026-08-27/technical-report.md",
+  "source_report": "research.md",
   "generated_from": {
     "source_repo": "de-snake/front-knowledge-base",
     "source_ref": "docs/rich-token-reports",

@@ -2,7 +2,7 @@
   "asset_id": "pendle:ethereum:market:0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952",
   "asset_type": "pendle_pt",
   "symbol": "PT-apyUSD-2026-08-27",
-  "display_name": "Pendle PT apyUSD — 27 Aug 2026",
+  "display_name": "Pendle PT apyUSD \u2014 27 Aug 2026",
   "chain": "ethereum",
   "chain_id": 1,
   "market_address": "0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952",
@@ -228,7 +228,7 @@
       },
       {
         "id": "pt_apyusd_fixed_discount",
-        "summary": "PT-apyUSD social rate sheets cited roughly 17.94%–18.00% implied APY; local Pendle snapshot showed 17.60% implied APY."
+        "summary": "PT-apyUSD social rate sheets cited roughly 17.94%\u201318.00% implied APY; local Pendle snapshot showed 17.60% implied APY."
       },
       {
         "id": "expected_loss_and_exit_cost_buffer",
@@ -268,8 +268,7 @@
     "Inherited apyUSD/apxUSD reserve, receipt, redemption, issuer-control, and live-liquidity unknowns",
     "Fresh fixed-return expected-loss and exit-cost recalibration against live reserve, redemption, maturity, and market-discount evidence"
   ],
-  "source_report": "data/assets/ethereum-pendle-pt-apyusd-2026-08-27/research.md",
-  "source_front_kb_report": "dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md",
+  "source_report": "research.md",
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
   "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay",

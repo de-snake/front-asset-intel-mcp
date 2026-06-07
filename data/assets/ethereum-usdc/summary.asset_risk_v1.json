@@ -183,7 +183,7 @@
     "Direct Circle redemption is holder/account/jurisdiction dependent; ordinary holders must use secondary-market exit unless eligible.",
     "Circle issuer controls such as freeze/blacklist/upgradeability are known and must be acceptable for the intended automation path."
   ],
-  "source_report": "data/assets/ethereum-usdc/research.md",
+  "source_report": "research.md",
   "generated_from": {
     "source_repo": "external_public_sources",
     "source_ref": "Circle public pages, Circle docs/terms, Etherscan, Federal Reserve FEDS Notes fetched 2026-06-07",

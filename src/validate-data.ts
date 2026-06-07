@@ -159,6 +159,31 @@ async function readJsonFile<T>(filePath: string): Promise<T> {
   return JSON.parse(raw) as T;
 }
 
+const forbiddenSummaryEvidenceFragments = [
+  "RESULT.md",
+  "dev/implementation/",
+  "front-kb RESULT",
+  "USDat analyst report §",
+  "sUSDat analyst report §",
+];
+
+function assertNoStaleEvidencePointer(slug: string, location: string, value: unknown): void {
+  if (typeof value === "string") {
+    const forbidden = forbiddenSummaryEvidenceFragments.find((fragment) => value.includes(fragment));
+    assert(!forbidden, `${slug}: stale/non-local evidence pointer at ${location}: ${value}`);
+    return;
+  }
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => assertNoStaleEvidencePointer(slug, `${location}[${index}]`, item));
+    return;
+  }
+  if (value && typeof value === "object") {
+    for (const [key, child] of Object.entries(value)) {
+      assertNoStaleEvidencePointer(slug, location ? `${location}.${key}` : key, child);
+    }
+  }
+}
+
 function evidencePointerHasContent(item: EvidencePointer): boolean {
   if (typeof item === "string") {
     return item.trim().length > 0;
@@ -383,10 +408,13 @@ assert(entries.length > 0, "No assets found");
 
 for (const entry of entries) {
   const manifest = entry.manifest;
+  assertNoStaleEvidencePointer(manifest.slug, "manifest", manifest);
   const summary = (await getAssetSummary({ asset_id: manifest.asset_id })) as Summary;
   const research = await getAssetResearch({ asset_id: manifest.asset_id });
 
   assert(validSummarySchemaVersions.has(summary.summary_schema_version), `${manifest.slug}: unexpected summary_schema_version`);
+  assertNoStaleEvidencePointer(manifest.slug, "summary", summary);
+  assert(summary.source_report === "research.md", `${manifest.slug}: source_report must point to local research.md evidence surface`);
   assert(summary.asset_id === manifest.asset_id, `${manifest.slug}: summary asset_id mismatch`);
   assert(summary.symbol === manifest.symbol, `${manifest.slug}: summary symbol mismatch`);
   assert(summary.rubric.version === manifest.rubric_version, `${manifest.slug}: rubric version mismatch`);

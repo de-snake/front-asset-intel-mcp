@@ -21,6 +21,5 @@
   "rubric_version": "asset_risk_v1",
   "summary_path": "summary.asset_risk_v1.json",
   "research_path": "research.md",
-  "source_front_kb_paths": [],
   "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
 }

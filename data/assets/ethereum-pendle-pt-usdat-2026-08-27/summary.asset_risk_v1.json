@@ -2,7 +2,7 @@
   "asset_id": "pendle:ethereum:market:0x9afe7a057a09cf5da748d952078c9c99938b4329",
   "asset_type": "pendle_pt",
   "symbol": "PT-USDat-2026-08-27",
-  "display_name": "Pendle PT USDat — 27 Aug 2026",
+  "display_name": "Pendle PT USDat \u2014 27 Aug 2026",
   "chain": "ethereum",
   "chain_id": 1,
   "rubric": {
@@ -24,8 +24,8 @@
       "selected_option": "partial_attestations_or_issuer_dashboards",
       "answer": "Docs support a treasury-backed launch model, but reserve/redemption freshness was not independently verified in the run.",
       "evidence": [
-        "RESULT.md §USDat review",
-        "USDat analyst report §Backing and NAV quality"
+        "research.md#usdat-review",
+        "research.md#backing-and-nav-quality"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -41,8 +41,8 @@
       "selected_option": "holder_specific_unknown_or_blocking",
       "answer": "Saturn onboarding, freeze/pause surfaces, and Credit Account/liquidator/recipient eligibility must be proven before automation.",
       "evidence": [
-        "RESULT.md §USDat review",
-        "RESULT.md §Missing before decision-grade proposal"
+        "research.md#usdat-review",
+        "research.md#missing-before-decision-grade-proposal"
       ],
       "confidence": "medium/high",
       "missing_behavior": "block_automation",
@@ -58,7 +58,7 @@
       "selected_option": "observable_but_not_size_checked",
       "answer": "The observed Curve USDat/USDC venue had about $15.7M displayed liquidity and roughly balanced USDC/USDat reserves, but exact position size and route capacity were missing.",
       "evidence": [
-        "RESULT.md §USDat review"
+        "research.md#usdat-review"
       ],
       "confidence": "medium/high",
       "missing_behavior": "review_required",
@@ -74,8 +74,8 @@
       "selected_option": "strong_or_poorly_mapped_controls",
       "answer": "USDat exposes issuer-controlled freeze and pause surfaces; wallet, Credit Account, liquidator, and recipient state must be checked.",
       "evidence": [
-        "RESULT.md §USDat review",
-        "USDat analyst report §Controls, governance, and legal restrictions"
+        "research.md#usdat-review",
+        "research.md#controls-governance-and-legal-restrictions"
       ],
       "confidence": "medium",
       "missing_behavior": "block_automation",
@@ -91,7 +91,7 @@
       "selected_option": "oracle_tracks_executable_value",
       "answer": "The supplied Gearbox feed reads a Curve USDat/USDC market primitive plus bounded USDC/USD child quote rather than a hardcoded 1.00 peg.",
       "evidence": [
-        "RESULT.md §USDat review"
+        "research.md#usdat-review"
       ],
       "confidence": "high for run snapshot",
       "missing_behavior": "review_required",
@@ -107,8 +107,8 @@
       "selected_option": "weak_missing_or_unknown_security_review",
       "answer": "The public package does not establish deployed-scope audit coverage for the issuer/control/redemption surface.",
       "evidence": [
-        "RESULT.md §Missing before decision-grade proposal",
-        "USDat analyst report §Evidence quality"
+        "research.md#missing-before-decision-grade-proposal",
+        "research.md#evidence-quality"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -122,9 +122,9 @@
       "score": 6,
       "max_score": 10,
       "selected_option": "some_stress_or_incomplete_history",
-      "answer": "The old X/social layer frames USDat as Saturn’s stable/risk-off leg but still flags whitelist/freeze/issuer controls, holder eligibility, reserve evidence, and live route depth.",
+      "answer": "The old X/social layer frames USDat as Saturn\u2019s stable/risk-off leg but still flags whitelist/freeze/issuer controls, holder eligibility, reserve evidence, and live route depth.",
       "evidence": [
-        "RESULT.md §X / social research layer"
+        "research.md#x--social-research-layer"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -144,7 +144,7 @@
     "Pendle PT/SY/YT support and Gearbox PT oracle/feed design",
     "Fresh fixed-return expected-loss and exit-cost recalibration against live reserve, redemption, maturity, and market-discount evidence"
   ],
-  "source_report": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/pt-markets/pendle-pt-eth-mainnet-usdat-2026-08-27/technical-report.md",
+  "source_report": "research.md",
   "generated_from": {
     "source_repo": "de-snake/front-knowledge-base",
     "source_ref": "docs/rich-token-reports",

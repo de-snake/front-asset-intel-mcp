@@ -202,7 +202,7 @@
       },
       {
         "id": "pt_apyusd_fixed_discount",
-        "summary": "PT-apyUSD social rate sheets cited roughly 17.94%–18.00% implied APY; local Pendle snapshot showed 17.60% implied APY."
+        "summary": "PT-apyUSD social rate sheets cited roughly 17.94%\u201318.00% implied APY; local Pendle snapshot showed 17.60% implied APY."
       }
     ],
     "risk_narratives": [
@@ -235,8 +235,7 @@
     "Gearbox-specific oracle/support state and valuation method",
     "Wallet-specific APYx Pips eligibility, dilution, vesting, and liquidity terms"
   ],
-  "source_report": "data/assets/ethereum-apyusd/research.md",
-  "source_front_kb_report": "dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md",
+  "source_report": "research.md",
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
   "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay",
@@ -295,9 +294,9 @@
       "basis": "apyUSD direct hold is modeled as a fresh APYx Pips Season 2 farming route, not the old cheap points-prior. Organic yield keeps the old 13% APY issuer/social assumption, while points use APYx confirmed Season 2 allocation/date/multiplier math. DefiLlama APXUSD apyUSD-vault TVL is used only as a live raw-TVL proxy and converted to conservative 1x-equivalent weighted-denominator scenarios because the live total Pips denominator/leaderboard was not publicly fetched in this run.",
       "confidence": "low/medium for allocation/date/multiplier inputs; low for denominator scenario until live total Pips denominator is fetched",
       "evidence": [
-        "Apyx docs §Season 2 Details: 6,000,000 APYX / 6% total supply for Season 2",
-        "Apyx docs §How Season 2 Works: Pips = USD Value × Multiplier and Season 2 runs May 23-Oct 11 2026",
-        "Apyx blog §How To Earn Pips in Season 2: Hold apyUSD earns 4x Pips",
+        "Apyx docs \u00a7Season 2 Details: 6,000,000 APYX / 6% total supply for Season 2",
+        "Apyx docs \u00a7How Season 2 Works: Pips = USD Value \u00d7 Multiplier and Season 2 runs May 23-Oct 11 2026",
+        "Apyx blog \u00a7How To Earn Pips in Season 2: Hold apyUSD earns 4x Pips",
         "DefiLlama yields API fetched 2026-06-07: APXUSD apyUSD vault TVL $189,834,907"
       ],
       "expected_loss_prior_scenarios": {
@@ -329,7 +328,7 @@
         },
         "raw_tvl_proxy_usd": 189834907,
         "raw_tvl_proxy_source": "DefiLlama yields API APXUSD apyUSD vault TVL fetched 2026-06-07",
-        "weighted_denominator_scenario_method": "raw_tvl_proxy_usd × denominator_multiplier; denominator is 1x-equivalent weighted Pips TVL, not raw TVL",
+        "weighted_denominator_scenario_method": "raw_tvl_proxy_usd \u00d7 denominator_multiplier; denominator is 1x-equivalent weighted Pips TVL, not raw TVL",
         "weighted_denominator_multipliers": {
           "low": 50,
           "base": 20,
@@ -380,9 +379,9 @@
     "basis": "apyUSD direct hold is modeled as a fresh APYx Pips Season 2 farming route, not the old cheap points-prior. Organic yield keeps the old 13% APY issuer/social assumption, while points use APYx confirmed Season 2 allocation/date/multiplier math. DefiLlama APXUSD apyUSD-vault TVL is used only as a live raw-TVL proxy and converted to conservative 1x-equivalent weighted-denominator scenarios because the live total Pips denominator/leaderboard was not publicly fetched in this run.",
     "confidence": "low/medium for allocation/date/multiplier inputs; low for denominator scenario until live total Pips denominator is fetched",
     "evidence": [
-      "Apyx docs §Season 2 Details: 6,000,000 APYX / 6% total supply for Season 2",
-      "Apyx docs §How Season 2 Works: Pips = USD Value × Multiplier and Season 2 runs May 23-Oct 11 2026",
-      "Apyx blog §How To Earn Pips in Season 2: Hold apyUSD earns 4x Pips",
+      "Apyx docs \u00a7Season 2 Details: 6,000,000 APYX / 6% total supply for Season 2",
+      "Apyx docs \u00a7How Season 2 Works: Pips = USD Value \u00d7 Multiplier and Season 2 runs May 23-Oct 11 2026",
+      "Apyx blog \u00a7How To Earn Pips in Season 2: Hold apyUSD earns 4x Pips",
       "DefiLlama yields API fetched 2026-06-07: APXUSD apyUSD vault TVL $189,834,907"
     ],
     "expected_loss_prior_scenarios": {
@@ -414,7 +413,7 @@
       },
       "raw_tvl_proxy_usd": 189834907,
       "raw_tvl_proxy_source": "DefiLlama yields API APXUSD apyUSD vault TVL fetched 2026-06-07",
-      "weighted_denominator_scenario_method": "raw_tvl_proxy_usd × denominator_multiplier; denominator is 1x-equivalent weighted Pips TVL, not raw TVL",
+      "weighted_denominator_scenario_method": "raw_tvl_proxy_usd \u00d7 denominator_multiplier; denominator is 1x-equivalent weighted Pips TVL, not raw TVL",
       "weighted_denominator_multipliers": {
         "low": 50,
         "base": 20,

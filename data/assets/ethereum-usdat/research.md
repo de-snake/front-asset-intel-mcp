@@ -1,8 +1,8 @@
 # USDat — combined public collateral package
 
-Source primary report: `dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/RESULT.md`
+Source lineage: imported from the front-knowledge-base `usdat-susdat-collateral-20260606` reproducible run. This local `research.md` is the MCP evidence surface.
 
-## Combined public RESULT.md
+## Combined public research report
 
 # Result — USDat / sUSDat collateral Analyze → Propose
 

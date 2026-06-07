@@ -2,7 +2,7 @@
   "asset_id": "pendle:ethereum:market:0xaf0349fb9b1ba07d34381870c59b560b31412660",
   "asset_type": "pendle_pt",
   "symbol": "PT-apxUSD-2026-11-05",
-  "display_name": "Pendle PT apxUSD — 05 Nov 2026",
+  "display_name": "Pendle PT apxUSD \u2014 05 Nov 2026",
   "chain": "ethereum",
   "chain_id": 1,
   "market_address": "0xaf0349fb9b1ba07d34381870c59b560b31412660",
@@ -203,15 +203,14 @@
     "Fresh expected-loss recalibration against live reserve, redemption, and market-discount evidence",
     "Fresh fixed-return expected-loss and exit-cost recalibration against live reserve, redemption, maturity, and market-discount evidence"
   ],
-  "source_report": "dev/implementation/reproducible-runs/apxusd-investment-research-20260604/run/technical-reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
-  "source_front_kb_report": "dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
+  "source_report": "research.md",
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
   "summary_mode": "precomputed_from_front_kb_report_plus_social_quant_overlay",
   "social_research_layer": {
     "evidence_date": "2026-06-04",
     "source_refs": [
-      "front-kb RESULT.md#8-x--social-research-layer"
+      "research.md#8-x--social-research-layer"
     ],
     "return_models": [
       {

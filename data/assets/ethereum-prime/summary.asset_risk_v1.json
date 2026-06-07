@@ -24,8 +24,8 @@
       "selected_option": "partial_attestations_or_issuer_dashboards",
       "answer": "Hastra proof-of-reserves and docs give a coherent wYLDS/YLDS/HELOC-linked backing story, but reserve, custody, and attestation bodies were not located in the source pass.",
       "evidence": [
-        "RESULT.md §1 Executive view",
-        "RESULT.md §3 Backing and exposure risk"
+        "research.md#1-executive-view",
+        "research.md#backing-and-exposure-risk"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -41,7 +41,7 @@
       "selected_option": "holder_specific_unknown_or_blocking",
       "answer": "Legal eligibility, YieldVault redemption state, USDC redeemVault availability, and settlement completion are holder- and route-specific unknowns.",
       "evidence": [
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium",
       "missing_behavior": "block_automation",
@@ -57,8 +57,8 @@
       "selected_option": "observable_but_not_size_checked",
       "answer": "Ethereum DEX liquidity exists and may support smaller exits, but the report says exit depth can cliff near visible inventory and requires a live size-specific quote.",
       "evidence": [
-        "RESULT.md §1 Executive view",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#1-executive-view",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium",
       "missing_behavior": "block_automation",
@@ -74,8 +74,8 @@
       "selected_option": "strong_or_poorly_mapped_controls",
       "answer": "Administrator, pause, freeze, FeedVerifier, YieldVault, Safe, operational EOA, and upgrade controls can affect existing holders and must be refreshed.",
       "evidence": [
-        "RESULT.md §1 Executive view",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#1-executive-view",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium/high",
       "missing_behavior": "review_required",
@@ -91,8 +91,8 @@
       "selected_option": "accounting_model_known_but_not_use_verified",
       "answer": "PRIME conversions use a NAV / redemption-rate feed with staleness and FeedVerifier dependencies; NAV must be compared with executable value and settlement path.",
       "evidence": [
-        "RESULT.md §3 NAV feed risk",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#nav-feed-risk",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium/high",
       "missing_behavior": "review_required",
@@ -108,7 +108,7 @@
       "selected_option": "weak_missing_or_unknown_security_review",
       "answer": "Current audit scope against deployed PRIME, FeedVerifier, YieldVault, and admin surfaces was not established.",
       "evidence": [
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -124,8 +124,8 @@
       "selected_option": "some_stress_or_incomplete_history",
       "answer": "The report notes observed pause windows and frozen YieldVault accounts in the redemption path, while no scoped PRIME X/social memo existed.",
       "evidence": [
-        "RESULT.md §8 X / social research layer",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#8-x--social-research-layer",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -142,7 +142,7 @@
     "live Uniswap route quote for exact size",
     "Gearbox-specific oracle/support state"
   ],
-  "source_report": "dev/implementation/reproducible-runs/prime-investment-research-20260604/RESULT.md",
+  "source_report": "research.md",
   "generated_from": {
     "source_repo": "de-snake/front-knowledge-base",
     "source_ref": "docs/rich-token-reports",
@@ -177,7 +177,7 @@
     "score_source": "direct_asset_quality_score",
     "score_explanation": "This score is an asset-quality/readiness score from the curated rubric; it is not report quality, a live-market route score, or an investment recommendation.",
     "recommended_table_decision": "research_only_fresh_quant_needed",
-    "decision_label": "Research only — fresh quant/live route pass needed",
+    "decision_label": "Research only \u2014 fresh quant/live route pass needed",
     "underwriting_status": "needs_fresh_quant_and_live_inputs",
     "execution_automation_status": "blocked_until_live_inputs_resolved",
     "primary_blockers": [

@@ -16,8 +16,5 @@
   "rubric_version": "asset_risk_v1",
   "summary_path": "summary.asset_risk_v1.json",
   "research_path": "research.md",
-  "source_front_kb_paths": [
-    "dev/implementation/reproducible-runs/prime-investment-research-20260604/RESULT.md"
-  ],
   "address": "0x19ebb35279A16207Ec4ba82799CC64715065F7F6"
 }

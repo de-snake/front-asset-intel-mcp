@@ -3,7 +3,7 @@
   "slug": "ethereum-pendle-pt-apyusd-2026-08-27",
   "asset_type": "pendle_pt",
   "symbol": "PT-apyUSD-2026-08-27",
-  "display_name": "Pendle PT apyUSD — 27 Aug 2026",
+  "display_name": "Pendle PT apyUSD \u2014 27 Aug 2026",
   "chain": "ethereum",
   "chain_id": 1,
   "market_address": "0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952",
@@ -22,12 +22,5 @@
   ],
   "rubric_version": "asset_risk_v1",
   "summary_path": "summary.asset_risk_v1.json",
-  "research_path": "research.md",
-  "source_front_kb_paths": [
-    "dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md",
-    "dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apyusd-2026-08-27.md",
-    "dev/implementation/asset-risk-reports-mvp/technical-reports/pendle-pt-eth-mainnet-apyusd-2026-08-27.md",
-    "dev/implementation/asset-risk-reports-mvp/x-research/x-research-apyusd-points-stac-pt-2026-08-27.md",
-    "dev/implementation/asset-risk-reports-mvp/investment-analysis/investment-analyst-report-points-pt-risk-return.md"
-  ]
+  "research_path": "research.md"
 }

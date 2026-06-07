@@ -16,10 +16,5 @@
   "rubric_version": "asset_risk_v1",
   "summary_path": "summary.asset_risk_v1.json",
   "research_path": "research.md",
-  "source_front_kb_paths": [
-    "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/RESULT.md",
-    "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/asset-investment-diligence/tokens/eth-mainnet-usdat/analyst-report.md",
-    "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/asset-investment-diligence/tokens/eth-mainnet-usdat/technical-report.md"
-  ],
   "address": "0x23238f20b894f29041f48d88ee91131c395aaa71"
 }

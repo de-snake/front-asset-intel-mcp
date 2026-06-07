@@ -24,8 +24,8 @@
       "selected_option": "partial_attestations_or_issuer_dashboards",
       "answer": "Centrifuge materials tie deSPXA to SPXA / Janus Henderson Anemoy S&P 500 Index Fund exposure and Base vault accounting, but live holdings, NAV reports, service providers, and cash buffers must be refreshed.",
       "evidence": [
-        "RESULT.md §1 Executive view",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#1-executive-view",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium/high",
       "missing_behavior": "review_required",
@@ -41,8 +41,8 @@
       "selected_option": "holder_specific_unknown_or_blocking",
       "answer": "Primary mint/redeem access depends on member / Authorized Participant / KYC status and cannot be assumed for an ordinary holder.",
       "evidence": [
-        "RESULT.md §1 Executive view",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#1-executive-view",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium/high",
       "missing_behavior": "block_automation",
@@ -58,8 +58,8 @@
       "selected_option": "observable_but_not_size_checked",
       "answer": "Secondary DEX liquidity exists but can differ from manager/NAV price; live route quote at exact size is required.",
       "evidence": [
-        "RESULT.md §1 Executive view",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#1-executive-view",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium",
       "missing_behavior": "block_automation",
@@ -75,8 +75,8 @@
       "selected_option": "strong_or_poorly_mapped_controls",
       "answer": "Transfer-hook freeze/member controls and Centrifuge Root/ward administration can change important behavior and must be refreshed.",
       "evidence": [
-        "RESULT.md §1 Executive view",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#1-executive-view",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium/high",
       "missing_behavior": "review_required",
@@ -92,8 +92,8 @@
       "selected_option": "accounting_model_known_but_not_use_verified",
       "answer": "USDC-based vault accounting and price-per-share mechanics are identifiable, but price timestamp/feed details and executable-value alignment are not decision-grade.",
       "evidence": [
-        "RESULT.md §1 Executive view",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#1-executive-view",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -109,7 +109,7 @@
       "selected_option": "weak_missing_or_unknown_security_review",
       "answer": "Audit/formal-verification scope against the exact Base deployment remains an explicit live-use check.",
       "evidence": [
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -125,8 +125,8 @@
       "selected_option": "some_stress_or_incomplete_history",
       "answer": "No scoped old-run X/social memo existed; freeze, pause, oracle, redemption-delay, NAV, and incident disclosures require a fresh check.",
       "evidence": [
-        "RESULT.md §8 X / social research layer",
-        "RESULT.md §10 What must be checked before live use"
+        "research.md#8-x--social-research-layer",
+        "research.md#10-what-must-be-checked-before-live-use"
       ],
       "confidence": "medium",
       "missing_behavior": "review_required",
@@ -145,7 +145,7 @@
     "live DEX route quote for exact size",
     "Gearbox-specific oracle/support state"
   ],
-  "source_report": "dev/implementation/reproducible-runs/despxa-investment-research-20260604/RESULT.md",
+  "source_report": "research.md",
   "generated_from": {
     "source_repo": "de-snake/front-knowledge-base",
     "source_ref": "docs/rich-token-reports",
@@ -180,7 +180,7 @@
     "score_source": "direct_asset_quality_score",
     "score_explanation": "This score is an asset-quality/readiness score from the curated rubric; it is not report quality, a live-market route score, or an investment recommendation.",
     "recommended_table_decision": "research_only_fresh_quant_needed",
-    "decision_label": "Research only — fresh quant/live route pass needed",
+    "decision_label": "Research only \u2014 fresh quant/live route pass needed",
     "underwriting_status": "needs_fresh_quant_and_live_inputs",
     "execution_automation_status": "blocked_until_live_inputs_resolved",
     "primary_blockers": [

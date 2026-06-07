@@ -162,7 +162,7 @@ Highest-impact unknowns:
 | E4 | [YT contract on Etherscan](https://etherscan.io/address/0x076a3ea71e83ca09319b161e40f5fb3bb943d3c6) | explorer / onchain pointer | 2026-06-04 | medium; address pointer, not full role audit |
 
 
-## Combined RESULT.md social / quantitative overlay
+## Combined social / quantitative overlay
 
 ## X / social research layer
 
