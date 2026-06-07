@@ -208,6 +208,7 @@ const simpleTokenReturnEstimateSlugs = new Set([
   "ethereum-apxusd",
   "ethereum-apyusd",
   "ethereum-prime",
+  "ethereum-usdc",
   "ethereum-susdat",
   "ethereum-usdat",
 ]);

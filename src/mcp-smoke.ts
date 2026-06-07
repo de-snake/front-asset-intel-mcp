@@ -246,6 +246,7 @@ const summaryLookups = [
   { id: 4, label: "apyUSD", symbol: "apyUSD", expectedSymbol: "apyUSD", expectedScore: 35, expectedOrganicRoi: 0.045233, expectedPointsRoi: 0.016961, expectedRiskAdjustedRoi: 0.012194 },
   { id: 5, label: "PRIME", symbol: "PRIME", expectedSymbol: "PRIME", expectedScore: 41, expectedOrganicRoi: 0.01979, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.04021 },
   { id: 6, label: "deSPXA", symbol: "deSPXA", expectedSymbol: "deSPXA", expectedScore: 44, expectedOrganicRoi: 0.017655, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.037345 },
+  { id: 24, label: "USDC", symbol: "USDC", expectedSymbol: "USDC", expectedScore: 77, expectedOrganicRoi: 0, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.0007 },
   { id: 7, label: "USDat", symbol: "USDat", expectedSymbol: "USDat", expectedScore: 52, expectedOrganicRoi: 0, expectedPointsRoi: 0.056663, expectedRiskAdjustedRoi: 0.047663 },
   { id: 8, label: "sUSDat", symbol: "sUSDat", expectedSymbol: "sUSDat", expectedScore: 40, expectedOrganicRoi: 0.021575, expectedPointsRoi: 0.008095, expectedRiskAdjustedRoi: -0.03283 },
   {
@@ -335,11 +336,12 @@ const simpleResearchLookups = [
   { id: 17, label: "apyUSD", symbol: "apyUSD", expectedOrganicRoi: 0.045233, expectedPointsRoi: 0.016961, expectedRiskAdjustedRoi: 0.012194 },
   { id: 18, label: "PRIME", symbol: "PRIME", expectedOrganicRoi: 0.01979, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.04021 },
   { id: 19, label: "deSPXA", symbol: "deSPXA", expectedOrganicRoi: 0.017655, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.037345 },
+  { id: 25, label: "USDC", symbol: "USDC", expectedOrganicRoi: 0, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.0007 },
   { id: 20, label: "USDat", symbol: "USDat", expectedOrganicRoi: 0, expectedPointsRoi: 0.056663, expectedRiskAdjustedRoi: 0.047663 },
   { id: 21, label: "sUSDat", symbol: "sUSDat", expectedOrganicRoi: 0.021575, expectedPointsRoi: 0.008095, expectedRiskAdjustedRoi: -0.03283 },
 ];
 
-await waitForResponseCount(17, "initial asset-list, address lookup, summary, and PT research calls");
+await waitForResponseCount(18, "initial asset-list, address lookup, summary, and PT research calls");
 
 const initialize = responseById(1);
 const tools = responseById(2);
@@ -364,7 +366,7 @@ assert(availableAssets.usage.examples.some((example) => example.tool === "get_as
 const availableBySymbol = new Map(availableAssets.assets.map((asset) => [asset.symbol, asset]));
 const apxAvailable = availableBySymbol.get("apxUSD");
 assert(apxAvailable, "available assets response missing apxUSD");
-assert(apxAvailable.accepted_lookup_values.includes("ethereum:0x98A878b1Cd98131B271883B390f68D2c90674665"), "available assets response missing apxUSD chain-prefixed lookup");
+assert(apxAvailable.accepted_lookup_values.includes("ethereum:0x98a878b1cd98131b271883b390f68d2c90674665"), "available assets response missing apxUSD chain-prefixed lookup");
 assert(apxAvailable.recommended_calls.some((call) => call.tool === "get_asset_summary" && call.arguments.symbol === "apxUSD"), "apxUSD missing summary recommended call");
 assert(apxAvailable.recommended_calls.some((call) => call.tool === "get_asset_research" && call.arguments.asset_id === "0x98A878b1Cd98131B271883B390f68D2c90674665"), "apxUSD missing address research recommended call");
 const ptUsdatAvailable = availableBySymbol.get("PT-USDat-2026-08-27");

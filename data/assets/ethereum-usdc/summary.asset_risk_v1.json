@@ -1,0 +1,339 @@
+{
+  "asset_id": "ethereum:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+  "asset_type": "token",
+  "symbol": "USDC",
+  "display_name": "USD Coin (Circle USDC)",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "rubric": {
+    "version": "asset_risk_v1",
+    "score": 77,
+    "max_score": 100,
+    "decision_class": "review_required",
+    "decision_rationale": "USDC is a top-tier, deeply liquid, reserve-backed stablecoin with a tested peg, current Circle transparency reporting, and direct 1:1 redemption for eligible Circle users. It should be a known asset, not a not-found case. Automation still requires live holder/route/size checks and acknowledgement of Circle issuer controls.",
+    "score_label": "asset_quality_evidence_score",
+    "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
+    "score_status": "precomputed"
+  },
+  "dimensions": [
+    {
+      "id": "backing_nav_evidence",
+      "question": "Is backing/NAV evidence current, transparent, and independently reconcilable?",
+      "score": 17,
+      "max_score": 18,
+      "selected_option": "current_reconciled_reserves",
+      "score_band": "strong",
+      "status": "usable_for_review",
+      "evidence_state": "verified",
+      "missing_behavior": "usable_for_review",
+      "answer": "USDC is backed by Circle reserve assets with public transparency reporting and current reserve totals exceeding circulating USDC in the fetched snapshot.",
+      "evidence": [
+        {
+          "source": "https://www.circle.com/transparency",
+          "quote": "As of Jun 04, 2026: In circulation $75.5B; Total Reserves $75.7B; reserve categories include bank deposits, overnight reverse Treasury repo, and <3-month Treasuries."
+        },
+        {
+          "source": "https://www.circle.com/usdc",
+          "quote": "USDC is backed 100% by highly liquid cash and cash-equivalent assets and is redeemable 1:1 for US dollars."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "redemption_holder_eligibility",
+      "question": "Can the intended holder redeem or exit through a known route?",
+      "score": 14,
+      "max_score": 18,
+      "selected_option": "restricted_but_understood",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required",
+      "answer": "Direct 1:1 redemption is documented through eligible Circle Mint / Circle account routes, while ordinary DeFi holders rely on secondary-market exit unless they are eligible Circle customers.",
+      "evidence": [
+        {
+          "source": "https://www.circle.com/legal/usdc-terms",
+          "quote": "USDC terms describe redemption for eligible users and Circle Mint account redemption mechanics."
+        },
+        {
+          "source": "https://www.circle.com/circle-mint",
+          "quote": "Circle Mint is positioned for approved businesses/institutions to mint and redeem USDC and EURC."
+        }
+      ],
+      "confidence": "medium-high"
+    },
+    {
+      "id": "market_liquidity_peg_behavior",
+      "question": "Is market exit liquid, near accounting value, and robust for the intended size?",
+      "score": 17,
+      "max_score": 18,
+      "selected_option": "deep_tight_size_checked",
+      "score_band": "strong",
+      "status": "usable_for_review",
+      "evidence_state": "verified",
+      "missing_behavior": "usable_for_review",
+      "answer": "USDC has very deep exchange/DeFi liquidity and a long peg record; the main adverse peg test was the March 2023 SVB shock, after which USDC recovered when redemptions resumed.",
+      "evidence": [
+        {
+          "source": "https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "quote": "Etherscan token page showed USDC near $1 with millions of holders and very large on-chain market cap in the fetched search result."
+        },
+        {
+          "source": "https://www.federalreserve.gov/econres/notes/feds-notes/in-the-shadow-of-bank-run-lessons-from-the-silicon-valley-bank-failure-and-its-impact-on-stablecoins-20251217.html",
+          "quote": "Federal Reserve FEDS Notes describe USDC hitting its low point when primary markets shut down and returning toward peg when Circle began processing redemptions again."
+        }
+      ],
+      "confidence": "high for general liquidity/peg; live route quote still required for automation size"
+    },
+    {
+      "id": "issuer_controls_governance",
+      "question": "Are issuer/admin controls limited, transparent, and slow enough for analyst-agent use?",
+      "score": 5,
+      "max_score": 14,
+      "selected_option": "strong_or_poorly_mapped_controls",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "source_inconclusive",
+      "missing_behavior": "block_automation",
+      "answer": "USDC is an issuer-controlled stablecoin with known compliance/admin surfaces such as blacklist/freeze and upgradeable contract architecture; this is acceptable for many use cases but must be treated as an automation control risk.",
+      "evidence": [
+        {
+          "source": "https://www.circle.com/legal/mica-usdc-whitepaper",
+          "quote": "Circle MiCA white paper describes USDC deployed using upgradeable smart contract architectures."
+        },
+        {
+          "source": "https://etherscan.io/address/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "quote": "USDC Ethereum contract is verified and associated with Circle; operational admin/control state must be checked live before automated use."
+        }
+      ],
+      "confidence": "medium-high"
+    },
+    {
+      "id": "oracle_accounting_alignment",
+      "question": "Does the valuation method track executable value for this use case?",
+      "score": 9,
+      "max_score": 10,
+      "selected_option": "oracle_tracks_executable_value",
+      "score_band": "strong",
+      "status": "usable_for_review",
+      "evidence_state": "verified",
+      "missing_behavior": "usable_for_review",
+      "answer": "The accounting unit is one redeemable USD claim per USDC, and executable market value is normally tightly aligned with the dollar peg; live venue quote remains the final route check.",
+      "evidence": [
+        {
+          "source": "https://www.circle.com/usdc",
+          "quote": "USDC is redeemable 1:1 for US dollars."
+        },
+        {
+          "source": "https://www.circle.com/transparency",
+          "quote": "Circle publishes current reserve totals and issuance/redemption activity for USDC."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "audits_security_review",
+      "question": "Does the project have credible audits or formal verification covering the live risk surface?",
+      "score": 8,
+      "max_score": 12,
+      "selected_option": "some_audits_scope_uncertain",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required",
+      "answer": "USDC is a mature verified-contract asset with public security/audit history, but this snapshot did not compile a complete live-scope audit matrix for every current proxy/admin component.",
+      "evidence": [
+        {
+          "source": "https://etherscan.io/address/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "quote": "Ethereum USDC contract is verified on Etherscan."
+        },
+        {
+          "source": "https://www.circle.com/legal/mica-usdc-whitepaper",
+          "quote": "MiCA white paper documents the token architecture and issuer framework; full audit matrix was not regenerated in this MCP data pass."
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "incidents_social_stress",
+      "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
+      "score": 7,
+      "max_score": 10,
+      "selected_option": "some_stress_or_incomplete_history",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required",
+      "answer": "USDC has a known major 2023 SVB-related peg stress that recovered; no fresh blocking stress was found in this quick pass, but the depeg history is material enough to keep stress evidence explicit.",
+      "evidence": [
+        {
+          "source": "https://www.federalreserve.gov/econres/notes/feds-notes/in-the-shadow-of-bank-run-lessons-from-the-silicon-valley-bank-failure-and-its-impact-on-stablecoins-20251217.html",
+          "quote": "The Fed note links the USDC low point to primary-market closure and its return toward peg to resumed Circle redemptions."
+        },
+        {
+          "source": "https://www.circle.com/transparency",
+          "quote": "Fetched Circle transparency snapshot showed reserve assets exceeding circulating USDC as of 2026-06-04."
+        }
+      ],
+      "confidence": "medium-high"
+    }
+  ],
+  "blocking_unknowns": [
+    "Live route/venue quote and slippage for the intended size are not embedded in static data.",
+    "Direct Circle redemption is holder/account/jurisdiction dependent; ordinary holders must use secondary-market exit unless eligible.",
+    "Circle issuer controls such as freeze/blacklist/upgradeability are known and must be acceptable for the intended automation path."
+  ],
+  "source_report": "data/assets/ethereum-usdc/research.md",
+  "generated_from": {
+    "source_repo": "external_public_sources",
+    "source_ref": "Circle public pages, Circle docs/terms, Etherscan, Federal Reserve FEDS Notes fetched 2026-06-07",
+    "source_commit": "not_applicable"
+  },
+  "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+  "social_research_layer": {
+    "evidence_date": "2026-06-07",
+    "return_models": [
+      "No native yield for vanilla USDC direct hold.",
+      "No confirmed points program for vanilla USDC direct hold; venue/wrapper campaigns must be modeled separately."
+    ],
+    "risk_narratives": [
+      "Top-tier stablecoin with deep liquidity and reserve transparency.",
+      "Material historical SVB depeg recovered after redemption processing resumed.",
+      "Issuer/admin controls are intentional compliance features but an automation risk."
+    ],
+    "decision_effect": "Treat USDC as a known high-quality stablecoin; require only live execution and holder/control checks before automation.",
+    "confidence": "high for asset identity and peg/backing tier; medium for live execution without a route quote"
+  },
+  "summary_schema_version": "asset_summary_v1.2",
+  "agent_display": {
+    "recommended_table_fields": [
+      "agent_display.score_display",
+      "agent_display.decision_label",
+      "agent_display.underwriting_status",
+      "agent_display.execution_automation_status",
+      "agent_display.primary_blockers",
+      "agent_display.next_action",
+      "agent_display.simple_token_return_display",
+      "agent_display.simple_token_return_estimate"
+    ],
+    "score_display": "77/100 asset-quality evidence",
+    "score_sort": 77,
+    "score_source": "direct_asset_quality_score",
+    "score_explanation": "This score is an asset-quality/readiness score from the curated rubric. USDC is treated as a top-tier stablecoin with tested peg behavior, current reserve transparency, and deep market liquidity; it is not a live-market quote, report-quality score, or investment recommendation.",
+    "recommended_table_decision": "analysis_candidate_live_preview_possible",
+    "decision_label": "Top-tier stablecoin; live route preview required before automation",
+    "underwriting_status": "analysis_candidate",
+    "execution_automation_status": "blocked_until_live_inputs_resolved",
+    "primary_blockers": [
+      "Need live venue/route quote for intended size before automated execution",
+      "Circle direct redemption and issuer-control acceptance are holder/use-case dependent"
+    ],
+    "next_action": "Use USDC as a known stablecoin candidate, then fetch live route/size quote and confirm holder/control policy before any Preview/Execute automation.",
+    "table_note": "USDC is included to avoid a not-found result for the canonical Circle stablecoin. Static score is high; runtime execution still needs live market and policy checks.",
+    "simple_token_return_display": "Organic ROI 0.00% over 83d + points ROI 0.00% - expected loss 0.05% (band 0.01%-0.30%) - exit 0.02% = risk-adjusted ROI -0.07% (band -0.32% to -0.03%; -0.31% annualized base)",
+    "simple_token_return_estimate": {
+      "scope": "direct_token_hold_not_pendle_pt",
+      "horizon_days": 83,
+      "organic_yield_apy_estimate": 0,
+      "organic_yield_apy_range_estimate": [
+        0,
+        0
+      ],
+      "organic_roi_over_horizon": 0,
+      "estimated_points_roi_over_horizon": 0,
+      "estimated_points_annualized_return": 0,
+      "points_program": "none confirmed for vanilla USDC direct hold",
+      "points_roi_scenarios_over_horizon": {
+        "low": 0,
+        "base": 0,
+        "high": 0
+      },
+      "expected_loss_prior": 0.0005,
+      "expected_loss_prior_scenarios": {
+        "low": 0.0001,
+        "base": 0.0005,
+        "high": 0.003
+      },
+      "exit_cost_assumption": 0.0002,
+      "risk_adjusted_roi_before_points": -0.0007,
+      "risk_adjusted_roi_after_base_points": -0.0007,
+      "risk_adjusted_annualized_return_after_base_points": -0.003078,
+      "underwriting_hurdle_net_annualized": 0.1,
+      "method": "no_confirmed_points_program: organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; vanilla USDC has no native yield and no confirmed points program, so points_roi = 0.",
+      "basis": "USDC direct hold is modeled as a top-tier payment/stablecoin asset rather than a yield route: no organic yield, no confirmed points, minimal peg/exit haircut, and a small issuer/control stress prior retained for automation safety.",
+      "confidence": "high for no native yield / no confirmed points; medium-high for low haircut because USDC has deep liquidity and tested peg recovery but retains issuer controls and banking/redemption dependencies",
+      "evidence": [
+        "Circle USDC page: USDC is redeemable 1:1 for US dollars and backed by highly liquid cash and cash-equivalent assets.",
+        "Circle transparency page fetched 2026-06-07: $75.5B USDC in circulation and $75.7B total reserves as of 2026-06-04.",
+        "Federal Reserve FEDS Notes: USDC depegged during the SVB shock and returned toward peg when primary redemptions resumed."
+      ],
+      "risk_adjusted_roi_scenarios_after_base_points": {
+        "low_loss": -0.0003,
+        "base": -0.0007,
+        "high_loss": -0.0032
+      },
+      "points_thesis_kind": "no_confirmed_points_program",
+      "points_farming_thesis": {
+        "kind": "no_confirmed_points_program",
+        "as_of": "2026-06-07",
+        "program": "none identified for vanilla USDC direct hold",
+        "route": "direct token hold",
+        "formula": "points_roi = 0 because no confirmed points program applies to vanilla USDC direct hold",
+        "freshness_status": "not a farming thesis; assign non-zero points only for a specific campaign/venue wrapper with current public terms",
+        "confidence": "high for vanilla USDC itself; venue-specific campaigns must be modeled separately"
+      }
+    }
+  },
+  "simple_token_return_estimate": {
+    "scope": "direct_token_hold_not_pendle_pt",
+    "horizon_days": 83,
+    "organic_yield_apy_estimate": 0,
+    "organic_yield_apy_range_estimate": [
+      0,
+      0
+    ],
+    "organic_roi_over_horizon": 0,
+    "estimated_points_roi_over_horizon": 0,
+    "estimated_points_annualized_return": 0,
+    "points_program": "none confirmed for vanilla USDC direct hold",
+    "points_roi_scenarios_over_horizon": {
+      "low": 0,
+      "base": 0,
+      "high": 0
+    },
+    "expected_loss_prior": 0.0005,
+    "expected_loss_prior_scenarios": {
+      "low": 0.0001,
+      "base": 0.0005,
+      "high": 0.003
+    },
+    "exit_cost_assumption": 0.0002,
+    "risk_adjusted_roi_before_points": -0.0007,
+    "risk_adjusted_roi_after_base_points": -0.0007,
+    "risk_adjusted_annualized_return_after_base_points": -0.003078,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "method": "no_confirmed_points_program: organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; vanilla USDC has no native yield and no confirmed points program, so points_roi = 0.",
+    "basis": "USDC direct hold is modeled as a top-tier payment/stablecoin asset rather than a yield route: no organic yield, no confirmed points, minimal peg/exit haircut, and a small issuer/control stress prior retained for automation safety.",
+    "confidence": "high for no native yield / no confirmed points; medium-high for low haircut because USDC has deep liquidity and tested peg recovery but retains issuer controls and banking/redemption dependencies",
+    "evidence": [
+      "Circle USDC page: USDC is redeemable 1:1 for US dollars and backed by highly liquid cash and cash-equivalent assets.",
+      "Circle transparency page fetched 2026-06-07: $75.5B USDC in circulation and $75.7B total reserves as of 2026-06-04.",
+      "Federal Reserve FEDS Notes: USDC depegged during the SVB shock and returned toward peg when primary redemptions resumed."
+    ],
+    "risk_adjusted_roi_scenarios_after_base_points": {
+      "low_loss": -0.0003,
+      "base": -0.0007,
+      "high_loss": -0.0032
+    },
+    "points_thesis_kind": "no_confirmed_points_program",
+    "points_farming_thesis": {
+      "kind": "no_confirmed_points_program",
+      "as_of": "2026-06-07",
+      "program": "none identified for vanilla USDC direct hold",
+      "route": "direct token hold",
+      "formula": "points_roi = 0 because no confirmed points program applies to vanilla USDC direct hold",
+      "freshness_status": "not a farming thesis; assign non-zero points only for a specific campaign/venue wrapper with current public terms",
+      "confidence": "high for vanilla USDC itself; venue-specific campaigns must be modeled separately"
+    }
+  }
+}

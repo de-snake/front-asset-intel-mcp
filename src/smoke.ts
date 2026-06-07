@@ -127,7 +127,7 @@ function pickSummary(summary: Summary): Record<string, unknown> {
 const availableAssets = await getAvailableAssets();
 assert(availableAssets.endpoint === "list_available_assets", "available assets endpoint name mismatch");
 assert(availableAssets.available_asset_count === availableAssets.assets.length, "available asset count mismatch");
-assert(availableAssets.available_asset_count >= 10, "available assets list should include the current seed set");
+assert(availableAssets.available_asset_count >= 11, "available assets list should include the current seed set");
 assert(availableAssets.usage.summary_tool.includes("get_asset_summary"), "available assets usage missing summary tool guidance");
 assert(availableAssets.usage.research_tool.includes("get_asset_research"), "available assets usage missing research tool guidance");
 assert(availableAssets.usage.if_agent_knows_symbol.includes("symbol"), "available assets usage missing symbol guidance");
@@ -137,7 +137,13 @@ const apxAvailable = availableBySymbol.get("apxUSD");
 assert(apxAvailable, "available assets missing apxUSD");
 assert(apxAvailable.recommended_calls.some((call) => call.tool === "get_asset_summary" && call.arguments.symbol === "apxUSD"), "apxUSD missing summary-by-symbol call guidance");
 assert(apxAvailable.recommended_calls.some((call) => call.tool === "get_asset_research" && call.arguments.asset_id === "0x98A878b1Cd98131B271883B390f68D2c90674665"), "apxUSD missing research-by-address call guidance");
-assert(apxAvailable.accepted_lookup_values.includes("ethereum:0x98A878b1Cd98131B271883B390f68D2c90674665"), "apxUSD missing chain-prefixed token lookup value");
+assert(apxAvailable.accepted_lookup_values.includes("ethereum:0x98a878b1cd98131b271883b390f68d2c90674665"), "apxUSD missing chain-prefixed token lookup value");
+const usdcAvailable = availableBySymbol.get("USDC");
+assert(usdcAvailable, "available assets missing USDC");
+assert(usdcAvailable.accepted_lookup_values.includes("USDC"), "USDC missing symbol lookup value");
+assert(usdcAvailable.accepted_lookup_values.includes("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"), "USDC missing address lookup value");
+assert(usdcAvailable.accepted_lookup_values.includes("ethereum:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"), "USDC missing chain-prefixed token lookup value");
+assert(usdcAvailable.recommended_calls.some((call) => call.tool === "get_asset_summary" && call.arguments.symbol === "USDC"), "USDC missing summary-by-symbol call guidance");
 const ptUsdatAvailable = availableBySymbol.get("PT-USDat-2026-08-27");
 assert(ptUsdatAvailable, "available assets missing PT-USDat");
 assert(ptUsdatAvailable.accepted_lookup_values.includes("PT-USDat"), "PT-USDat missing short-symbol alias lookup value");
@@ -151,6 +157,7 @@ const summaries = {
   apyUSD: (await getAssetSummary({ symbol: "apyUSD" })) as Summary,
   PRIME: (await getAssetSummary({ symbol: "PRIME" })) as Summary,
   deSPXA: (await getAssetSummary({ symbol: "deSPXA" })) as Summary,
+  USDC: (await getAssetSummary({ symbol: "USDC" })) as Summary,
   USDat: (await getAssetSummary({ symbol: "USDat" })) as Summary,
   sUSDat: (await getAssetSummary({ symbol: "sUSDat" })) as Summary,
   pt_apxUSD: (await getAssetSummary({ symbol: "PT-apxUSD" })) as Summary,
@@ -164,6 +171,7 @@ const simpleResearch = {
   apyUSD: await getAssetResearch({ symbol: "apyUSD" }),
   PRIME: await getAssetResearch({ symbol: "PRIME" }),
   deSPXA: await getAssetResearch({ symbol: "deSPXA" }),
+  USDC: await getAssetResearch({ symbol: "USDC" }),
   USDat: await getAssetResearch({ symbol: "USDat" }),
   sUSDat: await getAssetResearch({ symbol: "sUSDat" }),
 };

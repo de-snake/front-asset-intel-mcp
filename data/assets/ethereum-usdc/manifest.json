@@ -1,0 +1,26 @@
+{
+  "asset_id": "ethereum:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+  "slug": "ethereum-usdc",
+  "asset_type": "token",
+  "symbol": "USDC",
+  "display_name": "USD Coin (Circle USDC)",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "aliases": [
+    "USDC",
+    "usdc",
+    "USD Coin",
+    "usd coin",
+    "Circle USDC",
+    "circle usdc",
+    "ethereum-usdc",
+    "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "ethereum:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+  ],
+  "rubric_version": "asset_risk_v1",
+  "summary_path": "summary.asset_risk_v1.json",
+  "research_path": "research.md",
+  "source_front_kb_paths": [],
+  "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+}

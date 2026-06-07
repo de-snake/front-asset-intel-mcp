@@ -55,13 +55,25 @@ function addLookupValue(values: Set<string>, value: string | undefined): void {
   if (value?.trim()) values.add(value.trim());
 }
 
+function uniqueLookupValues(values: Iterable<string>): string[] {
+  const seen = new Set<string>();
+  const unique: string[] = [];
+  for (const value of values) {
+    const key = normalizeLookupKey(value);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(value);
+  }
+  return unique;
+}
+
 function addressLookupValues(manifest: AssetManifest): string[] {
   const values = new Set<string>();
   for (const address of [manifest.address, manifest.market_address, manifest.pt_address]) {
     addLookupValue(values, address);
     if (address) addLookupValue(values, `${manifest.chain}:${address}`);
   }
-  return Array.from(values);
+  return uniqueLookupValues(values);
 }
 
 function manifestLookupValues(manifest: AssetManifest): string[] {
@@ -74,7 +86,7 @@ function manifestLookupValues(manifest: AssetManifest): string[] {
   for (const value of addressLookupValues(manifest)) addLookupValue(values, value);
   for (const alias of manifest.aliases ?? []) addLookupValue(values, alias);
 
-  return Array.from(values);
+  return uniqueLookupValues(values);
 }
 
 function manifestLookupKeys(manifest: AssetManifest): string[] {

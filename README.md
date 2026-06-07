@@ -4,6 +4,12 @@ Lightweight local TypeScript MCP server exposing **precomputed** asset research 
 
 This repo is intentionally runtime-small: the MCP server does not call an LLM, crawl the web, or regenerate research. It only serves validated local files.
 
+## Research workflow for new assets
+
+The copied research workflow lives in [`docs/asset-investment-diligence/`](docs/asset-investment-diligence/). Start with [`docs/asset-investment-diligence/RUN-RESEARCH.md`](docs/asset-investment-diligence/RUN-RESEARCH.md) when producing a new token or PT package.
+
+New research is generated as an offline artifact first, normally under `research-runs/<run-slug>/`, not directly under `data/assets/`. For MCP-quality packages, run S1/S2 token diligence, include S4/S5 X/social research and S6 quantitative return context, and run S3 only when the asset is a Pendle PT / PT market. After review, import the curated result into `data/assets/<asset-slug>/{manifest.json,summary.asset_risk_v1.json,research.md}` and run `npm test`.
+
 ## Why this exists
 
 Long Markdown research reports are useful for diligence, but they are not a stable decision interface for an analyst agent. The server exposes a small discovery surface plus two data layers:
@@ -63,6 +69,7 @@ Example asset lookups:
 - `apyUSD`
 - `PRIME`
 - `deSPXA`
+- `USDC`
 - `USDat`
 - `sUSDat`
 - `PT-apxUSD`
@@ -89,6 +96,7 @@ For non-PT/direct token rows, the context is `direct_or_variable_token_return` a
 - `ethereum-pendle-pt-apyusd-2026-08-27` — Pendle PT apyUSD 27 Aug 2026 report and summary, including the 83-day fixed-return recovery trade overlay.
 - `ethereum-prime` — Hastra PRIME rich public report package normalized into the asset-quality rubric.
 - `base-despxa` — Centrifuge deSPXA rich public report package normalized into the asset-quality rubric.
+- `ethereum-usdc` — Circle USDC known-asset package with top-tier stablecoin/backing, tested-peg, issuer-control, and no-points direct-token return context.
 - `ethereum-usdat` — Saturn USDat collateral package with Gearbox feed/oracle context, X/social layer, and public asset reports.
 - `ethereum-susdat` — Saturn sUSDat collateral package with ERC-4626/feed context, X/social layer, and public asset reports.
 - `ethereum-pendle-pt-usdat-2026-08-27` — Pendle PT USDat 27 Aug 2026 PT market dossier plus quantitative fixed-return hurdle overlay.

@@ -1,0 +1,197 @@
+{
+  "workflow_id": "asset-investment-diligence-v1",
+  "version": "1.0.0",
+  "purpose": "Transform token and Pendle PT opportunity scope into a decision-grade investment analyst report while controlling parent context size through stage artifacts and subagent handoffs.",
+  "workflow_dir": "docs/asset-investment-diligence",
+  "artifact_root": "[run_artifact_root]",
+  "example_artifact_root": "research-runs/asset-risk-example",
+  "artifact_layout": {
+    "layout_reference": "docs/asset-investment-diligence/output-structure.md",
+    "run_manifest": "run-manifest.json",
+    "run_index": "index.md",
+    "token_dir": "tokens/<token-slug>",
+    "pt_market_dir": "pt-markets/<pt-scope-slug>",
+    "final_verification": "verification/final-investment-analysis-verification.md",
+    "return_contract": "Return run_artifact_root, run-manifest.json, index.md, per-token directories, per-PT directories, and final verification path. Do not return loose report paths or raw evidence dumps."
+  },
+  "global_rules": {
+    "parent_context_policy": "Parent reads workflow manifest, indexes, stage summaries, and final reports first. Parent expands raw evidence only to audit a disputed number or conclusion.",
+    "subagent_output_policy": "Subagents write artifacts to disk and return only artifact paths, verdicts, key numbers, blockers, and validation status.",
+    "no_raw_dump_handoff": true,
+    "single_candidate_memos": true,
+    "numbers_not_labels": true,
+    "evidence_before_conclusion": true,
+    "no_execution_instructions_or_suitability_language_in_source_reports": true
+  },
+  "stages": [
+    {
+      "id": "S1_general_asset_mining",
+      "title": "General asset mining",
+      "role": "Collect on-chain, issuer, backing, controls, liquidity, oracle, governance, security, and incident evidence for one token.",
+      "depends_on": [],
+      "parallelization": {
+        "parallelizable": true,
+        "unit": "one token per subagent",
+        "recommended_max_concurrent": 3,
+        "reason": "Each token has independent evidence collection and writes to isolated research directories."
+      },
+      "delegate_to_subagent": true,
+      "subagent_context": [
+        "token scope: chain_id, token address, symbol, intended use",
+        "methodology.md",
+        "requirements-brief.md if analyst readability is required",
+        "output directory for the specific token"
+      ],
+      "inputs": ["token_scope"],
+      "outputs": [
+        "<token_artifact_dir>/scope.json",
+        "<token_artifact_dir>/research/onchain-admin.md",
+        "<token_artifact_dir>/research/issuer-backing-security.md",
+        "<token_artifact_dir>/research/transfer-liquidity-oracle-governance.md",
+        "<token_artifact_dir>/technical-report.md"
+      ],
+      "handoff_summary_fields": ["artifact_paths", "top_5_numeric_facts", "blocking_unknowns", "source_quality", "validation_status"],
+      "validation": ["required research files exist", "technical report has source map", "no unsupported conclusions without evidence"]
+    },
+    {
+      "id": "S2_asset_risk_analyst_report",
+      "title": "Asset-risk analyst report",
+      "role": "Convert token evidence into an analyst-readable token-level risk report.",
+      "depends_on": ["S1_general_asset_mining"],
+      "parallelization": {
+        "parallelizable": true,
+        "unit": "one token per subagent",
+        "recommended_max_concurrent": 3,
+        "reason": "Each analyst report is a single-candidate memo and does not require cross-token reasoning."
+      },
+      "delegate_to_subagent": true,
+      "subagent_context": [
+        "token scope",
+        "S1 handoff summary for the token",
+        "technical report path for the token",
+        "requirements-brief.md"
+      ],
+      "inputs": ["S1_token_artifacts"],
+      "outputs": ["<token_artifact_dir>/analyst-report.md", "<token_artifact_dir>/verification.md"],
+      "handoff_summary_fields": ["artifact_path", "executive_view", "risk_implications", "missing_behavior", "numeric_facts", "verification_status"],
+      "validation": ["analyst report has required sections", "technical report preserved", "source map retained", "no code fences", "no recommendation language"]
+    },
+    {
+      "id": "S3_pt_market_economics",
+      "title": "PT market and economics analysis",
+      "role": "Identify exact Pendle PT market and quantify price, accounting asset, maturity, implied APY, liquidity, and PT-specific risks.",
+      "depends_on": ["S2_asset_risk_analyst_report"],
+      "parallelization": {
+        "parallelizable": true,
+        "unit": "one PT market per subagent",
+        "recommended_max_concurrent": 3,
+        "reason": "Each PT market has independent market/API identity and writes a separate memo."
+      },
+      "delegate_to_subagent": true,
+      "skip_if": "No PT markets in scope.",
+      "subagent_context": [
+        "PT scope: underlying symbol/address, maturity, chain, days label",
+        "underlying token analyst report path",
+        "underlying technical report path",
+        "Pendle API/source requirements"
+      ],
+      "inputs": ["pt_scope", "underlying_asset_report"],
+      "outputs": [
+        "<pt_artifact_dir>/scope.json",
+        "<pt_artifact_dir>/analyst-report.md",
+        "<pt_artifact_dir>/technical-report.md",
+        "<pt_artifact_dir>/verification.md",
+        "pt-markets/index.md"
+      ],
+      "handoff_summary_fields": ["market", "pt", "sy", "yt", "maturity", "pt_price", "accounting_asset_price", "implied_apy", "liquidity", "break_even_drawdown", "artifact_path"],
+      "validation": ["exact market/PT/SY/YT IDs sourced", "maturity matches user scope", "PT price/accounting price/liquidity recorded", "inherited token risk separated from PT-specific risk"]
+    },
+    {
+      "id": "S4_x_social_mining",
+      "title": "X/social mining for risk, return, and points",
+      "role": "Collect X/social claims about points, yield, PT APY, depeg, redemption, queue, and stress narratives for one token/PT scope.",
+      "depends_on": ["S2_asset_risk_analyst_report", "S3_pt_market_economics"],
+      "parallelization": {
+        "parallelizable": true,
+        "unit": "one token/PT social scope per subagent",
+        "recommended_max_concurrent": 3,
+        "reason": "Each social search lane is independent and should not pollute the parent context with raw X results. Hermes delegated batch execution is capped at three children in this environment."
+      },
+      "delegate_to_subagent": true,
+      "skip_if": "No points, social, or market-narrative upside/risk is in scope.",
+      "subagent_context": [
+        "token/PT scope",
+        "underlying analyst report path",
+        "PT report path when applicable",
+        "X-search safety constraints: read-only, no X write actions, mark degraded citations"
+      ],
+      "inputs": ["token_or_pt_scope", "S2_report", "S3_report_optional"],
+      "outputs": ["x-research/x-research-<scope>.md"],
+      "handoff_summary_fields": ["artifact_path", "return_models", "risk_narratives", "points_mechanics", "source_count", "citation_degraded_count", "validation_status"],
+      "validation": ["at least 4 query angles", "material claims have handle/date/URL or citation_degraded", "speculation separated from source facts", "no X write actions"]
+    },
+    {
+      "id": "S5_x_social_synthesis",
+      "title": "X/social synthesis",
+      "role": "Synthesize social evidence across scopes into cross-token return models, risk narratives, contradictions, and confidence boundaries.",
+      "depends_on": ["S4_x_social_mining"],
+      "parallelization": {
+        "parallelizable": false,
+        "unit": "all social artifacts",
+        "reason": "This stage reasons across all social memos and should run once after S4 completes."
+      },
+      "delegate_to_subagent": false,
+      "skip_if": "S4 skipped.",
+      "inputs": ["all_x_research_artifacts"],
+      "outputs": ["x-research/index.md", "verification/final-x-research-points-yield-verification.md"],
+      "handoff_summary_fields": ["artifact_path", "programs_detected", "pt_rate_ranges", "risk_narratives", "contradictions", "citation_degradation_summary", "verification_status"],
+      "validation": ["all scoped social artifacts represented", "points/yield/PT risks synthesized", "contradictions identified", "citation degradation explicit"]
+    },
+    {
+      "id": "S6_quantitative_underwriting",
+      "title": "Quantitative underwriting and decision memo",
+      "role": "Convert token, PT, and social evidence into ROI/APR, points EV, expected loss, price-stability certainty, and risk-adjusted decision outputs.",
+      "depends_on": ["S2_asset_risk_analyst_report", "S3_pt_market_economics", "S5_x_social_synthesis"],
+      "parallelization": {
+        "parallelizable": false,
+        "unit": "portfolio/opportunity set",
+        "reason": "This stage compares candidates, applies consistent priors, and produces a single decision surface."
+      },
+      "delegate_to_subagent": false,
+      "inputs": ["S2_reports", "S3_reports_optional", "S5_social_synthesis_optional", "investment_hurdles", "position_size", "horizon"],
+      "outputs": [
+        "investment-analysis/quantitative-underwriting-methodology.md",
+        "investment-analysis/investment-analyst-report-points-pt-risk-return.md",
+        "investment-analysis/index.md"
+      ],
+      "handoff_summary_fields": ["risk_adjusted_returns", "expected_loss_priors", "points_break_even", "price_stability_scores", "decision_statuses", "live_inputs_needed"],
+      "validation": ["PT ROI/APR formula present", "points EV formula present", "expected-loss model present", "risk-adjusted returns computed", "decision triggers named"]
+    },
+    {
+      "id": "S7_final_verification",
+      "title": "Final verification",
+      "role": "Run structural, terminology, workspace, and decision-surface checks before reporting completion.",
+      "depends_on": ["S6_quantitative_underwriting"],
+      "parallelization": {
+        "parallelizable": false,
+        "unit": "full run",
+        "reason": "Verification must observe the final artifact set after all writes."
+      },
+      "delegate_to_subagent": false,
+      "inputs": ["all_outputs"],
+      "outputs": ["verification/final-investment-analysis-verification.md"],
+      "validation": ["required files exist", "cross-links resolve", "numbers present", "workspace policy check passes", "no stale blocker unreported"]
+    }
+  ],
+  "parallel_groups": [
+    {"id": "G1_token_mining", "stages": ["S1_general_asset_mining"], "parallel_unit": "token"},
+    {"id": "G2_token_reports", "stages": ["S2_asset_risk_analyst_report"], "parallel_unit": "token"},
+    {"id": "G3_pt_reports", "stages": ["S3_pt_market_economics"], "parallel_unit": "PT market"},
+    {"id": "G4_x_mining", "stages": ["S4_x_social_mining"], "parallel_unit": "token/PT social scope"}
+  ],
+  "serial_groups": [
+    {"id": "X_synthesis", "stages": ["S5_x_social_synthesis"]},
+    {"id": "underwriting", "stages": ["S6_quantitative_underwriting"]},
+    {"id": "verification", "stages": ["S7_final_verification"]}
+  ]
+}
