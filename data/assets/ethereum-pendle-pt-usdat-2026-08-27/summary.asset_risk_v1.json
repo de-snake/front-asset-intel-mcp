@@ -204,5 +204,29 @@
     "points_roi_required_to_clear_hurdle": 0.014993,
     "conclusion": "PT-USDat is the stable-price / low-return candidate and needs credible Saturn points or a lower hurdle to justify the route."
   },
-  "summary_schema_version": "asset_summary_v1.1"
+  "summary_schema_version": "asset_summary_v1.2",
+  "agent_display": {
+    "recommended_table_fields": [
+      "agent_display.score_display",
+      "agent_display.decision_label",
+      "agent_display.underwriting_status",
+      "agent_display.execution_automation_status",
+      "agent_display.primary_blockers",
+      "agent_display.next_action"
+    ],
+    "score_display": "52/100 inherited asset-quality + PT economics overlay",
+    "score_sort": 52,
+    "score_source": "inherited_underlying_asset_quality_score",
+    "score_explanation": "The numeric score intentionally inherits underlying asset-quality risk. Use this row’s PT economics, points hurdle, and blockers to rank the PT; do not read the inherited score as a standalone PT return score.",
+    "recommended_table_decision": "conditional_pt_needs_points_or_lower_loss",
+    "decision_label": "Conditional PT candidate — needs 1.50% points ROI or lower loss/hurdle",
+    "underwriting_status": "conditional_candidate_requires_points_or_lower_expected_loss",
+    "execution_automation_status": "blocked_until_live_inputs_resolved",
+    "primary_blockers": [
+      "Holder/redemption route: Saturn onboarding, freeze/pause surfaces, and Credit Account/liquidator/recipient eligibility must be proven before automation",
+      "Issuer/admin controls: USDat exposes issuer-controlled freeze and pause surfaces; wallet, Credit Account, liquidator, and recipient state must be checked"
+    ],
+    "next_action": "Resolve named live inputs before any Preview/Execute automation.",
+    "table_note": "PT-USDat is the stable-price / low-return candidate and needs credible Saturn points or a lower hurdle to justify the route."
+  }
 }

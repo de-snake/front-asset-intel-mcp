@@ -240,5 +240,30 @@
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
   "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay",
-  "summary_schema_version": "asset_summary_v1.1"
+  "summary_schema_version": "asset_summary_v1.2",
+  "agent_display": {
+    "recommended_table_fields": [
+      "agent_display.score_display",
+      "agent_display.decision_label",
+      "agent_display.underwriting_status",
+      "agent_display.execution_automation_status",
+      "agent_display.primary_blockers",
+      "agent_display.next_action"
+    ],
+    "score_display": "35/100 asset-quality evidence",
+    "score_sort": 35,
+    "score_source": "direct_asset_quality_score",
+    "score_explanation": "This score is an asset-quality/readiness score from the curated rubric; it is not report quality, a live-market route score, or an investment recommendation.",
+    "recommended_table_decision": "cannot_underwrite_current_snapshot",
+    "decision_label": "Do not underwrite from this snapshot",
+    "underwriting_status": "do_not_underwrite_current_snapshot",
+    "execution_automation_status": "blocked_current_snapshot",
+    "primary_blockers": [
+      "Holder/redemption route: apyUSD exit depends on vault unlock/receipt mechanics, fees/duration, apxUSD output, and holder-specific restriction/redemption state. The report says unresolved route, pause, deny-list, receipt, and pending-governance state blocks automated execution",
+      "Issuer/admin controls: On-chain evidence maps proxy/implementation/authority, AccessManager, pause, deny-list, receipt/vesting/fee values, and Safe-like reads, but pending governance state and restriction inventory require refresh",
+      "Oracle/accounting: Vault exchange-rate accounting can diverge from executable market value, apxUSD price, final USDC route, and receipt/eligibility state. Gearbox-specific oracle/support state is unresolved"
+    ],
+    "next_action": "Upgrade only if apxUSD collateral stress resolves, apyUSD market discount closes, receipt/claim state is confirmed, and wallet-specific APYx points EV exceeds 5.6168% of capital over 83 days.",
+    "table_note": "Direct apyUSD yield and PT-apyUSD fixed discount fail the old base-case risk adjustment before points."
+  }
 }

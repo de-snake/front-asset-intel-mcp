@@ -2,7 +2,7 @@
 
 - Date: 2026-06-07
 - State: implemented and verified
-- Summary: TypeScript MCP server scaffolded with two read-only tools, static rubric/data layout, APX/APY/PRIME/deSPXA/Saturn seed assets, PT market overlays, and a first-class MCP stdio smoke test (`npm run smoke:mcp`). The latest public rich token report branch (`front-knowledge-base` commit `b954049`) is normalized into returned summaries and reports.
+- Summary: TypeScript MCP server scaffolded with two read-only tools, static rubric/data layout, APX/APY/PRIME/deSPXA/Saturn seed assets, PT market overlays, table-facing `agent_display` decisions, and a first-class MCP stdio smoke test (`npm run smoke:mcp`). The latest public rich token report branch (`front-knowledge-base` commit `b954049`) is normalized into returned summaries and reports.
 
 ## Current artifact
 
@@ -23,6 +23,10 @@
   - `data/assets/ethereum-pendle-pt-susdat-2026-08-27/`
 - Rubric:
   - `data/rubrics/asset_risk_v1.json`
+- Summary contract:
+  - `summary_schema_version: asset_summary_v1.2`
+  - `agent_display.score_display`, `decision_label`, `underwriting_status`, `execution_automation_status`, `primary_blockers`, and `next_action` are the preferred table/ranking fields.
+  - Legacy `rubric.score` / `rubric.decision_class` remain for backward compatibility and deterministic validation only.
 
 ## Verification
 

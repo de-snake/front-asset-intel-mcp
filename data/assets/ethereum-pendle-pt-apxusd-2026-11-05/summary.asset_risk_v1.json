@@ -259,5 +259,29 @@
     "source_ref": "docs/rich-token-reports",
     "source_commit": "b954049"
   },
-  "summary_schema_version": "asset_summary_v1.1"
+  "summary_schema_version": "asset_summary_v1.2",
+  "agent_display": {
+    "recommended_table_fields": [
+      "agent_display.score_display",
+      "agent_display.decision_label",
+      "agent_display.underwriting_status",
+      "agent_display.execution_automation_status",
+      "agent_display.primary_blockers",
+      "agent_display.next_action"
+    ],
+    "score_display": "49/100 inherited asset-quality + PT economics overlay",
+    "score_sort": 49,
+    "score_source": "inherited_underlying_asset_quality_score",
+    "score_explanation": "The numeric score intentionally inherits underlying asset-quality risk. Use this row’s PT economics, points hurdle, and blockers to rank the PT; do not read the inherited score as a standalone PT return score.",
+    "recommended_table_decision": "conditional_pt_needs_points_or_lower_loss",
+    "decision_label": "Conditional PT candidate — needs 0.47% points ROI or lower loss/hurdle",
+    "underwriting_status": "conditional_candidate_requires_points_or_lower_expected_loss",
+    "execution_automation_status": "blocked_until_live_inputs_resolved",
+    "primary_blockers": [
+      "Holder/redemption route: Inherited from apxUSD and compounded by PT maturity/output checks: holder eligibility and restriction state for apxUSD must be refreshed before live use",
+      "Issuer/admin controls: Inherited from apxUSD: the PT wrapper does not remove pause, deny-list, upgrade, redemption-eligibility, or issuer-control risks in the accounting asset"
+    ],
+    "next_action": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, no pending admin event, and route-specific APYx points eligibility. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
+    "table_note": "Conditionally underwriteable review candidate, not clean carry before points."
+  }
 }

@@ -23,7 +23,7 @@ server.registerTool(
   {
     title: "Get asset rubric summary",
     description:
-      "Return the precomputed rubric-style JSON summary for an asset, including total score/decision plus per-rubric dimension score, score band, status, evidence state, and evidence pointers. Use this for standardized analyst-agent decisions before reading the full report.",
+      "Return the precomputed rubric-style JSON summary for an asset. For tables and analyst-agent routing, prefer agent_display.score_display, agent_display.decision_label, underwriting_status, execution_automation_status, primary_blockers, and next_action over the legacy rubric.score/decision_class fields. The payload also includes per-rubric dimension score, score band, status, evidence state, and evidence pointers.",
     inputSchema: assetLookupSchema,
   },
   async (args: AssetLookupArgs) => {

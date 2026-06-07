@@ -279,5 +279,30 @@
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
   "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay",
-  "summary_schema_version": "asset_summary_v1.1"
+  "summary_schema_version": "asset_summary_v1.2",
+  "agent_display": {
+    "recommended_table_fields": [
+      "agent_display.score_display",
+      "agent_display.decision_label",
+      "agent_display.underwriting_status",
+      "agent_display.execution_automation_status",
+      "agent_display.primary_blockers",
+      "agent_display.next_action"
+    ],
+    "score_display": "35/100 inherited asset-quality + PT economics overlay",
+    "score_sort": 35,
+    "score_source": "inherited_underlying_asset_quality_score",
+    "score_explanation": "The numeric score intentionally inherits underlying asset-quality risk. Use this row’s PT economics, points hurdle, and blockers to rank the PT; do not read the inherited score as a standalone PT return score.",
+    "recommended_table_decision": "cannot_underwrite_current_snapshot",
+    "decision_label": "Do not underwrite from this snapshot",
+    "underwriting_status": "do_not_underwrite_current_snapshot",
+    "execution_automation_status": "blocked_current_snapshot",
+    "primary_blockers": [
+      "Holder/redemption route: The PT inherits apyUSD receipt/unlock and apxUSD redemption constraints; maturity output/holder eligibility must be verified before live use",
+      "Issuer/admin controls: Inherited from apyUSD/apxUSD: AccessManager, upgrade, pause, deny-list, receipt, fee, and pending-governance state can affect PT settlement or output conversion",
+      "Oracle/accounting: Pendle API pricing is known, but a production PT valuation feed/Gearbox oracle was not verified, and accounting asset value can diverge from executable exit value under stress"
+    ],
+    "next_action": "Upgrade only if apxUSD collateral stress resolves, apyUSD market discount closes, receipt/claim state is confirmed, and wallet-specific APYx points EV exceeds 5.6168% of capital over 83 days. Downgrade if apxUSD trades below accounting value or receipt/claim exits become less predictable.",
+    "table_note": "PT-apyUSD is a points/recovery trade, not clean fixed-income-like carry."
+  }
 }

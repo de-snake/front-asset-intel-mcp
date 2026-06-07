@@ -27,6 +27,20 @@ type SummaryDimension = {
   evidence: EvidencePointer[];
   confidence: string;
 };
+type AgentDisplay = {
+  recommended_table_fields: string[];
+  score_display: string;
+  score_sort: number;
+  score_source: string;
+  score_explanation: string;
+  recommended_table_decision: string;
+  decision_label: string;
+  underwriting_status: string;
+  execution_automation_status: string;
+  primary_blockers: string[];
+  next_action: string;
+  table_note: string;
+};
 type Summary = {
   summary_schema_version: string;
   asset_id: string;
@@ -41,6 +55,7 @@ type Summary = {
     score_status: string;
     decision_class: string;
   };
+  agent_display: AgentDisplay;
   dimensions: SummaryDimension[];
   return_profile?: unknown;
   blocking_unknowns: string[];
@@ -72,6 +87,27 @@ const rubricDimensionById = new Map(rubric.dimensions.map((dim) => [dim.id, dim]
 const validScoreBands = new Set(["strong", "partial", "weak"]);
 const validStatuses = new Set(["usable_for_review", "review_required", "block_automation", "cannot_underwrite"]);
 const validDecisionClasses = new Set(["usable_with_live_preview", "review_required", "blocked_or_cannot_underwrite"]);
+const validRecommendedTableDecisions = new Set([
+  "analysis_candidate_live_preview_possible",
+  "block_preview_execute_until_inputs",
+  "cannot_underwrite_current_snapshot",
+  "conditional_pt_needs_points_or_lower_loss",
+  "points_recovery_trade_only",
+  "research_only_fresh_quant_needed",
+]);
+const validUnderwritingStatuses = new Set([
+  "analysis_candidate",
+  "conditional_candidate_requires_points_or_lower_expected_loss",
+  "do_not_underwrite_current_snapshot",
+  "manual_underwriting_only",
+  "needs_fresh_quant_and_live_inputs",
+  "not_clean_carry_points_trade_only",
+]);
+const validExecutionAutomationStatuses = new Set([
+  "blocked_current_snapshot",
+  "blocked_until_live_inputs_resolved",
+  "requires_live_preview_before_execute",
+]);
 const validEvidenceStates = new Set(["verified", "partially_supported", "source_inconclusive", "missing_or_unknown", "negative_evidence"]);
 
 for (const dimension of rubric.dimensions) {
@@ -98,7 +134,7 @@ for (const entry of entries) {
   const summary = (await getAssetSummary({ asset_id: manifest.asset_id })) as Summary;
   const research = await getAssetResearch({ asset_id: manifest.asset_id });
 
-  assert(summary.summary_schema_version === "asset_summary_v1.1", `${manifest.slug}: unexpected summary_schema_version`);
+  assert(summary.summary_schema_version === "asset_summary_v1.2", `${manifest.slug}: unexpected summary_schema_version`);
   assert(summary.asset_id === manifest.asset_id, `${manifest.slug}: summary asset_id mismatch`);
   assert(summary.symbol === manifest.symbol, `${manifest.slug}: summary symbol mismatch`);
   assert(summary.rubric.version === manifest.rubric_version, `${manifest.slug}: rubric version mismatch`);
@@ -107,6 +143,41 @@ for (const entry of entries) {
   assert(summary.rubric.score_status === "precomputed", `${manifest.slug}: rubric score_status mismatch`);
   assert(summary.rubric.score_meaning.length > 40, `${manifest.slug}: rubric score_meaning is missing`);
   assert(validDecisionClasses.has(summary.rubric.decision_class), `${manifest.slug}: invalid top-level decision_class`);
+  assert(summary.agent_display, `${manifest.slug}: missing agent_display`);
+  assert(
+    validRecommendedTableDecisions.has(summary.agent_display.recommended_table_decision),
+    `${manifest.slug}: invalid recommended_table_decision`,
+  );
+  assert(
+    !validDecisionClasses.has(summary.agent_display.recommended_table_decision),
+    `${manifest.slug}: recommended_table_decision must not reuse legacy rubric decision_class`,
+  );
+  assert(summary.agent_display.decision_label.length > 20, `${manifest.slug}: decision_label too short`);
+  assert(
+    validUnderwritingStatuses.has(summary.agent_display.underwriting_status),
+    `${manifest.slug}: invalid underwriting_status`,
+  );
+  assert(
+    validExecutionAutomationStatuses.has(summary.agent_display.execution_automation_status),
+    `${manifest.slug}: invalid execution_automation_status`,
+  );
+  assert(summary.agent_display.score_sort === summary.rubric.score, `${manifest.slug}: score_sort must match rubric score`);
+  assert(
+    summary.agent_display.score_display.includes(`${summary.rubric.score}/100`),
+    `${manifest.slug}: score_display missing score`,
+  );
+  assert(summary.agent_display.score_explanation.length > 80, `${manifest.slug}: score_explanation too short`);
+  assert(
+    summary.agent_display.recommended_table_fields.includes("agent_display.decision_label"),
+    `${manifest.slug}: table field hint missing decision_label`,
+  );
+  assert(summary.agent_display.primary_blockers.length > 0, `${manifest.slug}: expected primary_blockers for table display`);
+  assert(summary.agent_display.next_action.length > 20, `${manifest.slug}: next_action too short`);
+  assert(summary.agent_display.table_note.length > 20, `${manifest.slug}: table_note too short`);
+  assert(
+    summary.agent_display.execution_automation_status.startsWith("blocked"),
+    `${manifest.slug}: seed assets should still block automation despite richer table decisions`,
+  );
   assert(research.markdown.length > 500, `${manifest.slug}: research markdown is unexpectedly short`);
 
   const seen = new Set<string>();
@@ -161,6 +232,19 @@ for (const entry of entries) {
 
   if (manifest.asset_type === "pendle_pt") {
     assert(summary.return_profile, `${manifest.slug}: PT summary must include return_profile`);
+    assert(
+      summary.agent_display.score_source === "inherited_underlying_asset_quality_score",
+      `${manifest.slug}: PT score_source must disclose inherited asset-quality score`,
+    );
+    assert(
+      summary.agent_display.score_display.includes("PT economics overlay"),
+      `${manifest.slug}: PT score_display must mention economics overlay`,
+    );
+  } else {
+    assert(
+      summary.agent_display.score_source === "direct_asset_quality_score",
+      `${manifest.slug}: token score_source must be direct_asset_quality_score`,
+    );
   }
 }
 
