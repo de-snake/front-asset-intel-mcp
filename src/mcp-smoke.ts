@@ -74,6 +74,7 @@ const child = spawn(process.execPath, [serverPath], {
   cwd: projectRoot,
   stdio: ["pipe", "pipe", "pipe"],
 });
+child.stdin.setMaxListeners(50);
 
 let stdoutBuffer = "";
 let stderrBuffer = "";
@@ -119,6 +120,31 @@ function parseResearch(id: number, label: string): string {
   const text = response?.result?.content?.[0]?.text;
   assert(text, `${label} get_asset_research failed: ${JSON.stringify(response?.error)}`);
   return text;
+}
+
+function parseSimpleTokenEstimateFromResearch(text: string, label: string): SimpleTokenReturnEstimate {
+  const match = /```json\n([\s\S]*?)\n```/.exec(text);
+  assert(match?.[1], `${label} research missing simple-token estimate JSON block`);
+  return JSON.parse(match[1]) as SimpleTokenReturnEstimate;
+}
+
+async function waitForResponseCount(expectedResponseCount: number, label: string): Promise<void> {
+  const deadline = Date.now() + 5000;
+  while (Date.now() < deadline && responses.filter((response) => response.id !== undefined).length < expectedResponseCount) {
+    await new Promise((resolveWait) => setTimeout(resolveWait, 25));
+  }
+  assert(
+    responses.filter((response) => response.id !== undefined).length >= expectedResponseCount,
+    `${label}: expected ${expectedResponseCount} JSON-RPC responses, got ${responses.filter((response) => response.id !== undefined).length}; stderr=${stderrBuffer}`,
+  );
+}
+
+async function waitForResponseId(id: number, label: string): Promise<void> {
+  const deadline = Date.now() + 5000;
+  while (Date.now() < deadline && !responseById(id)) {
+    await new Promise((resolveWait) => setTimeout(resolveWait, 25));
+  }
+  assert(responseById(id), `${label}: expected JSON-RPC response id ${id}; stderr=${stderrBuffer}`);
 }
 
 send({
@@ -223,13 +249,16 @@ send({
   },
 });
 
-const expectedResponseCount = 15;
-const deadline = Date.now() + 5000;
-while (Date.now() < deadline && responses.filter((response) => response.id !== undefined).length < expectedResponseCount) {
-  await new Promise((resolveWait) => setTimeout(resolveWait, 25));
-}
+const simpleResearchLookups = [
+  { id: 16, label: "apxUSD", symbol: "apxUSD", expectedOrganicRoi: 0, expectedPointsRoi: 0.0027, expectedRiskAdjustedRoi: -0.0323 },
+  { id: 17, label: "apyUSD", symbol: "apyUSD", expectedOrganicRoi: 0.028182, expectedPointsRoi: 0.0027, expectedRiskAdjustedRoi: -0.019118 },
+  { id: 18, label: "PRIME", symbol: "PRIME", expectedOrganicRoi: 0.01979, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.04021 },
+  { id: 19, label: "deSPXA", symbol: "deSPXA", expectedOrganicRoi: 0.017655, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.037345 },
+  { id: 20, label: "USDat", symbol: "USDat", expectedOrganicRoi: 0, expectedPointsRoi: 0.002063, expectedRiskAdjustedRoi: -0.006937 },
+  { id: 21, label: "sUSDat", symbol: "sUSDat", expectedOrganicRoi: 0.027145, expectedPointsRoi: 0.002063, expectedRiskAdjustedRoi: -0.033292 },
+];
 
-child.kill("SIGTERM");
+await waitForResponseCount(15, "initial summary/PT research calls");
 
 const initialize = responseById(1);
 const tools = responseById(2);
@@ -327,6 +356,33 @@ for (const lookup of summaryLookups) {
   }
 }
 
+for (const lookup of simpleResearchLookups) {
+  send({
+    jsonrpc: "2.0",
+    id: lookup.id,
+    method: "tools/call",
+    params: {
+      name: "get_asset_research",
+      arguments: { symbol: lookup.symbol },
+    },
+  });
+  await waitForResponseId(lookup.id, `${lookup.label} simple-token research call`);
+}
+
+for (const lookup of simpleResearchLookups) {
+  const researchText = parseResearch(lookup.id, lookup.label);
+  assert(researchText.includes("simple_token_return_estimate: included"), `${lookup.label} research should declare included simple-token estimate`);
+  assert(researchText.includes("## Precomputed simple-token return estimate"), `${lookup.label} research missing precomputed estimate section`);
+  assert(researchText.includes("Organic ROI over"), `${lookup.label} research missing organic ROI line`);
+  assert(researchText.includes("Estimated points ROI over"), `${lookup.label} research missing points ROI line`);
+  assert(researchText.includes("Risk-adjusted ROI after base points"), `${lookup.label} research missing risk-adjusted ROI line`);
+  assert(researchText.includes("## Source research report"), `${lookup.label} research missing source report separator`);
+  const estimate = parseSimpleTokenEstimateFromResearch(researchText, lookup.label);
+  assert(estimate.organic_roi_over_horizon === lookup.expectedOrganicRoi, `${lookup.label} research organic ROI estimate changed`);
+  assert(estimate.estimated_points_roi_over_horizon === lookup.expectedPointsRoi, `${lookup.label} research points ROI estimate changed`);
+  assert(estimate.risk_adjusted_roi_after_base_points === lookup.expectedRiskAdjustedRoi, `${lookup.label} research risk-adjusted ROI estimate changed`);
+}
+
 const ptApyResearchText = parseResearch(13, "PT-apyUSD");
 assert(
   ptApyResearchText.includes("risk-adjusted base case was negative after expected loss and exit cost"),
@@ -344,6 +400,8 @@ assert(!ptUsdatResearchText.toLowerCase().includes("points roi"), "PT-USDat rese
 const ptSusdatResearchText = parseResearch(15, "PT-sUSDat");
 assert(ptSusdatResearchText.includes("fixed-return base case is negative after expected loss and exit cost"), "PT-sUSDat research markdown missing fixed-return loss conclusion");
 assert(ptSusdatResearchText.includes("STRC/NAV/queue expected loss"), "PT-sUSDat research markdown missing expected-loss conclusion");
+
+child.kill("SIGTERM");
 
 console.log(
   JSON.stringify(
@@ -382,6 +440,12 @@ console.log(
         ]),
       ),
       research_chars: {
+        apxUSD: parseResearch(16, "apxUSD").length,
+        apyUSD: parseResearch(17, "apyUSD").length,
+        PRIME: parseResearch(18, "PRIME").length,
+        deSPXA: parseResearch(19, "deSPXA").length,
+        USDat: parseResearch(20, "USDat").length,
+        sUSDat: parseResearch(21, "sUSDat").length,
         pt_apyUSD: ptApyResearchText.length,
         pt_USDat: ptUsdatResearchText.length,
         pt_sUSDat: ptSusdatResearchText.length,

@@ -58,7 +58,7 @@ Example asset lookups:
 
 ### `get_asset_research`
 
-Same lookup input. Returns the full Markdown research report.
+Same lookup input. Returns the full Markdown research report. For non-PT/simple-token rows, the MCP response also prepends a validated `## Precomputed simple-token return estimate` block copied from the summary JSON, so research-only callers receive organic ROI, estimated points ROI, expected-loss low/base/high bands, and risk-adjusted ROI before the source report body. PT research responses keep `simple_token_return_estimate: none` and do not add points assumptions.
 
 ## Seed assets
 
@@ -133,7 +133,8 @@ npm test
    - checks `tools/list` exposes `get_asset_summary` and `get_asset_research`;
    - calls `get_asset_summary` for APYx, Saturn, PRIME, and deSPXA assets;
    - verifies PT fixed-return table scores and risk-adjusted APY values for `PT-apxUSD`, `PT-apyUSD`, `PT-USDat`, and `PT-sUSDat`;
-   - calls `get_asset_research` for PT reports and verifies the fixed-return risk-adjusted conclusions are present.
+   - calls `get_asset_research` for all simple-token reports and verifies the prepended organic ROI / estimated points ROI / risk-adjusted ROI block mirrors the summary estimate;
+   - calls `get_asset_research` for PT reports and verifies the fixed-return risk-adjusted conclusions are present without simple-token points assumptions.
 
 For only the MCP protocol smoke after a build:
 

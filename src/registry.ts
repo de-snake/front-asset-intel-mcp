@@ -1,7 +1,13 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { AssetLookupArgs, AssetManifest, AssetRegistryEntry, AssetResearchResult } from "./types.js";
+import type {
+  AssetLookupArgs,
+  AssetManifest,
+  AssetRegistryEntry,
+  AssetResearchResult,
+  SimpleTokenReturnEstimate,
+} from "./types.js";
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const DATA_ROOT = path.join(PROJECT_ROOT, "data");
@@ -80,8 +86,24 @@ export async function getAssetSummary(args: AssetLookupArgs): Promise<unknown> {
   return readJsonFile(path.join(entry.directory, entry.manifest.summary_path));
 }
 
+type SummaryWithSimpleTokenReturnEstimate = {
+  simple_token_return_estimate?: SimpleTokenReturnEstimate;
+  agent_display?: {
+    simple_token_return_display?: string;
+    simple_token_return_estimate?: SimpleTokenReturnEstimate;
+  };
+};
+
 export async function getAssetResearch(args: AssetLookupArgs): Promise<AssetResearchResult> {
   const entry = await resolveAsset(args);
-  const markdown = await readFile(path.join(entry.directory, entry.manifest.research_path), "utf8");
-  return { manifest: entry.manifest, markdown };
+  const [markdown, summary] = await Promise.all([
+    readFile(path.join(entry.directory, entry.manifest.research_path), "utf8"),
+    readJsonFile<SummaryWithSimpleTokenReturnEstimate>(path.join(entry.directory, entry.manifest.summary_path)),
+  ]);
+  return {
+    manifest: entry.manifest,
+    markdown,
+    simple_token_return_display: summary.agent_display?.simple_token_return_display,
+    simple_token_return_estimate: summary.simple_token_return_estimate ?? summary.agent_display?.simple_token_return_estimate,
+  };
 }

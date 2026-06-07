@@ -2,7 +2,7 @@
 
 - Date: 2026-06-07
 - State: implemented and verified
-- Summary: TypeScript MCP server scaffolded with two read-only tools, static rubric/data layout, APX/APY/PRIME/deSPXA/Saturn seed assets, PT fixed-return overlays, table-facing `agent_display` decisions, simple-token organic/points/risk-adjusted ROI estimates with expected-loss bands, and a first-class MCP stdio smoke test (`npm run smoke:mcp`). The latest public rich token report branch (`front-knowledge-base` commit `b954049`) is normalized into returned summaries and reports.
+- Summary: TypeScript MCP server scaffolded with two read-only tools, static rubric/data layout, APX/APY/PRIME/deSPXA/Saturn seed assets, PT fixed-return overlays, table-facing `agent_display` decisions, simple-token organic/points/risk-adjusted ROI estimates with expected-loss bands, and `get_asset_research` now prepends the validated simple-token estimate block for non-PT research callers. The latest public rich token report branch (`front-knowledge-base` commit `b954049`) is normalized into returned summaries and reports.
 
 ## Current artifact
 
@@ -57,4 +57,5 @@ MCP stdio smoke verified:
   - PT-apyUSD: `11/100`, `-14.70%` risk-adjusted APY.
   - PT-USDat: `27/100`, `3.41%` risk-adjusted APY.
   - PT-sUSDat: `31/100`, `-8.94%` risk-adjusted APY.
-- `tools/call get_asset_research` resolves PT-apyUSD, PT-USDat, and PT-sUSDat and verifies their fixed-return risk-adjusted conclusions are present.
+- `tools/call get_asset_research` resolves apxUSD, apyUSD, PRIME, deSPXA, USDat, and sUSDat and verifies the prepended simple-token estimate block includes organic ROI, estimated points ROI, and risk-adjusted ROI mirrored from summary JSON.
+- `tools/call get_asset_research` resolves PT-apyUSD, PT-USDat, and PT-sUSDat and verifies their fixed-return risk-adjusted conclusions are present without simple-token points assumptions.

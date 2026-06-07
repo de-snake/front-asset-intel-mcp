@@ -49,6 +49,10 @@ type Summary = {
   };
 };
 
+function assert(condition: unknown, message: string): asserts condition {
+  if (!condition) throw new Error(message);
+}
+
 function pickSummary(summary: Summary): Record<string, unknown> {
   const selected: Record<string, unknown> = {
     legacy_score: summary.rubric?.score,
@@ -110,6 +114,24 @@ const summaries = {
   pt_sUSDat: (await getAssetSummary({ symbol: "PT-sUSDat" })) as Summary,
 };
 
+const simpleResearch = {
+  apxUSD: await getAssetResearch({ symbol: "apxUSD" }),
+  apyUSD: await getAssetResearch({ symbol: "apyUSD" }),
+  PRIME: await getAssetResearch({ symbol: "PRIME" }),
+  deSPXA: await getAssetResearch({ symbol: "deSPXA" }),
+  USDat: await getAssetResearch({ symbol: "USDat" }),
+  sUSDat: await getAssetResearch({ symbol: "sUSDat" }),
+};
+
+for (const [key, research] of Object.entries(simpleResearch)) {
+  const summary = summaries[key as keyof typeof simpleResearch] as Summary;
+  assert(research.simple_token_return_display === summary.agent_display?.simple_token_return_display, `${key} research display missing simple-token ROI line`);
+  assert(
+    JSON.stringify(research.simple_token_return_estimate) === JSON.stringify(summary.simple_token_return_estimate),
+    `${key} research estimate must mirror summary estimate`,
+  );
+}
+
 const research = {
   pt_apxUSD: await getAssetResearch({ asset_id: "0xaf0349fb9b1ba07d34381870c59b560b31412660" }),
   pt_apyUSD: await getAssetResearch({ asset_id: "0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952" }),
@@ -117,11 +139,17 @@ const research = {
   pt_sUSDat: await getAssetResearch({ asset_id: "0x91bc86899c8391b6caaf26535b9cd82efe49a189" }),
 };
 
+for (const [key, ptResearch] of Object.entries(research)) {
+  assert(!ptResearch.simple_token_return_display, `${key} PT research must not expose simple-token points display`);
+  assert(!ptResearch.simple_token_return_estimate, `${key} PT research must not expose simple-token points estimate`);
+}
+
 console.log(
   JSON.stringify(
     {
       ok: true,
       assets: Object.fromEntries(Object.entries(summaries).map(([key, summary]) => [key, pickSummary(summary)])),
+      simple_research_chars: Object.fromEntries(Object.entries(simpleResearch).map(([key, value]) => [key, value.markdown.length])),
       research_chars: Object.fromEntries(Object.entries(research).map(([key, value]) => [key, value.markdown.length])),
     },
     null,

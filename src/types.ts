@@ -26,9 +26,35 @@ export interface AssetLookupArgs {
   symbol?: string;
 }
 
+export interface SimpleTokenReturnEstimate {
+  scope: string;
+  horizon_days: number;
+  organic_yield_apy_estimate: number;
+  organic_yield_apy_range_estimate: [number, number];
+  organic_roi_over_horizon: number;
+  estimated_points_roi_over_horizon: number;
+  estimated_points_annualized_return: number;
+  points_program: string;
+  points_roi_scenarios_over_horizon: { low: number; base: number; high: number };
+  expected_loss_prior: number;
+  expected_loss_prior_scenarios: { low: number; base: number; high: number };
+  exit_cost_assumption: number;
+  risk_adjusted_roi_before_points: number;
+  risk_adjusted_roi_after_base_points: number;
+  risk_adjusted_roi_scenarios_after_base_points: { low_loss: number; base: number; high_loss: number };
+  risk_adjusted_annualized_return_after_base_points: number;
+  underwriting_hurdle_net_annualized: number;
+  method: string;
+  basis: string;
+  confidence: string;
+  evidence: string[];
+}
+
 export interface AssetResearchResult {
   manifest: AssetManifest;
   markdown: string;
+  simple_token_return_display?: string;
+  simple_token_return_estimate?: SimpleTokenReturnEstimate;
 }
 
 export interface AssetRegistryEntry {

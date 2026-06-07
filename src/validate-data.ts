@@ -414,6 +414,8 @@ for (const entry of entries) {
     assert(summary.return_profile, `${manifest.slug}: PT summary must include return_profile`);
     assert(!summary.simple_token_return_estimate, `${manifest.slug}: PT summary must not include simple token return estimate`);
     assert(!summary.agent_display.simple_token_return_estimate, `${manifest.slug}: PT agent_display must not include simple token return estimate`);
+    assert(!research.simple_token_return_estimate, `${manifest.slug}: PT research result must not include simple token return estimate`);
+    assert(!research.simple_token_return_display, `${manifest.slug}: PT research result must not include simple token return display`);
     assert(
       summary.agent_display.score_source === "pt_fixed_return_trade_score",
       `${manifest.slug}: PT score_source must be pt_fixed_return_trade_score`,
@@ -429,6 +431,11 @@ for (const entry of entries) {
     );
     assert(simpleTokenReturnEstimateSlugs.has(manifest.slug), `${manifest.slug}: unexpected token summary without simple estimate allowlist`);
     validateSimpleTokenReturnEstimate(manifest.slug, summary);
+    assert(research.simple_token_return_display === summary.agent_display.simple_token_return_display, `${manifest.slug}: research result must mirror simple token display`);
+    assert(
+      JSON.stringify(research.simple_token_return_estimate) === JSON.stringify(summary.simple_token_return_estimate),
+      `${manifest.slug}: research result must mirror simple token estimate`,
+    );
   }
 }
 
