@@ -11,9 +11,20 @@ interface JsonRpcResponse {
   error?: unknown;
 }
 
+type SummaryDimension = {
+  id: string;
+  score: number;
+  max_score: number;
+  score_band: string;
+  status: string;
+  evidence_state: string;
+};
+
 type Summary = {
+  summary_schema_version: string;
   symbol: string;
-  rubric: { score: number; decision_class: string };
+  rubric: { score: number; score_label: string; score_status: string; decision_class: string };
+  dimensions: SummaryDimension[];
   return_profile?: { gross_roi?: number; compound_gross_apy?: number };
   quantitative_risk_return_layer?: {
     points_roi_required_to_clear_hurdle?: number;
@@ -194,7 +205,28 @@ for (const lookup of summaryLookups) {
   const summary = parseSummary(lookup.id, lookup.label);
   parsedSummaries[lookup.label] = summary;
   assert(summary.symbol === lookup.expectedSymbol, `${lookup.label} summary lookup returned wrong symbol`);
+  assert(summary.summary_schema_version === "asset_summary_v1.1", `${lookup.label} summary schema version missing`);
   assert(summary.rubric.score === lookup.expectedScore, `${lookup.label} summary score changed`);
+  assert(summary.rubric.score_label === "asset_quality_evidence_score", `${lookup.label} score label missing`);
+  assert(summary.rubric.score_status === "precomputed", `${lookup.label} score status missing`);
+  assert(summary.dimensions.length === 7, `${lookup.label} expected seven rubric dimensions`);
+  for (const dimension of summary.dimensions) {
+    assert(typeof dimension.score === "number", `${lookup.label} dimension ${dimension.id} missing score`);
+    assert(typeof dimension.max_score === "number", `${lookup.label} dimension ${dimension.id} missing max_score`);
+    assert(dimension.score_band, `${lookup.label} dimension ${dimension.id} missing score_band`);
+    assert(dimension.status, `${lookup.label} dimension ${dimension.id} missing status`);
+    assert(dimension.evidence_state, `${lookup.label} dimension ${dimension.id} missing evidence_state`);
+  }
+  if (lookup.label === "USDat") {
+    const byId = Object.fromEntries(summary.dimensions.map((dimension) => [dimension.id, dimension]));
+    assert(byId.redemption_holder_eligibility?.status === "block_automation", "USDat redemption status should block automation");
+    assert(byId.oracle_accounting_alignment?.score_band === "strong", "USDat oracle score band should be strong");
+  }
+  if (lookup.label === "apyUSD") {
+    const byId = Object.fromEntries(summary.dimensions.map((dimension) => [dimension.id, dimension]));
+    assert(byId.oracle_accounting_alignment?.status === "cannot_underwrite", "apyUSD oracle status should block underwriting");
+    assert(byId.incidents_social_stress?.evidence_state === "negative_evidence", "apyUSD incident evidence state should flag negative evidence");
+  }
   if (lookup.expectedCompoundGrossApy !== undefined) {
     assert(
       summary.return_profile?.compound_gross_apy === lookup.expectedCompoundGrossApy,
@@ -232,7 +264,12 @@ console.log(
           {
             symbol: summary.symbol,
             score: summary.rubric.score,
+            score_label: summary.rubric.score_label,
             decision_class: summary.rubric.decision_class,
+            dimensions_with_status: summary.dimensions.length,
+            blocking_dimensions: summary.dimensions
+              .filter((dimension) => dimension.status === "block_automation" || dimension.status === "cannot_underwrite")
+              .map((dimension) => `${dimension.id}:${dimension.score}/${dimension.max_score}:${dimension.status}`),
             compound_gross_apy: summary.return_profile?.compound_gross_apy,
             points_roi_required_to_clear_hurdle:
               summary.quantitative_risk_return_layer?.points_roi_required_to_clear_hurdle,

@@ -11,7 +11,10 @@
     "score": 49,
     "max_score": 100,
     "decision_class": "review_required",
-    "decision_rationale": "apxUSD has observable technical and issuer evidence, listed audits, and secondary-market liquidity, but reserve reconciliation, holder-specific redemption eligibility, issuer controls, live route depth, Gearbox oracle/support, and newly integrated social collateral-stress/redemption-arbitrage concerns remain unresolved for automated analyst-agent use."
+    "decision_rationale": "apxUSD has observable technical and issuer evidence, listed audits, and secondary-market liquidity, but reserve reconciliation, holder-specific redemption eligibility, issuer controls, live route depth, Gearbox oracle/support, and newly integrated social collateral-stress/redemption-arbitrage concerns remain unresolved for automated analyst-agent use.",
+    "score_label": "asset_quality_evidence_score",
+    "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
+    "score_status": "precomputed"
   },
   "dimensions": [
     {
@@ -31,7 +34,11 @@
           "quote": "current reserve / custody / attestation reconciliation; preferred-share issuer concentration and valuation methodology"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "redemption_holder_eligibility",
@@ -50,7 +57,11 @@
           "quote": "user-specific jurisdiction, whitelist, and redemption eligibility"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "missing_or_unknown",
+      "missing_behavior": "block_automation"
     },
     {
       "id": "market_liquidity_peg_behavior",
@@ -69,7 +80,11 @@
           "quote": "live executable liquidity for a concrete size"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "issuer_controls_governance",
@@ -88,7 +103,11 @@
           "quote": "full pending Safe payload decoding; deny-list administration and current denied-account inventory"
         }
       ],
-      "confidence": "medium_high"
+      "confidence": "medium_high",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "source_inconclusive",
+      "missing_behavior": "block_automation"
     },
     {
       "id": "oracle_accounting_alignment",
@@ -107,7 +126,11 @@
           "quote": "Apyx docs, apxUSD overview ... apxUSD mechanism, preferred-share backing, collateral allocation, peg model"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "audits_security_review",
@@ -130,7 +153,11 @@
           "quote": "exact audit and formal-verification scope against live deployments"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "strong",
+      "status": "usable_for_review",
+      "evidence_state": "verified",
+      "missing_behavior": "usable_for_review"
     },
     {
       "id": "incidents_social_stress",
@@ -149,7 +176,11 @@
           "quote": "Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route."
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     }
   ],
   "blocking_unknowns": [
@@ -205,5 +236,6 @@
     "source_repo": "de-snake/front-knowledge-base",
     "source_ref": "docs/rich-token-reports",
     "source_commit": "b954049"
-  }
+  },
+  "summary_schema_version": "asset_summary_v1.1"
 }

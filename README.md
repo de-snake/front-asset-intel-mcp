@@ -8,7 +8,7 @@ This repo is intentionally runtime-small: the MCP server does not call an LLM, c
 
 Long Markdown research reports are useful for diligence, but they are not a stable decision interface for an analyst agent. The server exposes two layers:
 
-- `get_asset_summary` — compact rubric JSON with uniform questions, fixed scoring buckets, evidence snippets, blocking unknowns, and optional social/quantitative decision overlays.
+- `get_asset_summary` — compact rubric JSON with uniform questions, fixed scoring buckets, per-rubric score/status/evidence-state fields, evidence snippets, blocking unknowns, and optional social/quantitative decision overlays.
 - `get_asset_research` — full Markdown report for source review when the summary needs expansion.
 
 ## Tools
@@ -90,7 +90,16 @@ src/
 - Audits and security review: 12
 - Incidents and social stress: 10
 
-Each dimension has fixed answer buckets and score ranges. Summaries store the selected bucket, score, evidence, confidence, blocking unknowns, and — where available — `social_research_layer` / `quantitative_risk_return_layer` overlays that expose points, hurdle, expected-loss, and risk-adjusted-return information without folding those economics into the 100-point asset-quality score.
+Each dimension has fixed answer buckets and score ranges. Summaries store the selected bucket, score, `score_band`, dimension-level action `status`, `evidence_state`, evidence, confidence, blocking unknowns, and — where available — `social_research_layer` / `quantitative_risk_return_layer` overlays that expose points, hurdle, expected-loss, and risk-adjusted-return information without folding those economics into the 100-point asset-quality score.
+
+Dimension `status` values are action-oriented:
+
+- `usable_for_review` — this dimension has usable evidence and does not itself force a review gate.
+- `review_required` — evidence is partial, stale, or size/holder-specific enough that an analyst must review it.
+- `block_automation` — the dimension can be discussed, but automated Preview/Execute should not proceed until the missing input is resolved.
+- `cannot_underwrite` — the dimension contains a material valuation/risk gap or negative evidence that prevents underwriting under current assumptions.
+
+`score_band` is the scoring bucket quality (`strong`, `partial`, `weak`). `evidence_state` preserves whether the status came from verified support, partial support, source inconclusiveness, missing/unknown evidence, or negative evidence.
 
 ## Install and verify
 

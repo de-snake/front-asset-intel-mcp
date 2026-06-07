@@ -10,7 +10,10 @@
     "score": 41,
     "max_score": 100,
     "decision_class": "review_required",
-    "decision_rationale": "PRIME is a tokenized vault-share / wYLDS / YLDS / HELOC-linked exposure with coherent issuer evidence but unresolved reserve bodies, holder eligibility, NAV-feed construction, admin controls, settlement path, and live route depth. It is useful for Analyze-stage review but not automation."
+    "decision_rationale": "PRIME is a tokenized vault-share / wYLDS / YLDS / HELOC-linked exposure with coherent issuer evidence but unresolved reserve bodies, holder eligibility, NAV-feed construction, admin controls, settlement path, and live route depth. It is useful for Analyze-stage review but not automation.",
+    "score_label": "asset_quality_evidence_score",
+    "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
+    "score_status": "precomputed"
   },
   "dimensions": [
     {
@@ -25,7 +28,10 @@
         "RESULT.md §3 Backing and exposure risk"
       ],
       "confidence": "medium",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported"
     },
     {
       "id": "redemption_holder_eligibility",
@@ -38,7 +44,10 @@
         "RESULT.md §10 What must be checked before live use"
       ],
       "confidence": "medium",
-      "missing_behavior": "block_automation"
+      "missing_behavior": "block_automation",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "missing_or_unknown"
     },
     {
       "id": "market_liquidity_peg_behavior",
@@ -52,7 +61,10 @@
         "RESULT.md §10 What must be checked before live use"
       ],
       "confidence": "medium",
-      "missing_behavior": "block_automation"
+      "missing_behavior": "block_automation",
+      "score_band": "partial",
+      "status": "block_automation",
+      "evidence_state": "partially_supported"
     },
     {
       "id": "issuer_controls_governance",
@@ -66,7 +78,10 @@
         "RESULT.md §10 What must be checked before live use"
       ],
       "confidence": "medium/high",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "weak",
+      "status": "review_required",
+      "evidence_state": "source_inconclusive"
     },
     {
       "id": "oracle_accounting_alignment",
@@ -80,7 +95,10 @@
         "RESULT.md §10 What must be checked before live use"
       ],
       "confidence": "medium/high",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported"
     },
     {
       "id": "audits_security_review",
@@ -93,7 +111,10 @@
         "RESULT.md §10 What must be checked before live use"
       ],
       "confidence": "medium",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "weak",
+      "status": "review_required",
+      "evidence_state": "missing_or_unknown"
     },
     {
       "id": "incidents_social_stress",
@@ -107,7 +128,10 @@
         "RESULT.md §10 What must be checked before live use"
       ],
       "confidence": "medium",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported"
     }
   ],
   "blocking_unknowns": [
@@ -135,5 +159,6 @@
     "status": "not_available_in_old_run",
     "decision_effect": "A fresh quantitative pass is required for NAV sensitivity, HELOC credit-cycle exposure, exit depth, issuer-control tail risk, and oracle/liquidation behavior.",
     "confidence": "high for absence in corpus"
-  }
+  },
+  "summary_schema_version": "asset_summary_v1.1"
 }

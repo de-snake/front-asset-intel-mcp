@@ -17,7 +17,10 @@
     "max_score": 100,
     "decision_class": "review_required",
     "score_source": "inherited_underlying_asset_risk",
-    "decision_rationale": "The PT changes timing and return profile, not the core issuer/backing/control risk. It inherits apxUSD asset-risk after the social-stress update (49/100) and adds PT-specific return, maturity, AMM-exit, oracle/feed, and points/hurdle checks."
+    "decision_rationale": "The PT changes timing and return profile, not the core issuer/backing/control risk. It inherits apxUSD asset-risk after the social-stress update (49/100) and adds PT-specific return, maturity, AMM-exit, oracle/feed, and points/hurdle checks.",
+    "score_label": "asset_quality_evidence_score",
+    "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
+    "score_status": "precomputed"
   },
   "dimensions": [
     {
@@ -33,7 +36,11 @@
           "quote": "The PT inherits apxUSD exposure to the Apyx synthetic-dollar model backed by off-chain preferred-share collateral."
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "redemption_holder_eligibility",
@@ -48,7 +55,11 @@
           "quote": "holder eligibility and restriction state for `apxUSD` / `apxUSD`"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "missing_or_unknown",
+      "missing_behavior": "block_automation"
     },
     {
       "id": "market_liquidity_peg_behavior",
@@ -67,7 +78,11 @@
           "quote": "Before maturity, the holder exits through Pendle market liquidity unless another route is available."
         }
       ],
-      "confidence": "medium_high"
+      "confidence": "medium_high",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "issuer_controls_governance",
@@ -82,7 +97,11 @@
           "quote": "The Pendle wrapper changes the timing and market mechanics, but it does not remove the underlying issuer-control, backing, restriction, or redemption issues."
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "source_inconclusive",
+      "missing_behavior": "block_automation"
     },
     {
       "id": "oracle_accounting_alignment",
@@ -101,7 +120,11 @@
           "quote": "the PT should be treated as requiring human review for valuation and blocking for automated live use"
         }
       ],
-      "confidence": "medium_high"
+      "confidence": "medium_high",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "audits_security_review",
@@ -116,7 +139,11 @@
           "quote": "Evidence quality is weaker for live size-specific exit depth, Pendle contract role and upgrade state, and any Gearbox-specific oracle or support status."
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "strong",
+      "status": "usable_for_review",
+      "evidence_state": "verified",
+      "missing_behavior": "usable_for_review"
     },
     {
       "id": "incidents_social_stress",
@@ -135,7 +162,11 @@
           "quote": "PT-apxUSD is the only scoped PT that comes close to the 10.00% net annualized hurdle before points."
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     }
   ],
   "return_profile": {
@@ -227,5 +258,6 @@
     "source_repo": "de-snake/front-knowledge-base",
     "source_ref": "docs/rich-token-reports",
     "source_commit": "b954049"
-  }
+  },
+  "summary_schema_version": "asset_summary_v1.1"
 }

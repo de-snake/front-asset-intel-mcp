@@ -10,7 +10,10 @@
     "score": 40,
     "max_score": 100,
     "decision_class": "review_required",
-    "decision_rationale": "sUSDat remains more conditional than USDat. Its feed is structurally complete but values ERC-4626 accounting over USDat, while immediate recovery depends on thinner liquidity, queues, issuer/STRC realization, and inherited permissioning. It requires a higher bar and more inputs before any proposal."
+    "decision_rationale": "sUSDat remains more conditional than USDat. Its feed is structurally complete but values ERC-4626 accounting over USDat, while immediate recovery depends on thinner liquidity, queues, issuer/STRC realization, and inherited permissioning. It requires a higher bar and more inputs before any proposal.",
+    "score_label": "asset_quality_evidence_score",
+    "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
+    "score_status": "precomputed"
   },
   "dimensions": [
     {
@@ -25,7 +28,10 @@
         "sUSDat analyst report §Backing and NAV quality"
       ],
       "confidence": "medium",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported"
     },
     {
       "id": "redemption_holder_eligibility",
@@ -39,7 +45,10 @@
         "RESULT.md §Missing before decision-grade proposal"
       ],
       "confidence": "medium/high",
-      "missing_behavior": "block_automation"
+      "missing_behavior": "block_automation",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "missing_or_unknown"
     },
     {
       "id": "market_liquidity_peg_behavior",
@@ -52,7 +61,10 @@
         "RESULT.md §sUSDat review"
       ],
       "confidence": "medium/high",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "weak",
+      "status": "review_required",
+      "evidence_state": "missing_or_unknown"
     },
     {
       "id": "issuer_controls_governance",
@@ -66,7 +78,10 @@
         "sUSDat analyst report §Controls, governance, and legal restrictions"
       ],
       "confidence": "medium",
-      "missing_behavior": "block_automation"
+      "missing_behavior": "block_automation",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "source_inconclusive"
     },
     {
       "id": "oracle_accounting_alignment",
@@ -80,7 +95,10 @@
         "RESULT.md §Oracle and liquidation implication"
       ],
       "confidence": "medium/high",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported"
     },
     {
       "id": "audits_security_review",
@@ -93,7 +111,10 @@
         "sUSDat analyst report §Evidence quality"
       ],
       "confidence": "medium",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "weak",
+      "status": "review_required",
+      "evidence_state": "missing_or_unknown"
     },
     {
       "id": "incidents_social_stress",
@@ -106,7 +127,10 @@
         "RESULT.md §X / social research layer"
       ],
       "confidence": "medium",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported"
     }
   ],
   "blocking_unknowns": [
@@ -148,5 +172,6 @@
     "effective_feed_answer_usd": 0.95272729,
     "erc4626_exchange_rate_usdat_per_susdat": 0.953119,
     "feed_answer_timestamp_utc": "2026-06-06 08:00:47 UTC"
-  }
+  },
+  "summary_schema_version": "asset_summary_v1.1"
 }

@@ -1,7 +1,10 @@
 import { getAssetResearch, getAssetSummary } from "./registry.js";
 
+type SummaryDimension = { id: string; score: number; max_score: number; score_band: string; status: string };
+
 type Summary = {
-  rubric?: { score?: number; decision_class?: string };
+  rubric?: { score?: number; score_label?: string; decision_class?: string };
+  dimensions?: SummaryDimension[];
   return_profile?: {
     gross_roi?: number;
     compound_gross_apy?: number;
@@ -16,7 +19,14 @@ type Summary = {
 function pickSummary(summary: Summary): Record<string, unknown> {
   const selected: Record<string, unknown> = {
     score: summary.rubric?.score,
+    score_label: summary.rubric?.score_label,
     decision_class: summary.rubric?.decision_class,
+    dimension_statuses: summary.dimensions?.map((dimension) => ({
+      id: dimension.id,
+      score: `${dimension.score}/${dimension.max_score}`,
+      score_band: dimension.score_band,
+      status: dimension.status,
+    })),
   };
 
   if (summary.return_profile) {
