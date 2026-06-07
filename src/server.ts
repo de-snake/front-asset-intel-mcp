@@ -2,7 +2,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { getAssetResearch, getAssetSummary } from "./registry.js";
+import { getAssetResearch, getAssetSummary, getAvailableAssets } from "./registry.js";
 import type { AssetLookupArgs, AssetResearchResult, AssetReturnContext, SimpleTokenReturnEstimate } from "./types.js";
 
 // Stdio transport can have many concurrent large tool responses in smoke tests and
@@ -14,7 +14,7 @@ const assetLookupSchema = {
   asset_id: z
     .string()
     .optional()
-    .describe("Canonical asset id, slug, token address, market address, PT address, or alias."),
+    .describe("Canonical asset id, slug, token address, Pendle market address, PT address, chain-prefixed address, or alias."),
   symbol: z.string().optional().describe("Asset symbol or alias, for example apxUSD, PRIME, USDat, or PT-USDat."),
 };
 
@@ -198,11 +198,32 @@ function formatAssetResearch(result: AssetResearchResult): string {
 }
 
 server.registerTool(
+  "list_available_assets",
+  {
+    title: "List available assets and lookup guidance",
+    description:
+      "Return the static list of assets this MCP can answer about, all accepted lookup values, and explicit examples for calling get_asset_summary or get_asset_research when an agent already knows a symbol, token address, Pendle market address, PT address, chain-prefixed address, canonical asset_id, slug, or alias. Call this first when you are unsure which asset identifiers are available; this server cannot dynamically fetch unknown assets.",
+    inputSchema: {},
+  },
+  async () => {
+    const result = await getAvailableAssets();
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    };
+  },
+);
+
+server.registerTool(
   "get_asset_summary",
   {
     title: "Get asset rubric summary",
     description:
-      "Return the precomputed rubric-style JSON summary for an asset, including the normalized return_context derived from the full local research package. This is the scoring-helper surface for analyst agents: each dimension includes the asset-specific answer plus dimensions[].possible_grades with every fixed rubric bucket, score range, status, and selected/higher/lower relation so agents can compare the current state against alternatives. For tables and analyst-agent routing, prefer agent_display.score_display, agent_display.decision_label, underwriting_status, execution_automation_status, primary_blockers, next_action, and return_context over the legacy rubric.score/decision_class fields.",
+      "Return the precomputed rubric-style JSON summary for an asset, including the normalized return_context derived from the full local research package. Accepts asset_id or symbol; asset_id may be a canonical asset id, slug, raw token/Pendle market/PT address, chain-prefixed address, or alias. If unsure what assets or lookup strings are available, call list_available_assets first. This is the scoring-helper surface for analyst agents: each dimension includes the asset-specific answer plus dimensions[].possible_grades with every fixed rubric bucket, score range, status, and selected/higher/lower relation so agents can compare the current state against alternatives. For tables and analyst-agent routing, prefer agent_display.score_display, agent_display.decision_label, underwriting_status, execution_automation_status, primary_blockers, next_action, and return_context over the legacy rubric.score/decision_class fields.",
     inputSchema: assetLookupSchema,
   },
   async (args: AssetLookupArgs) => {
@@ -223,7 +244,7 @@ server.registerTool(
   {
     title: "Get full asset research",
     description:
-      "Return the full precomputed Markdown research report for an asset, with the same normalized return_context used by get_asset_summary carried inline for auditability. The context covers PT fixed-maturity ROI, direct/non-PT organic or variable ROI, quantitatively modeled farming value, expected-loss/exit-cost bands, risk-adjusted ROI, and social/X plus quantitative overlays where present. Use this when the rubric answer needs source context or audit detail.",
+      "Return the full precomputed Markdown research report for an asset, with the same normalized return_context used by get_asset_summary carried inline for auditability. Accepts the same lookup inputs as get_asset_summary; if the agent only knows an address or symbol and is unsure whether it is available, call list_available_assets first for exact examples. The context covers PT fixed-maturity ROI, direct/non-PT organic or variable ROI, quantitatively modeled farming value, expected-loss/exit-cost bands, risk-adjusted ROI, and social/X plus quantitative overlays where present. Use this when the rubric answer needs source context or audit detail.",
     inputSchema: assetLookupSchema,
   },
   async (args: AssetLookupArgs) => {

@@ -2,12 +2,13 @@
 
 - Date: 2026-06-07
 - State: implemented and verified
-- Summary: TypeScript MCP server scaffolded with two read-only tools, static rubric/data layout, APX/APY/PRIME/deSPXA/Saturn seed assets, PT fixed-return overlays, table-facing `agent_display` decisions, scoring-helper `dimensions[].possible_grades` anchors, and a shared normalized `return_context` for both summary JSON and research Markdown. The return layer covers PT fixed-maturity ROI, non-PT/direct organic or variable ROI, modeled farming value, expected-loss/exit-cost bands, risk-adjusted ROI, and social/X plus quantitative overlays. The latest public rich token report branch (`front-knowledge-base` commit `b954049`) is normalized into returned summaries and reports.
+- Summary: TypeScript MCP server scaffolded with three read-only tools (`list_available_assets`, `get_asset_summary`, `get_asset_research`), static rubric/data layout, APX/APY/PRIME/deSPXA/Saturn seed assets, PT fixed-return overlays, table-facing `agent_display` decisions, scoring-helper `dimensions[].possible_grades` anchors, and a shared normalized `return_context` for both summary JSON and research Markdown. The return layer covers PT fixed-maturity ROI, non-PT/direct organic or variable ROI, modeled farming value, expected-loss/exit-cost bands, risk-adjusted ROI, and social/X plus quantitative overlays. The latest public rich token report branch (`front-knowledge-base` commit `b954049`) is normalized into returned summaries and reports.
 
 ## Current artifact
 
 - Runtime package: `projects/front-asset-intel-mcp/`
 - MCP tools:
+  - `list_available_assets`
   - `get_asset_summary`
   - `get_asset_research`
 - Seed data:
@@ -54,7 +55,8 @@ python3 scripts/workspace_policy_check.py --all
 
 MCP stdio smoke verified:
 
-- `tools/list` exposes `get_asset_summary` and `get_asset_research`.
+- `tools/list` exposes `list_available_assets`, `get_asset_summary`, and `get_asset_research`.
+- `tools/call list_available_assets` returns the 10-asset capability map with accepted lookup values and example summary/research calls.
 - `tools/call get_asset_summary` resolves all 10 seed assets: apxUSD, apyUSD, PRIME, deSPXA, USDat, sUSDat, PT-apxUSD, PT-apyUSD, PT-USDat, and PT-sUSDat.
 - `tools/call get_asset_summary` verifies scoring-helper metadata and 3 comparable `possible_grades` buckets per rubric dimension, including backing/NAV anchors from monthly/no-granularity through daily aggregated attestations to realtime/daily granular reconciled reporting.
 - Direct/variable-token summaries return normalized `return_context` with organic ROI, fresh-farming points ROI, expected-loss low/base/high bands, social/X context, and risk-adjusted ROI estimates for apxUSD, apyUSD, PRIME, deSPXA, USDat, and sUSDat.

@@ -6,12 +6,23 @@ This repo is intentionally runtime-small: the MCP server does not call an LLM, c
 
 ## Why this exists
 
-Long Markdown research reports are useful for diligence, but they are not a stable decision interface for an analyst agent. The server exposes two layers:
+Long Markdown research reports are useful for diligence, but they are not a stable decision interface for an analyst agent. The server exposes a small discovery surface plus two data layers:
 
+- `list_available_assets` — discovery JSON listing every static asset this MCP can answer about, accepted lookup values, and exact examples for calling summary/research when the agent already knows a symbol or address.
 - `get_asset_summary` — compact rubric JSON with uniform questions, fixed scoring buckets, table-facing `agent_display` fields, per-rubric score/status/evidence-state fields, evidence snippets, blocking unknowns, per-topic comparable grade anchors, and a normalized `return_context` that carries the full local return/social/quant overlay.
 - `get_asset_research` — full Markdown report for source review when the summary needs expansion, with the same `return_context` inline so the research view and JSON view use the same ROI layer.
 
 ## Tools
+
+### `list_available_assets`
+
+No input. Returns a static asset-capability map with:
+
+- available asset count;
+- each asset's canonical `asset_id`, slug, symbol, chain, addresses, aliases, and accepted lookup values;
+- recommended `get_asset_summary` / `get_asset_research` examples for symbol-first, token-address-first, Pendle-market-address-first, and PT-address-first callers.
+
+Use this when an agent is unsure which identifiers the MCP recognizes or needs a deterministic way to call the summary/research tools without web discovery.
 
 ### `get_asset_summary`
 
@@ -19,7 +30,7 @@ Input accepts any one of:
 
 - `asset_id`
 - `symbol`
-- slug / alias / token address / PT market address
+- slug / alias / token address / Pendle market address / PT address / chain-prefixed address
 
 Returns precomputed JSON enriched with static rubric grade anchors from `data/rubrics/asset_risk_v1.json` and a runtime-built `return_context` from the same local summary/report package.
 
@@ -137,11 +148,13 @@ npm test
 
 1. TypeScript build.
 2. Data validation against manifests/rubric schema.
-3. Registry smoke lookups for apxUSD, apyUSD, PRIME, deSPXA, USDat, sUSDat, and PT assets.
+3. Registry smoke lookups for `list_available_assets`, apxUSD, apyUSD, PRIME, deSPXA, USDat, sUSDat, and PT assets, including a chain-prefixed market-address lookup.
 4. Real MCP stdio smoke test:
    - initializes the MCP server;
-   - checks `tools/list` exposes `get_asset_summary` and `get_asset_research`;
+   - checks `tools/list` exposes `list_available_assets`, `get_asset_summary`, and `get_asset_research`;
+   - calls `list_available_assets` and verifies symbol/address call guidance plus accepted lookup values;
    - calls `get_asset_summary` for APYx, Saturn, PRIME, and deSPXA assets;
+   - calls `get_asset_summary` by a chain-prefixed PT market address to verify address-first callers can use the guidance;
    - verifies PT fixed-return table scores and risk-adjusted APY values for `PT-apxUSD`, `PT-apyUSD`, `PT-USDat`, and `PT-sUSDat`;
    - calls `get_asset_research` for all direct/variable-token reports and verifies the inline normalized return context mirrors the summary ROI basis (organic/variable ROI, fresh-farming points ROI, risk-adjusted ROI, and social/X context);
    - calls `get_asset_research` for PT reports and verifies the fixed-return risk-adjusted conclusions are present without simple-token points assumptions.

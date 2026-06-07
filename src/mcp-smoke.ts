@@ -102,6 +102,28 @@ type Summary = {
   };
 };
 
+type AvailableAssetsResult = {
+  endpoint: "list_available_assets";
+  available_asset_count: number;
+  usage: {
+    summary_tool: string;
+    research_tool: string;
+    if_agent_knows_symbol: string;
+    if_agent_knows_address: string;
+    examples: Array<{ tool: string; arguments: { asset_id?: string; symbol?: string } }>;
+  };
+  assets: Array<{
+    asset_id: string;
+    slug: string;
+    asset_type: string;
+    symbol: string;
+    display_name: string;
+    addresses: Record<string, string | undefined>;
+    accepted_lookup_values: string[];
+    recommended_calls: Array<{ tool: string; arguments: { asset_id?: string; symbol?: string } }>;
+  }>;
+};
+
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const serverPath = resolve(projectRoot, "dist", "server.js");
 const child = spawn(process.execPath, [serverPath], {
@@ -156,6 +178,13 @@ function parseResearch(id: number, label: string): string {
   return text;
 }
 
+function parseAvailableAssets(id: number): AvailableAssetsResult {
+  const response = responseById(id);
+  const text = response?.result?.content?.[0]?.text;
+  assert(text, `list_available_assets failed: ${JSON.stringify(response?.error)}`);
+  return JSON.parse(text) as AvailableAssetsResult;
+}
+
 function parseReturnContextFromResearch(text: string, label: string): ReturnContext {
   const match = /## Normalized return context[\s\S]*?```json\n([\s\S]*?)\n```/.exec(text);
   assert(match?.[1], `${label} research missing normalized return_context JSON block`);
@@ -193,6 +222,24 @@ send({
 });
 send({ jsonrpc: "2.0", method: "notifications/initialized", params: {} });
 send({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} });
+send({
+  jsonrpc: "2.0",
+  id: 22,
+  method: "tools/call",
+  params: {
+    name: "list_available_assets",
+    arguments: {},
+  },
+});
+send({
+  jsonrpc: "2.0",
+  id: 23,
+  method: "tools/call",
+  params: {
+    name: "get_asset_summary",
+    arguments: { asset_id: "ethereum:0x9afe7a057a09cf5da748d952078c9c99938b4329" },
+  },
+});
 
 const summaryLookups = [
   { id: 3, label: "apxUSD", symbol: "apxUSD", expectedSymbol: "apxUSD", expectedScore: 49, expectedOrganicRoi: 0, expectedPointsRoi: 0.033921, expectedRiskAdjustedRoi: -0.001079 },
@@ -292,7 +339,7 @@ const simpleResearchLookups = [
   { id: 21, label: "sUSDat", symbol: "sUSDat", expectedOrganicRoi: 0.021575, expectedPointsRoi: 0.008095, expectedRiskAdjustedRoi: -0.03283 },
 ];
 
-await waitForResponseCount(15, "initial summary/PT research calls");
+await waitForResponseCount(17, "initial asset-list, address lookup, summary, and PT research calls");
 
 const initialize = responseById(1);
 const tools = responseById(2);
@@ -300,8 +347,34 @@ const tools = responseById(2);
 assert(initialize?.result, `initialize failed: ${JSON.stringify(initialize?.error)}`);
 assert(tools?.result?.tools, `tools/list failed: ${JSON.stringify(tools?.error)}`);
 const toolNames = tools.result.tools.map((tool) => tool.name).sort();
+assert(toolNames.includes("list_available_assets"), "list_available_assets missing from tools/list");
 assert(toolNames.includes("get_asset_summary"), "get_asset_summary missing from tools/list");
 assert(toolNames.includes("get_asset_research"), "get_asset_research missing from tools/list");
+
+const availableAssets = parseAvailableAssets(22);
+assert(availableAssets.endpoint === "list_available_assets", "available assets response endpoint mismatch");
+assert(availableAssets.available_asset_count === availableAssets.assets.length, "available assets count mismatch");
+assert(availableAssets.available_asset_count >= summaryLookups.length, "available assets response missing seed assets");
+assert(availableAssets.usage.summary_tool.includes("get_asset_summary"), "available assets response missing summary guidance");
+assert(availableAssets.usage.research_tool.includes("get_asset_research"), "available assets response missing research guidance");
+assert(availableAssets.usage.if_agent_knows_symbol.includes("symbol"), "available assets response missing symbol guidance");
+assert(availableAssets.usage.if_agent_knows_address.includes("asset_id"), "available assets response missing address guidance");
+assert(availableAssets.usage.examples.some((example) => example.tool === "get_asset_summary" && example.arguments.symbol), "available assets response missing summary-by-symbol example");
+assert(availableAssets.usage.examples.some((example) => example.tool === "get_asset_research" && example.arguments.asset_id), "available assets response missing research-by-address example");
+const availableBySymbol = new Map(availableAssets.assets.map((asset) => [asset.symbol, asset]));
+const apxAvailable = availableBySymbol.get("apxUSD");
+assert(apxAvailable, "available assets response missing apxUSD");
+assert(apxAvailable.accepted_lookup_values.includes("ethereum:0x98A878b1Cd98131B271883B390f68D2c90674665"), "available assets response missing apxUSD chain-prefixed lookup");
+assert(apxAvailable.recommended_calls.some((call) => call.tool === "get_asset_summary" && call.arguments.symbol === "apxUSD"), "apxUSD missing summary recommended call");
+assert(apxAvailable.recommended_calls.some((call) => call.tool === "get_asset_research" && call.arguments.asset_id === "0x98A878b1Cd98131B271883B390f68D2c90674665"), "apxUSD missing address research recommended call");
+const ptUsdatAvailable = availableBySymbol.get("PT-USDat-2026-08-27");
+assert(ptUsdatAvailable, "available assets response missing PT-USDat");
+assert(ptUsdatAvailable.accepted_lookup_values.includes("PT-USDat"), "PT-USDat list missing short-symbol alias");
+assert(ptUsdatAvailable.accepted_lookup_values.includes("0x9afe7a057a09cf5da748d952078c9c99938b4329"), "PT-USDat list missing market address");
+assert(ptUsdatAvailable.accepted_lookup_values.includes("ethereum:0x9afe7a057a09cf5da748d952078c9c99938b4329"), "PT-USDat list missing chain-prefixed market address");
+const ptUsdatByAddressSummary = parseSummary(23, "PT-USDat chain-prefixed market lookup");
+assert(ptUsdatByAddressSummary.symbol === "PT-USDat-2026-08-27", "chain-prefixed PT market lookup returned wrong asset");
+assert(ptUsdatByAddressSummary.return_context?.kind === "fixed_maturity_pt_return", "chain-prefixed PT market lookup missing fixed-return context");
 
 const parsedSummaries: Record<string, Summary> = {};
 for (const lookup of summaryLookups) {
@@ -486,6 +559,13 @@ console.log(
     {
       ok: true,
       tools: toolNames,
+      available_assets: {
+        count: availableAssets.available_asset_count,
+        first_example: availableAssets.usage.examples[0],
+        apxUSD_lookup_values: apxAvailable.accepted_lookup_values.slice(0, 6),
+        pt_USDat_lookup_values: ptUsdatAvailable.accepted_lookup_values.slice(0, 8),
+        chain_prefixed_pt_market_lookup_symbol: ptUsdatByAddressSummary.symbol,
+      },
       summaries: Object.fromEntries(
         Object.entries(parsedSummaries).map(([label, summary]) => [
           label,

@@ -7,7 +7,8 @@ This project is a lightweight local MCP server for analyst-agent asset intellige
 - TypeScript MCP server.
 - Runtime serves only precomputed local files.
 - No runtime LLM calls, web crawling, extraction, scoring regeneration, or external API calls.
-- Keep exactly two public MCP tools unless the user asks otherwise:
+- Public MCP tools:
+  - `list_available_assets`
   - `get_asset_summary`
   - `get_asset_research`
 

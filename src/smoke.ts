@@ -1,4 +1,4 @@
-import { getAssetResearch, getAssetSummary } from "./registry.js";
+import { getAssetResearch, getAssetSummary, getAvailableAssets } from "./registry.js";
 
 type SummaryDimension = {
   id: string;
@@ -124,6 +124,28 @@ function pickSummary(summary: Summary): Record<string, unknown> {
   return selected;
 }
 
+const availableAssets = await getAvailableAssets();
+assert(availableAssets.endpoint === "list_available_assets", "available assets endpoint name mismatch");
+assert(availableAssets.available_asset_count === availableAssets.assets.length, "available asset count mismatch");
+assert(availableAssets.available_asset_count >= 10, "available assets list should include the current seed set");
+assert(availableAssets.usage.summary_tool.includes("get_asset_summary"), "available assets usage missing summary tool guidance");
+assert(availableAssets.usage.research_tool.includes("get_asset_research"), "available assets usage missing research tool guidance");
+assert(availableAssets.usage.if_agent_knows_symbol.includes("symbol"), "available assets usage missing symbol guidance");
+assert(availableAssets.usage.if_agent_knows_address.includes("asset_id"), "available assets usage missing address guidance");
+const availableBySymbol = new Map(availableAssets.assets.map((asset) => [asset.symbol, asset]));
+const apxAvailable = availableBySymbol.get("apxUSD");
+assert(apxAvailable, "available assets missing apxUSD");
+assert(apxAvailable.recommended_calls.some((call) => call.tool === "get_asset_summary" && call.arguments.symbol === "apxUSD"), "apxUSD missing summary-by-symbol call guidance");
+assert(apxAvailable.recommended_calls.some((call) => call.tool === "get_asset_research" && call.arguments.asset_id === "0x98A878b1Cd98131B271883B390f68D2c90674665"), "apxUSD missing research-by-address call guidance");
+assert(apxAvailable.accepted_lookup_values.includes("ethereum:0x98A878b1Cd98131B271883B390f68D2c90674665"), "apxUSD missing chain-prefixed token lookup value");
+const ptUsdatAvailable = availableBySymbol.get("PT-USDat-2026-08-27");
+assert(ptUsdatAvailable, "available assets missing PT-USDat");
+assert(ptUsdatAvailable.accepted_lookup_values.includes("PT-USDat"), "PT-USDat missing short-symbol alias lookup value");
+assert(ptUsdatAvailable.accepted_lookup_values.includes("0x9afe7a057a09cf5da748d952078c9c99938b4329"), "PT-USDat missing market-address lookup value");
+assert(ptUsdatAvailable.accepted_lookup_values.includes("ethereum:0x9afe7a057a09cf5da748d952078c9c99938b4329"), "PT-USDat missing chain-prefixed market lookup value");
+const ptUsdatByChainPrefixedMarket = (await getAssetSummary({ asset_id: "ethereum:0x9afe7a057a09cf5da748d952078c9c99938b4329" })) as Summary;
+assert(ptUsdatByChainPrefixedMarket.agent_display?.score_source === "pt_fixed_return_trade_score", "chain-prefixed PT market lookup should resolve PT-USDat summary");
+
 const summaries = {
   apxUSD: (await getAssetSummary({ symbol: "apxUSD" })) as Summary,
   apyUSD: (await getAssetSummary({ symbol: "apyUSD" })) as Summary,
@@ -184,6 +206,12 @@ console.log(
   JSON.stringify(
     {
       ok: true,
+      available_assets: {
+        count: availableAssets.available_asset_count,
+        first_tool_example: availableAssets.usage.examples[0],
+        apxUSD_lookup_values: apxAvailable.accepted_lookup_values.slice(0, 6),
+        pt_USDat_lookup_values: ptUsdatAvailable.accepted_lookup_values.slice(0, 8),
+      },
       assets: Object.fromEntries(Object.entries(summaries).map(([key, summary]) => [key, pickSummary(summary)])),
       simple_research_chars: Object.fromEntries(Object.entries(simpleResearch).map(([key, value]) => [key, value.markdown.length])),
       research_chars: Object.fromEntries(Object.entries(research).map(([key, value]) => [key, value.markdown.length])),
