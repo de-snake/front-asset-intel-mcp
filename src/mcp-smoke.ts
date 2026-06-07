@@ -11,6 +11,16 @@ interface JsonRpcResponse {
   error?: unknown;
 }
 
+type Summary = {
+  symbol: string;
+  rubric: { score: number; decision_class: string };
+  return_profile?: { gross_roi?: number; compound_gross_apy?: number };
+  quantitative_risk_return_layer?: {
+    points_roi_required_to_clear_hurdle?: number;
+    conclusion?: string;
+  };
+};
+
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const serverPath = resolve(projectRoot, "dist", "server.js");
 const child = spawn(process.execPath, [serverPath], {
@@ -46,6 +56,24 @@ function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
 
+function responseById(id: number): JsonRpcResponse | undefined {
+  return responses.find((response) => response.id === id);
+}
+
+function parseSummary(id: number, label: string): Summary {
+  const response = responseById(id);
+  const text = response?.result?.content?.[0]?.text;
+  assert(text, `${label} get_asset_summary failed: ${JSON.stringify(response?.error)}`);
+  return JSON.parse(text) as Summary;
+}
+
+function parseResearch(id: number, label: string): string {
+  const response = responseById(id);
+  const text = response?.result?.content?.[0]?.text;
+  assert(text, `${label} get_asset_research failed: ${JSON.stringify(response?.error)}`);
+  return text;
+}
+
 send({
   jsonrpc: "2.0",
   id: 1,
@@ -58,47 +86,102 @@ send({
 });
 send({ jsonrpc: "2.0", method: "notifications/initialized", params: {} });
 send({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} });
-send({
-  jsonrpc: "2.0",
-  id: 3,
-  method: "tools/call",
-  params: {
-    name: "get_asset_summary",
-    arguments: { symbol: "PT-apxUSD" },
+
+const summaryLookups = [
+  { id: 3, label: "apxUSD", symbol: "apxUSD", expectedSymbol: "apxUSD", expectedScore: 49 },
+  { id: 4, label: "apyUSD", symbol: "apyUSD", expectedSymbol: "apyUSD", expectedScore: 35 },
+  { id: 5, label: "PRIME", symbol: "PRIME", expectedSymbol: "PRIME", expectedScore: 41 },
+  { id: 6, label: "deSPXA", symbol: "deSPXA", expectedSymbol: "deSPXA", expectedScore: 44 },
+  { id: 7, label: "USDat", symbol: "USDat", expectedSymbol: "USDat", expectedScore: 52 },
+  { id: 8, label: "sUSDat", symbol: "sUSDat", expectedSymbol: "sUSDat", expectedScore: 40 },
+  {
+    id: 9,
+    label: "PT-apxUSD",
+    symbol: "PT-apxUSD",
+    expectedSymbol: "PT-apxUSD-2026-11-05",
+    expectedScore: 49,
+    expectedCompoundGrossApy: 0.2168,
+    expectedPointsHurdle: 0.004671,
   },
-});
-send({
-  jsonrpc: "2.0",
-  id: 4,
-  method: "tools/call",
-  params: {
-    name: "get_asset_summary",
-    arguments: { symbol: "PT-apyUSD" },
+  {
+    id: 10,
+    label: "PT-apyUSD",
+    symbol: "PT-apyUSD",
+    expectedSymbol: "PT-apyUSD-2026-08-27",
+    expectedScore: 35,
+    expectedCompoundGrossApy: 0.176,
+    expectedPointsHurdle: 0.056168,
   },
-});
+  {
+    id: 11,
+    label: "PT-USDat",
+    symbol: "PT-USDat",
+    expectedSymbol: "PT-USDat-2026-08-27",
+    expectedScore: 52,
+    expectedCompoundGrossApy: 0.0898,
+    expectedPointsHurdle: 0.014993,
+  },
+  {
+    id: 12,
+    label: "PT-sUSDat",
+    symbol: "PT-sUSDat",
+    expectedSymbol: "PT-sUSDat-2026-08-27",
+    expectedScore: 40,
+    expectedCompoundGrossApy: 0.3364,
+    expectedPointsHurdle: 0.043075,
+  },
+];
+
+for (const lookup of summaryLookups) {
+  send({
+    jsonrpc: "2.0",
+    id: lookup.id,
+    method: "tools/call",
+    params: {
+      name: "get_asset_summary",
+      arguments: { symbol: lookup.symbol },
+    },
+  });
+}
+
 send({
   jsonrpc: "2.0",
-  id: 5,
+  id: 13,
   method: "tools/call",
   params: {
     name: "get_asset_research",
     arguments: { symbol: "PT-apyUSD" },
   },
 });
+send({
+  jsonrpc: "2.0",
+  id: 14,
+  method: "tools/call",
+  params: {
+    name: "get_asset_research",
+    arguments: { symbol: "PT-USDat" },
+  },
+});
+send({
+  jsonrpc: "2.0",
+  id: 15,
+  method: "tools/call",
+  params: {
+    name: "get_asset_research",
+    arguments: { symbol: "PT-sUSDat" },
+  },
+});
 
+const expectedResponseCount = 15;
 const deadline = Date.now() + 5000;
-while (Date.now() < deadline && responses.filter((response) => response.id !== undefined).length < 5) {
+while (Date.now() < deadline && responses.filter((response) => response.id !== undefined).length < expectedResponseCount) {
   await new Promise((resolveWait) => setTimeout(resolveWait, 25));
 }
 
 child.kill("SIGTERM");
 
-const byId = new Map(responses.filter((response) => response.id !== undefined).map((response) => [response.id, response]));
-const initialize = byId.get(1);
-const tools = byId.get(2);
-const ptApxSummary = byId.get(3);
-const ptApySummary = byId.get(4);
-const ptApyResearch = byId.get(5);
+const initialize = responseById(1);
+const tools = responseById(2);
 
 assert(initialize?.result, `initialize failed: ${JSON.stringify(initialize?.error)}`);
 assert(tools?.result?.tools, `tools/list failed: ${JSON.stringify(tools?.error)}`);
@@ -106,54 +189,61 @@ const toolNames = tools.result.tools.map((tool) => tool.name).sort();
 assert(toolNames.includes("get_asset_summary"), "get_asset_summary missing from tools/list");
 assert(toolNames.includes("get_asset_research"), "get_asset_research missing from tools/list");
 
-const ptApxSummaryText = ptApxSummary?.result?.content?.[0]?.text;
-assert(ptApxSummaryText, `get_asset_summary PT-apxUSD failed: ${JSON.stringify(ptApxSummary?.error)}`);
-const ptApxSummaryJson = JSON.parse(ptApxSummaryText);
-assert(ptApxSummaryJson.symbol === "PT-apxUSD-2026-11-05", "PT-apxUSD summary lookup returned wrong symbol");
-assert(ptApxSummaryJson.return_profile?.compound_gross_apy === 0.2168, "PT-apxUSD return_profile missing expected APY");
-assert(
-  ptApxSummaryJson.quantitative_risk_return_layer?.points_roi_required_to_clear_hurdle === 0.004671,
-  "PT-apxUSD quantitative overlay missing points hurdle",
-);
+const parsedSummaries: Record<string, Summary> = {};
+for (const lookup of summaryLookups) {
+  const summary = parseSummary(lookup.id, lookup.label);
+  parsedSummaries[lookup.label] = summary;
+  assert(summary.symbol === lookup.expectedSymbol, `${lookup.label} summary lookup returned wrong symbol`);
+  assert(summary.rubric.score === lookup.expectedScore, `${lookup.label} summary score changed`);
+  if (lookup.expectedCompoundGrossApy !== undefined) {
+    assert(
+      summary.return_profile?.compound_gross_apy === lookup.expectedCompoundGrossApy,
+      `${lookup.label} return_profile missing expected APY`,
+    );
+  }
+  if (lookup.expectedPointsHurdle !== undefined) {
+    assert(
+      summary.quantitative_risk_return_layer?.points_roi_required_to_clear_hurdle === lookup.expectedPointsHurdle,
+      `${lookup.label} quantitative overlay missing points hurdle`,
+    );
+  }
+}
 
-const ptApySummaryText = ptApySummary?.result?.content?.[0]?.text;
-assert(ptApySummaryText, `get_asset_summary PT-apyUSD failed: ${JSON.stringify(ptApySummary?.error)}`);
-const ptApySummaryJson = JSON.parse(ptApySummaryText);
-assert(ptApySummaryJson.symbol === "PT-apyUSD-2026-08-27", "PT-apyUSD summary lookup returned wrong symbol");
-assert(ptApySummaryJson.return_profile?.compound_gross_apy === 0.176, "PT-apyUSD return_profile missing expected APY");
-assert(
-  ptApySummaryJson.quantitative_risk_return_layer?.points_roi_required_to_clear_hurdle === 0.056168,
-  "PT-apyUSD quantitative overlay missing points hurdle",
-);
-
-const ptApyResearchText = ptApyResearch?.result?.content?.[0]?.text;
-assert(ptApyResearchText, `get_asset_research PT-apyUSD failed: ${JSON.stringify(ptApyResearch?.error)}`);
+const ptApyResearchText = parseResearch(13, "PT-apyUSD");
 assert(ptApyResearchText.includes("5.6168%"), "PT-apyUSD research markdown missing points hurdle text");
 assert(ptApyResearchText.includes("points / recovery trade"), "PT-apyUSD research markdown missing decision conclusion");
+
+const ptUsdatResearchText = parseResearch(14, "PT-USDat");
+assert(ptUsdatResearchText.includes("1.4993%"), "PT-USDat research markdown missing points hurdle text");
+assert(ptUsdatResearchText.includes("stable-price / low-return candidate"), "PT-USDat research markdown missing decision conclusion");
+
+const ptSusdatResearchText = parseResearch(15, "PT-sUSDat");
+assert(ptSusdatResearchText.includes("4.3075%"), "PT-sUSDat research markdown missing points hurdle text");
+assert(ptSusdatResearchText.includes("STRC/NAV/queue expected loss"), "PT-sUSDat research markdown missing decision conclusion");
 
 console.log(
   JSON.stringify(
     {
       ok: true,
       tools: toolNames,
-      pt_apx_summary: {
-        symbol: ptApxSummaryJson.symbol,
-        score: ptApxSummaryJson.rubric.score,
-        decision_class: ptApxSummaryJson.rubric.decision_class,
-        compound_gross_apy: ptApxSummaryJson.return_profile.compound_gross_apy,
-        points_roi_required_to_clear_hurdle:
-          ptApxSummaryJson.quantitative_risk_return_layer.points_roi_required_to_clear_hurdle,
+      summaries: Object.fromEntries(
+        Object.entries(parsedSummaries).map(([label, summary]) => [
+          label,
+          {
+            symbol: summary.symbol,
+            score: summary.rubric.score,
+            decision_class: summary.rubric.decision_class,
+            compound_gross_apy: summary.return_profile?.compound_gross_apy,
+            points_roi_required_to_clear_hurdle:
+              summary.quantitative_risk_return_layer?.points_roi_required_to_clear_hurdle,
+          },
+        ]),
+      ),
+      research_chars: {
+        pt_apyUSD: ptApyResearchText.length,
+        pt_USDat: ptUsdatResearchText.length,
+        pt_sUSDat: ptSusdatResearchText.length,
       },
-      pt_apy_summary: {
-        symbol: ptApySummaryJson.symbol,
-        score: ptApySummaryJson.rubric.score,
-        decision_class: ptApySummaryJson.rubric.decision_class,
-        compound_gross_apy: ptApySummaryJson.return_profile.compound_gross_apy,
-        points_roi_required_to_clear_hurdle:
-          ptApySummaryJson.quantitative_risk_return_layer.points_roi_required_to_clear_hurdle,
-        conclusion: ptApySummaryJson.quantitative_risk_return_layer.conclusion,
-      },
-      pt_apy_research_chars: ptApyResearchText.length,
       stderr: stderrBuffer,
     },
     null,

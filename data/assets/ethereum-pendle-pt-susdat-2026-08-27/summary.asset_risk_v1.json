@@ -1,0 +1,183 @@
+{
+  "asset_id": "pendle:ethereum:market:0x91bc86899c8391b6caaf26535b9cd82efe49a189",
+  "asset_type": "pendle_pt",
+  "symbol": "PT-sUSDat-2026-08-27",
+  "display_name": "Pendle PT sUSDat — 27 Aug 2026",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "rubric": {
+    "version": "asset_risk_v1",
+    "score": 40,
+    "max_score": 100,
+    "decision_class": "review_required",
+    "decision_rationale": "The PT wrapper adds fixed-maturity discount, Pendle AMM exit, and points optionality while inheriting sUSDat STRC/NAV/queue and permissioning risk. The old priors make PT-sUSDat a points/recovery trade: gross yield is high, but expected loss consumes the fixed-yield spread before points."
+  },
+  "dimensions": [
+    {
+      "id": "backing_nav_evidence",
+      "question": "Is backing/NAV evidence current, transparent, and independently reconcilable?",
+      "score": 8,
+      "max_score": 18,
+      "selected_option": "partial_attestations_or_issuer_dashboards",
+      "answer": "sUSDat is an ERC-4626 yield-bearing vault over USDat with STRC/digital-credit/NAV/queue exposure; the run treats this as review-required rather than ordinary liquid stablecoin collateral.",
+      "evidence": [
+        "RESULT.md §sUSDat review",
+        "sUSDat analyst report §Backing and NAV quality"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "redemption_holder_eligibility",
+      "question": "Can the intended holder redeem or exit through a known route?",
+      "score": 5,
+      "max_score": 18,
+      "selected_option": "holder_specific_unknown_or_blocking",
+      "answer": "Realization can depend on queue processing, issuer controls, blacklist/pause state, and inherited USDat eligibility.",
+      "evidence": [
+        "RESULT.md §sUSDat review",
+        "RESULT.md §Missing before decision-grade proposal"
+      ],
+      "confidence": "medium/high",
+      "missing_behavior": "block_automation"
+    },
+    {
+      "id": "market_liquidity_peg_behavior",
+      "question": "Is market exit liquid, near accounting value, and robust for the intended size?",
+      "score": 6,
+      "max_score": 18,
+      "selected_option": "thin_discounted_or_unknown",
+      "answer": "The observed sUSDat/USDC Curve venue was much smaller than USDat, about $1.8M displayed liquidity with roughly 296,560 USDC against 1.62M sUSDat.",
+      "evidence": [
+        "RESULT.md §sUSDat review"
+      ],
+      "confidence": "medium/high",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "issuer_controls_governance",
+      "question": "Are issuer/admin controls limited, transparent, and slow enough for analyst-agent use?",
+      "score": 5,
+      "max_score": 14,
+      "selected_option": "strong_or_poorly_mapped_controls",
+      "answer": "sUSDat exposes blacklist and pause surfaces and inherits USDat permissioning concerns.",
+      "evidence": [
+        "RESULT.md §sUSDat review",
+        "sUSDat analyst report §Controls, governance, and legal restrictions"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "block_automation"
+    },
+    {
+      "id": "oracle_accounting_alignment",
+      "question": "Does the valuation method track executable value for this use case?",
+      "score": 7,
+      "max_score": 10,
+      "selected_option": "accounting_model_known_but_not_use_verified",
+      "answer": "The Gearbox feed recursively values sUSDat through ERC-4626 exchange-rate accounting times the USDat feed, but accounting value may not equal immediate recovery under stress.",
+      "evidence": [
+        "RESULT.md §sUSDat review",
+        "RESULT.md §Oracle and liquidation implication"
+      ],
+      "confidence": "medium/high",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "audits_security_review",
+      "question": "Does the project have credible audits or formal verification covering the live risk surface?",
+      "score": 4,
+      "max_score": 12,
+      "selected_option": "weak_missing_or_unknown_security_review",
+      "answer": "The package does not establish deployed-scope audit coverage for the vault/issuer/control/redemption surface.",
+      "evidence": [
+        "sUSDat analyst report §Evidence quality"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "incidents_social_stress",
+      "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
+      "score": 5,
+      "max_score": 10,
+      "selected_option": "some_stress_or_incomplete_history",
+      "answer": "The social layer frames sUSDat as yield-bearing STRC/NAV/queue-exposed Saturn collateral and emphasizes whether accounting/NAV value can be realized during stress.",
+      "evidence": [
+        "RESULT.md §X / social research layer"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "review_required"
+    }
+  ],
+  "blocking_unknowns": [
+    "evaluated Gearbox market / Credit Manager / pool",
+    "position size and target leverage",
+    "wallet / Credit Account / liquidator eligibility for sUSDat and USDat",
+    "queue/redemption state and issuer/STRC realization",
+    "size-specific route or liquidation quote",
+    "user risk policy: HF floor, max drawdown, automation policy",
+    "fresh PT market quote, slippage, liquidity, and maturity redemption path",
+    "Pendle PT/SY/YT support and Gearbox PT oracle/feed design",
+    "route-specific Saturn Gravity Points eligibility"
+  ],
+  "source_report": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/pt-markets/pendle-pt-eth-mainnet-susdat-2026-08-27/technical-report.md",
+  "generated_from": {
+    "source_repo": "de-snake/front-knowledge-base",
+    "source_ref": "docs/rich-token-reports",
+    "source_commit": "b954049"
+  },
+  "market_address": "0x91bc86899c8391b6caaf26535b9cd82efe49a189",
+  "pt_address": "0xc689f76f90fe1762fac55983ff25ae71033a84f7",
+  "sy_address": "0x8917f8c7feb840b5837edc7e128123baa2f289f9",
+  "yt_address": "0x7956bb9504b8a1f515f2890e309cee398198d3bd",
+  "underlying_asset_id": "ethereum:0xd166337499e176bbc38a1fbd113ab144e5bd2df7",
+  "underlying_symbol": "sUSDat",
+  "return_profile": {
+    "protocol": "Pendle",
+    "maturity_date": "2026-08-27",
+    "horizon_days": 83,
+    "market_address": "0x91bc86899c8391b6caaf26535b9cd82efe49a189",
+    "pt_address": "0xc689f76f90fe1762fac55983ff25ae71033a84f7",
+    "sy_address": "0x8917f8c7feb840b5837edc7e128123baa2f289f9",
+    "yt_address": "0x7956bb9504b8a1f515f2890e309cee398198d3bd",
+    "accounting_asset_symbol": "USDat",
+    "accounting_asset_address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+    "pt_price_usd_snapshot": 0.9358474650640412,
+    "accounting_asset_price_usd_snapshot": 0.9996386218988,
+    "pendle_implied_apy_snapshot": 0.13436285087935462,
+    "liquidity_usd_snapshot": 5125749.654170728,
+    "gross_roi": 0.068165,
+    "simple_gross_apr": 0.2998,
+    "compound_gross_apy": 0.3364,
+    "snapshot_timestamp_utc": "2026-06-04T19:33:45Z"
+  },
+  "social_research_layer": {
+    "evidence_date": "2026-06-04",
+    "return_models": [
+      "STRC dividend / digital-credit yield",
+      "PT fixed discount",
+      "Saturn Gravity Points"
+    ],
+    "risk_narratives": [
+      "queue and NAV realization risk",
+      "issuer controls",
+      "secondary liquidity during stress",
+      "accounting-versus-exit gap"
+    ],
+    "decision_effect": "Higher-risk review-required candidate; do not treat accounting value as immediate exit value.",
+    "confidence": "medium"
+  },
+  "quantitative_risk_return_layer": {
+    "horizon_days": 83,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "gross_roi": 0.068165,
+    "simple_gross_apr": 0.2998,
+    "compound_gross_apy": 0.3364,
+    "expected_loss_prior": 0.081,
+    "exit_cost_assumption": 0.0075,
+    "risk_adjusted_roi_before_points": -0.020335,
+    "risk_adjusted_annualized_return_before_points": -0.0894,
+    "points_roi_required_to_clear_hurdle": 0.043075,
+    "conclusion": "PT-sUSDat has higher gross PT yield, but STRC/NAV/queue expected loss consumes the fixed-yield spread under the old priors."
+  }
+}

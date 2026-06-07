@@ -162,8 +162,8 @@
     "Wallet-specific APYx Pips eligibility and final token economics",
     "Social/quantitative overlay from APYx old-run research requires live reserve/redemption refresh"
   ],
-  "source_report": "data/assets/ethereum-apxusd/research.md",
-  "source_front_kb_report": "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/eth-mainnet-apxusd.md",
+  "source_report": "dev/implementation/reproducible-runs/apxusd-investment-research-20260604/RESULT.md",
+  "source_front_kb_report": "dev/implementation/asset-risk-reports-mvp/reports/eth-mainnet-apxusd.md",
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
   "summary_mode": "precomputed_from_front_kb_report_plus_social_quant_overlay",
@@ -200,5 +200,10 @@
     "pt_apxusd_points_roi_required_to_clear_hurdle": 0.004671,
     "decision_trigger": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, and no pending admin event. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
     "conclusion": "apxUSD remains review-required; PT-apxUSD comes close to the 10% hurdle only after points or lower expected-loss evidence."
+  },
+  "generated_from": {
+    "source_repo": "de-snake/front-knowledge-base",
+    "source_ref": "docs/rich-token-reports",
+    "source_commit": "b954049"
   }
 }

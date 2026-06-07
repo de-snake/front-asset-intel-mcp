@@ -1,0 +1,30 @@
+{
+  "asset_id": "pendle:ethereum:market:0x91bc86899c8391b6caaf26535b9cd82efe49a189",
+  "slug": "ethereum-pendle-pt-susdat-2026-08-27",
+  "asset_type": "pendle_pt",
+  "symbol": "PT-sUSDat-2026-08-27",
+  "display_name": "Pendle PT sUSDat — 27 Aug 2026",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "aliases": [
+    "PT-sUSDat",
+    "pt sUSDat",
+    "PT sUSDat 2026-08-27",
+    "pendle-pt-eth-mainnet-susdat-2026-08-27",
+    "ethereum-pendle-pt-susdat-2026-08-27",
+    "0x91bc86899c8391b6caaf26535b9cd82efe49a189",
+    "0xc689f76f90fe1762fac55983ff25ae71033a84f7"
+  ],
+  "rubric_version": "asset_risk_v1",
+  "summary_path": "summary.asset_risk_v1.json",
+  "research_path": "research.md",
+  "source_front_kb_paths": [
+    "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/RESULT.md",
+    "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/pt-markets/pendle-pt-eth-mainnet-susdat-2026-08-27/technical-report.md"
+  ],
+  "market_address": "0x91bc86899c8391b6caaf26535b9cd82efe49a189",
+  "pt_address": "0xc689f76f90fe1762fac55983ff25ae71033a84f7",
+  "sy_address": "0x8917f8c7feb840b5837edc7e128123baa2f289f9",
+  "yt_address": "0x7956bb9504b8a1f515f2890e309cee398198d3bd",
+  "underlying_asset_id": "ethereum:0xd166337499e176bbc38a1fbd113ab144e5bd2df7"
+}

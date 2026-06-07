@@ -1,125 +1,162 @@
-# Pendle PT apxUSD — 05 Nov 2026 — investment analyst risk/economics note
+# Pendle PT apxUSD — 05 Nov 2026 — PT market risk/economics dossier
 
 Report date: 2026-06-04 UTC
 Protocol: Pendle
+Chain: Ethereum mainnet (`chain_id: 1`)
+Underlying token: apyx apxUSD / `apxUSD` at `0x98a878b1cd98131b271883b390f68d2c90674665`
+Supplied maturity: `2026-11-05`
+Supplied days to maturity: `153`
 User-supplied days to maturity label: `153 days`
-Chain and token identity: Ethereum mainnet (`chain_id: 1`), PT market `0xaf0349fb9b1ba07d34381870c59b560b31412660`, PT token `0xaf687b5ecb525ccea96115088999b4ed80c388b6`, underlying `apxUSD` at `0x98a878b1cd98131b271883b390f68d2c90674665`.
 
-This note is factual risk/economics analysis. Final use depends on a separate user mandate, protocol configuration review, and live Preview.
+This dossier extends the asset-specific mining pipeline for a Pendle Principal Token (PT). It is factual risk/economics analysis only. Final use depends on a separate user mandate, protocol configuration review, and live Preview.
 
-## 1. Executive view
+## 1. PT market identity and contract map
 
-The exact Pendle market for the supplied scope was identified from Pendle's active-market and market-detail APIs: `Pendle PT apxUSD — 05 Nov 2026` uses market `0xaf0349fb9b1ba07d34381870c59b560b31412660`, PT `0xaf687b5ecb525ccea96115088999b4ed80c388b6`, SY `0x4f116ee5bcd227d1a1c4f57918d694a4abe7b3fc`, YT `0x7fbc01c63b0ac372ec75907f3a1d8adc8cf28e1f`, and expiry `2026-11-05T00:00:00.000Z`.
+The exact market is confirmed because the active-market source contains one row with market `0xaf0349fb9b1ba07d34381870c59b560b31412660`, expiry `2026-11-05`, PT `0xaf687b5ecb525ccea96115088999b4ed80c388b6`, SY `0x4f116ee5bcd227d1a1c4f57918d694a4abe7b3fc`, YT `0x7fbc01c63b0ac372ec75907f3a1d8adc8cf28e1f`, and underlying asset `0x98a878b1cd98131b271883b390f68d2c90674665`. Same-underlying active candidates observed: 2026-06-18 market `0x50dce085af29caba28f7308bea57c4043757b491`; 2026-08-27 market `0xc3e6cc9269dc780e0d55512c46cad1dd29cfbaa5`; 2026-11-05 market `0xaf0349fb9b1ba07d34381870c59b560b31412660`.
 
-The PT is a fixed-maturity claim whose price reflects a discount to its accounting asset. The reported point-in-time PT price was $0.897297, the accounting asset price was $0.974237, and the computed discount to that accounting asset was 7.90%. Pendle's implied APY field was 21.68%. These are market snapshots, not guarantees.
+Pendle labels this PT as `PT apxUSD (apxUSD)`. Under Pendle's PT documentation, the bracketed/accounting asset is the redemption reference at maturity. The API reports accounting asset `apxUSD` at `0x98a878b1cd98131b271883b390f68d2c90674665`; this can differ from the named underlying wrapper for wrapped-yield assets.
 
-The main incremental risk is timing and exit path. Before maturity, exit depends on Pendle AMM liquidity. At maturity, value depends on Pendle redemption mechanics and the accounting asset. The PT also inherits the issuer, backing, restriction, and redemption risks already identified for `apxUSD`.
+| Field | Value | Source |
+|---|---|---|
+| Market / LP contract | `0xaf0349fb9b1ba07d34381870c59b560b31412660` | P1/P2/E1 |
+| PT token | `0xaf687b5ecb525ccea96115088999b4ed80c388b6` / `PT-apxUSD-5NOV2026` / 18 decimals | P1/P2/E2 |
+| SY token | `0x4f116ee5bcd227d1a1c4f57918d694a4abe7b3fc` / `SY-apxUSD` / 18 decimals | P1/P2/E3 |
+| YT token | `0x7fbc01c63b0ac372ec75907f3a1d8adc8cf28e1f` / `YT-apxUSD-5NOV2026` / 18 decimals | P1/P2/E4 |
+| Underlying asset in active API | `1-0x98a878b1cd98131b271883b390f68d2c90674665` | P2 |
+| Accounting asset in market detail | `apxUSD` at `0x98a878b1cd98131b271883b390f68d2c90674665` | P1/P4 |
+| Base pricing asset | `apxUSD` at `0x98a878b1cd98131b271883b390f68d2c90674665` | P1 |
+| Market expiry | `2026-11-05T00:00:00.000Z` | P1/P2 |
+| PT price timestamp | `2026-06-04T19:33:45.000Z` | P1 |
+| Market data timestamp | `2026-06-04T19:33:00.000Z` | P1 |
 
-## 2. What this PT represents
-
-Pendle separates a yield-bearing position into principal exposure and yield exposure. The PT is the principal side. Pendle documentation describes PT as redeemable at maturity against the accounting asset named for the market.
-
-For this market, Pendle identifies the accounting asset as `apxUSD` at `0x98a878b1cd98131b271883b390f68d2c90674665`. The PT label is `PT apxUSD (apxUSD)`. This accounting-asset detail matters because the economic maturity value may reference the accounting asset rather than one unit of the named yield-bearing wrapper.
-
-## 3. How underlying-token risk carries into the PT
+## 2. Inherited underlying-risk profile
 
 The PT inherits apxUSD exposure to the Apyx synthetic-dollar model backed by off-chain preferred-share collateral, UUPS upgradeability, AccessManager roles, pause and deny-list controls, eligible-participant primary mint/redeem constraints, reserve/NAV evidence gaps, and audit-scope uncertainty. The underlying apxUSD report treats current reserve/custody evidence, legal eligibility, admin drift, oracle methodology, and route depth as review-required or blocking for automated live use.
 
-The Pendle wrapper changes the timing and market mechanics, but it does not remove the underlying issuer-control, backing, restriction, or redemption issues. If the underlying token or accounting asset is frozen, restricted, depegged, paused, or difficult to redeem, the PT can be affected even when the PT itself still has an observable market price.
+The PT wrapper does not remove issuer, backing, legal, admin, transfer, freeze, redemption, or oracle risks from `apxUSD`. It adds an additional Pendle market layer: holders face PT/SY/YT contract dependencies, pre-maturity AMM liquidity, maturity redemption mechanics, and a valuation path tied to the accounting asset named by Pendle.
 
-## 4. PT-specific yield and maturity economics
+Local inherited artifacts reviewed:
 
-The fixed-yield signal comes from a PT trading below the expected maturity redemption reference. The 2026-06-04 API snapshot showed:
+- `reports/eth-mainnet-apxusd.md`
+- `technical-reports/eth-mainnet-apxusd.md`
+- `verification/eth-mainnet-apxusd.md`
 
-- PT price: $0.897297.
-- Accounting asset price: $0.974237.
-- Computed discount to accounting asset: 7.90%.
-- Pendle implied APY: 21.68%.
-- Pendle APY field: 13.23%.
-- Active API yield range: 6.00%–25.00%.
+## 3. PT mechanism and maturity/redemption path
 
-Those values require fresh review before live use. The economic result depends on market price, time to maturity, redemption mechanics, and the condition of `apxUSD` / `apxUSD`.
+Pendle documentation describes PT as the principal portion of an underlying yield-bearing position, economically similar to a zero-coupon bond on the accounting asset. PT is acquired at a discount; if swaps and credit/issuer impairments are ignored, its value should converge toward the accounting asset by maturity. Pendle documentation also states that PT redeems 1:1 for the accounting asset at maturity, not necessarily for the named yield-bearing wrapper [P4].
 
-## 5. Liquidity and exit risk
+For this market:
 
-The current API liquidity snapshot was $1,171,288. This is a market-data field, not a guaranteed executable exit size.
+- pre-maturity exit depends on the Pendle PT/SY AMM and routing depth, not on a guaranteed direct redemption path;
+- post-maturity redemption depends on Pendle maturity logic plus the SY/accounting-asset path;
+- the PT holder does not receive variable yield or points from the underlying position because those economics are separated into YT [P4];
+- if `apxUSD` or its accounting asset is frozen, deny-listed, paused, has stale NAV, or cannot be redeemed by the holder, the PT maturity value can be economically impaired even when Pendle market metadata remains visible.
 
-Before maturity, the holder exits through Pendle market liquidity unless another route is available. That means the realized price can differ from the maturity value, especially during liquidity stress, stale pricing, restriction events, or issuer/NAV uncertainty.
+## 4. Yield profile: price, discount, implied APY/fixed yield, assumptions
 
-For any live action, size-specific route quotes and slippage checks are required. Without them, automation remains blocked.
+All values below are point-in-time market/API data from 2026-06-04 and must be refreshed before any live Preview or valuation use.
 
-## 6. Pricing/oracle/valuation risk
+| Field | Value | Interpretation |
+|---|---:|---|
+| PT USD price | $0.897297 | Current Pendle API PT price snapshot [P1]. |
+| Accounting asset USD price | $0.974237 | API value for `apxUSD`, the maturity accounting reference [P1/P4]. |
+| Discount to accounting asset | 7.90% | Computed as `1 - PT price / accounting-asset price`; not a guaranteed return. |
+| Pendle implied APY | 21.68% | API-implied fixed-yield field [P1/P2]. |
+| Pendle APY field | 13.23% | Protocol API field; treat as point-in-time market data [P1/P2]. |
+| Aggregated APY field | 120.04% | Includes market/reward assumptions; not isolated PT fixed return [P1]. |
+| Active API fee rate | 0.41% | Fee-rate snapshot from active markets endpoint [P2]. |
+| Active API yield range | 6.00%–25.00% | AMM configured / observed yield range from active endpoint [P2]. |
 
-The report found Pendle API prices and implied-yield fields, but it did not verify a Gearbox-compatible PT oracle or a production valuation feed for this PT.
+The fixed-yield interpretation assumes maturity redemption proceeds at the accounting-asset value and ignores changes in market depth, contract state, issuer restrictions, and accounting-asset quality. Those assumptions are material for all four scoped RWA / issuer-controlled underlying assets.
 
-A valuation design would need to handle:
+## 5. Liquidity and exit risk before maturity
 
-- PT market price before maturity;
-- convergence toward accounting-asset redemption at maturity;
-- the accounting asset `apxUSD`;
-- inherited `apxUSD` issuer and redemption restrictions;
-- stale price updates;
-- market depeg and liquidity stress.
+Pendle's AMM documentation states that PT/SY pools trade PT directly against SY, with a curve concentrated around an implied-yield range and dynamic tightening as maturity approaches [P5]. This means the pre-maturity exit price is a market price, not the maturity redemption value.
 
-Until that feed design is explicitly verified, the PT should be treated as requiring human review for valuation and blocking for automated live use.
+Current market depth snapshot:
 
-## 7. Scenario behavior and live-use checks
+| Field | Value | Source |
+|---|---:|---|
+| Liquidity, USD | $1,171,288 | P1/P2 |
+| Liquidity, accounting units | 1,204,887 | P1 |
+| LP token | `0xaf0349fb9b1ba07d34381870c59b560b31412660` / `PLP-apxUSD-5NOV2026` | P1 |
 
-If the underlying or accounting asset depegs, the PT discount and implied APY can stop representing clean fixed-yield economics.
+Size-specific slippage was not computed in this recovery pass. For any state-changing action, missing live route quote and size-dependent slippage imply `missing_behavior: block_automation`. The report can continue as structural analysis, but live Preview must refresh the route, token approvals, market state, price update time, and holder eligibility.
 
-If transfer restrictions, freeze controls, holder eligibility, or redemption access become binding, Pendle settlement or output conversion can be impaired.
+## 6. Oracle, pricing, and valuation dependencies
 
-If Pendle AMM liquidity falls, pre-maturity exit may require a wider discount or waiting until maturity.
+The reviewed sources provide Pendle API market prices and implied-yield fields, but this dossier did not verify a Gearbox-compatible oracle for the PT. A live Credit Account or pool integration would need an explicit price-feed design that handles:
 
-If the market reaches maturity, the relevant question changes from AMM exit to redemption path, output asset, and holder eligibility.
+- PT price convergence toward maturity and the distinction between PT market price and accounting-asset redemption reference;
+- accounting-asset price quality for `apxUSD`;
+- `apxUSD` issuer/backing/restriction state inherited from the underlying report;
+- stale Pendle market API data or stale onchain oracle updates;
+- pre-maturity market depeg versus post-maturity redemption value;
+- liquidity collapse or inability to route PT/SY swaps at relevant size.
 
-Before any live use, refresh:
+`missing_behavior: review_required` for valuation design; `missing_behavior: block_automation` for any live Credit Account action without a current approved oracle/feed and route/depth check.
 
-- market/PT/SY/YT addresses and maturity;
-- current PT price, implied APY, liquidity, and route quote;
-- accounting-asset price and output asset;
-- holder eligibility and restriction state for `apxUSD` / `apxUSD`;
-- oracle/feed availability and freshness;
-- underlying issuer/admin/backing state from the local underlying dossier.
+## 7. Admin, governance, and contract dependency surface
 
-## 8. Quantitative and social return overlay
+The dependency stack is:
 
-The expanded APYx old-run investment layer treats PT-apxUSD 05 Nov 2026 as the scoped PT that comes closest to the 10.00% net annualized hurdle before points. The base quantitative view uses a 153-day horizon, a 10.00% net annualized hurdle, a 20.00% opportunistic hurdle, a 3.85% apxUSD expected-loss prior, and a 1.00% exit-cost assumption.
+1. Pendle market / LP contract `0xaf0349fb9b1ba07d34381870c59b560b31412660`.
+2. PT contract `0xaf687b5ecb525ccea96115088999b4ed80c388b6`.
+3. SY wrapper `0x4f116ee5bcd227d1a1c4f57918d694a4abe7b3fc`.
+4. YT contract `0x7fbc01c63b0ac372ec75907f3a1d8adc8cf28e1f`.
+5. Pendle routing/AMM/oracle infrastructure used for swaps and market data.
+6. Accounting asset `apxUSD` at `0x98a878b1cd98131b271883b390f68d2c90674665`.
+7. Underlying token `apxUSD` at `0x98a878b1cd98131b271883b390f68d2c90674665` and all issuer/admin restrictions inherited from the underlying dossier.
 
-Positive drivers:
+This recovery pass did not perform a full role-holder or upgradeability audit of the Pendle market, PT, SY, and YT contracts. Etherscan links are included as onchain pointers, but role-state and implementation verification remain `missing_behavior: review_required` before production use.
 
-- 8.5746% gross ROI to accounting asset over 153 days.
-- 7.8975% accounting-asset drawdown buffer before costs.
-- 8.89% base risk-adjusted annualized return before points.
-- Only 0.4671% APYx points ROI over 153 days needed to clear the 10.00% net annualized hurdle under current priors.
+## 8. Scenario and economic risk matrix
 
-Negative drivers:
+| Scenario | PT-specific behavior | Missing-data behavior |
+|---|---|---|
+| Underlying or accounting asset depegs | PT discount/APY can become misleading because maturity value depends on the accounting asset quality, not only the PT quote. | `review_required`; `block_automation` for live execution. |
+| Underlying transfer, freeze, deny-list, whitelist, or holder restriction activates | Pendle settlement or post-maturity output can be impaired even if the PT contract itself is transferable. | `block_automation` until holder eligibility and restriction state are refreshed. |
+| Issuer redemption pause or NAV/backing impairment | PT maturity convergence assumption fails or becomes delayed/uncertain. | `review_required`; cannot treat fixed-yield field as clean return. |
+| Pendle AMM liquidity collapses before maturity | Exit may clear at a wider discount or require waiting until maturity. | `block_automation` without live quote/depth. |
+| Pendle oracle/API data stale | Displayed price/APY/liquidity may not represent executable state. | `review_required` for analysis; `block_automation` for execution. |
+| Maturity reached | PT redemption path replaces pre-maturity AMM economics, but holder still depends on Pendle redemption and output-asset restrictions. | Refresh maturity status, redemption route, and output token eligibility. |
+| Rollover into later PT maturity | Rollover is a new market decision with new price, maturity, liquidity, and source checks. | New analysis required; do not carry this dossier forward automatically. |
 
-- Saved and social evidence includes secondary-market discount and collateral-buffer stress.
-- Primary redemption is not assumed to be universally available.
-- The expected-loss prior plus exit cost is 4.85%, slightly above the 4.3825% combined threshold required to clear the 10.00% hurdle without points.
+## 9. Data quality, missing_behavior, and highest-impact unknowns
 
-Decision trigger: upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, no pending admin event, and route-specific APYx points eligibility. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.
+| Field | Current value / quality | source_class | confidence | missing_behavior |
+|---|---|---|---|---|
+| Exact market identity | Confirmed by active and detail API for supplied underlying/maturity | protocol_api / market_data | high | continue |
+| PT/SY/YT addresses | Present in Pendle API and linked to Etherscan | protocol_api / explorer | high for address strings; medium for un-audited role state | review_required before production |
+| Current price/APY/liquidity | Point-in-time 2026-06-04 API fields | market_data | medium/high for snapshot | refresh before live use |
+| Accounting asset semantics | Pendle docs plus market detail bracket/accounting asset | protocol_docs / protocol_api | high | continue; review_required if feed design depends on it |
+| Size-specific exit depth | Not computed | unknown | low | block_automation |
+| Pendle contract role/upgrade state | Not fully audited in this recovery pass | explorer/onchain pointer only | low/medium | review_required |
+| Underlying issuer/backing/restrictions | Inherited from local verified underlying reports | local reports | high for prior dossier; stale for future use | review_required or block_automation per underlying report |
+| Gearbox PT support/oracle | Not found / not checked as supported | unknown | low | review_required before any integration |
 
-## 9. Evidence quality
+Highest-impact unknowns:
 
-Evidence quality is strongest for market identity, PT/SY/YT addresses, maturity, current API price fields, and local inherited-risk files.
+1. Live size-specific PT/SY route depth and slippage were not computed; `missing_behavior: block_automation` for any trade or liquidation Preview.
+2. A Gearbox-compatible PT oracle/feed design was not verified; `missing_behavior: review_required` for collateral or valuation use.
+3. Pendle market/PT/SY/YT role, upgrade, pause, or emergency controls were not independently audited; `missing_behavior: review_required` before production acceptance.
+4. `apxUSD` eligibility, restriction, redemption, reserve/NAV, and issuer-admin state must be refreshed from the underlying dossier before live use; `missing_behavior: review_required` or `block_automation` depending on the action.
+5. Maturity redemption output depends on the accounting asset `apxUSD` and on Pendle/SY routing; any mismatch between named underlying wrapper and accounting asset requires human review before valuation.
 
-Evidence quality is weaker for live size-specific exit depth, Pendle contract role and upgrade state, and any Gearbox-specific oracle or support status. Those fields require fresh review before production use.
+## 10. Sources
 
-## 10. Source map
-
-- P1 — Pendle market API detail: [https://api-v2.pendle.finance/core/v1/1/markets/0xaf0349fb9b1ba07d34381870c59b560b31412660](https://api-v2.pendle.finance/core/v1/1/markets/0xaf0349fb9b1ba07d34381870c59b560b31412660); local copy `research/pendle-pt-eth-mainnet-apxusd-2026-11-05/raw/pendle-market-api-2026-06-04.json`. source_class: market_data / protocol_api. accessed: 2026-06-04. confidence: high for current API fields.
-- P2 — Pendle active markets API: [https://api-v2.pendle.finance/core/v1/1/markets/active](https://api-v2.pendle.finance/core/v1/1/markets/active); local exact-match copy `research/pendle-pt-eth-mainnet-apxusd-2026-11-05/raw/pendle-active-market-details-2026-06-04.json`. source_class: market_data / protocol_api. accessed: 2026-06-04. confidence: high for active listing.
-- P3 — Local same-underlying candidate scan: `research/pendle-pt-eth-mainnet-apxusd-2026-11-05/raw/pendle-active-candidates-apxusd-2026-06-04.json`. source_class: local derived evidence. accessed: 2026-06-04. confidence: high for disambiguation within the active API response.
-- P4 — Pendle PT documentation: [https://docs.pendle.finance/pendle-v2/ProtocolMechanics/YieldTokenization/PT](https://docs.pendle.finance/pendle-v2/ProtocolMechanics/YieldTokenization/PT). source_class: protocol_docs. accessed: 2026-06-04. confidence: high for PT mechanism.
-- P5 — Pendle AMM documentation: [https://docs.pendle.finance/pendle-v2/ProtocolMechanics/LiquidityEngines/AMM](https://docs.pendle.finance/pendle-v2/ProtocolMechanics/LiquidityEngines/AMM). source_class: protocol_docs. accessed: 2026-06-04. confidence: high for AMM mechanism.
-- P6 — Pendle FAQ: [https://docs.pendle.finance/pendle-v2/FAQ](https://docs.pendle.finance/pendle-v2/FAQ). source_class: protocol_docs. accessed: 2026-06-04. confidence: medium/high for maturity framing.
-- U1 — Underlying analyst report: `reports/eth-mainnet-apxusd.md`. source_class: local analyst report. accessed: 2026-06-04. confidence: high for inherited-risk summary.
-- U2 — Underlying technical report: `technical-reports/eth-mainnet-apxusd.md`. source_class: local technical dossier. accessed: 2026-06-04. confidence: high for inherited technical evidence.
-- U3 — Underlying verification artifact: `verification/eth-mainnet-apxusd.md`. source_class: local verification artifact. accessed: 2026-06-04. confidence: high for upstream QA status.
-- E1 — Market/PT/SY/YT address pointers: [market](https://etherscan.io/address/0xaf0349fb9b1ba07d34381870c59b560b31412660), [PT](https://etherscan.io/address/0xaf687b5ecb525ccea96115088999b4ed80c388b6), [SY](https://etherscan.io/address/0x4f116ee5bcd227d1a1c4f57918d694a4abe7b3fc), [YT](https://etherscan.io/address/0x7fbc01c63b0ac372ec75907f3a1d8adc8cf28e1f). source_class: explorer / onchain pointer. accessed: 2026-06-04. confidence: medium because this report did not fully audit contract roles.
-
-## 11. Technical appendix pointer
-
-Technical dossier: `technical-reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md`.
+| ID | Source | source_class | accessed | confidence |
+|---|---|---|---|---|
+| P1 | [Pendle market API detail](https://api-v2.pendle.finance/core/v1/1/markets/0xaf0349fb9b1ba07d34381870c59b560b31412660) and local snapshot `research/pendle-pt-eth-mainnet-apxusd-2026-11-05/raw/pendle-market-api-2026-06-04.json` | market_data / protocol_api | 2026-06-04 | high for current API fields |
+| P2 | [Pendle active markets API](https://api-v2.pendle.finance/core/v1/1/markets/active) and local exact-match snapshot `research/pendle-pt-eth-mainnet-apxusd-2026-11-05/raw/pendle-active-market-details-2026-06-04.json` | market_data / protocol_api | 2026-06-04 | high for active listing and APY/liquidity snapshot |
+| P3 | local candidate scan `research/pendle-pt-eth-mainnet-apxusd-2026-11-05/raw/pendle-active-candidates-apxusd-2026-06-04.json` | market_data / local derived evidence | 2026-06-04 | high for disambiguation within active API response |
+| P4 | [Pendle PT documentation](https://docs.pendle.finance/pendle-v2/ProtocolMechanics/YieldTokenization/PT) | protocol_docs | 2026-06-04 | high for PT mechanism |
+| P5 | [Pendle AMM documentation](https://docs.pendle.finance/pendle-v2/ProtocolMechanics/LiquidityEngines/AMM) | protocol_docs | 2026-06-04 | high for AMM mechanism |
+| P6 | [Pendle FAQ](https://docs.pendle.finance/pendle-v2/FAQ) | protocol_docs | 2026-06-04 | medium/high for maturity and risk framing |
+| U1 | `reports/eth-mainnet-apxusd.md` | local analyst report | 2026-06-04 | high for inherited-risk summary |
+| U2 | `technical-reports/eth-mainnet-apxusd.md` | local technical dossier | 2026-06-04 | high for inherited technical evidence |
+| U3 | `verification/eth-mainnet-apxusd.md` | local verification artifact | 2026-06-04 | high for upstream QA status |
+| E1 | [Market contract on Etherscan](https://etherscan.io/address/0xaf0349fb9b1ba07d34381870c59b560b31412660) | explorer / onchain pointer | 2026-06-04 | medium; address pointer, not full role audit |
+| E2 | [PT contract on Etherscan](https://etherscan.io/address/0xaf687b5ecb525ccea96115088999b4ed80c388b6) | explorer / onchain pointer | 2026-06-04 | medium; address pointer, not full role audit |
+| E3 | [SY contract on Etherscan](https://etherscan.io/address/0x4f116ee5bcd227d1a1c4f57918d694a4abe7b3fc) | explorer / onchain pointer | 2026-06-04 | medium; address pointer, not full role audit |
+| E4 | [YT contract on Etherscan](https://etherscan.io/address/0x7fbc01c63b0ac372ec75907f3a1d8adc8cf28e1f) | explorer / onchain pointer | 2026-06-04 | medium; address pointer, not full role audit |

@@ -10,7 +10,7 @@ const assetLookupSchema = {
     .string()
     .optional()
     .describe("Canonical asset id, slug, token address, market address, PT address, or alias."),
-  symbol: z.string().optional().describe("Asset symbol or alias, for example apxUSD or PT-apxUSD."),
+  symbol: z.string().optional().describe("Asset symbol or alias, for example apxUSD, PRIME, USDat, or PT-USDat."),
 };
 
 const server = new McpServer({

@@ -3,6 +3,7 @@ import { getAssetResearch, getAssetSummary } from "./registry.js";
 type Summary = {
   rubric?: { score?: number; decision_class?: string };
   return_profile?: {
+    gross_roi?: number;
     compound_gross_apy?: number;
     points_roi_required_to_clear_10pct_hurdle?: number;
   };
@@ -12,42 +13,52 @@ type Summary = {
   };
 };
 
-const apxSummary = (await getAssetSummary({ symbol: "apxUSD" })) as Summary;
-const apySummary = (await getAssetSummary({ symbol: "apyUSD" })) as Summary;
-const ptApxSummary = (await getAssetSummary({ symbol: "PT-apxUSD" })) as Summary;
-const ptApySummary = (await getAssetSummary({ symbol: "PT-apyUSD" })) as Summary;
-const ptApxResearch = await getAssetResearch({ asset_id: "0xaf0349fb9b1ba07d34381870c59b560b31412660" });
-const ptApyResearch = await getAssetResearch({ asset_id: "0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952" });
+function pickSummary(summary: Summary): Record<string, unknown> {
+  const selected: Record<string, unknown> = {
+    score: summary.rubric?.score,
+    decision_class: summary.rubric?.decision_class,
+  };
+
+  if (summary.return_profile) {
+    selected.gross_roi = summary.return_profile.gross_roi;
+    selected.compound_gross_apy = summary.return_profile.compound_gross_apy;
+  }
+
+  if (summary.quantitative_risk_return_layer) {
+    selected.points_roi_required_to_clear_hurdle =
+      summary.quantitative_risk_return_layer.points_roi_required_to_clear_hurdle;
+    selected.conclusion = summary.quantitative_risk_return_layer.conclusion;
+  }
+
+  return selected;
+}
+
+const summaries = {
+  apxUSD: (await getAssetSummary({ symbol: "apxUSD" })) as Summary,
+  apyUSD: (await getAssetSummary({ symbol: "apyUSD" })) as Summary,
+  PRIME: (await getAssetSummary({ symbol: "PRIME" })) as Summary,
+  deSPXA: (await getAssetSummary({ symbol: "deSPXA" })) as Summary,
+  USDat: (await getAssetSummary({ symbol: "USDat" })) as Summary,
+  sUSDat: (await getAssetSummary({ symbol: "sUSDat" })) as Summary,
+  pt_apxUSD: (await getAssetSummary({ symbol: "PT-apxUSD" })) as Summary,
+  pt_apyUSD: (await getAssetSummary({ symbol: "PT-apyUSD" })) as Summary,
+  pt_USDat: (await getAssetSummary({ symbol: "PT-USDat" })) as Summary,
+  pt_sUSDat: (await getAssetSummary({ symbol: "PT-sUSDat" })) as Summary,
+};
+
+const research = {
+  pt_apxUSD: await getAssetResearch({ asset_id: "0xaf0349fb9b1ba07d34381870c59b560b31412660" }),
+  pt_apyUSD: await getAssetResearch({ asset_id: "0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952" }),
+  pt_USDat: await getAssetResearch({ asset_id: "0x9afe7a057a09cf5da748d952078c9c99938b4329" }),
+  pt_sUSDat: await getAssetResearch({ asset_id: "0x91bc86899c8391b6caaf26535b9cd82efe49a189" }),
+};
 
 console.log(
   JSON.stringify(
     {
       ok: true,
-      apxUSD: {
-        score: apxSummary.rubric?.score,
-        decision_class: apxSummary.rubric?.decision_class,
-      },
-      apyUSD: {
-        score: apySummary.rubric?.score,
-        decision_class: apySummary.rubric?.decision_class,
-      },
-      pt_apxUSD: {
-        score: ptApxSummary.rubric?.score,
-        decision_class: ptApxSummary.rubric?.decision_class,
-        compound_gross_apy: ptApxSummary.return_profile?.compound_gross_apy,
-        points_roi_required_to_clear_hurdle:
-          ptApxSummary.quantitative_risk_return_layer?.points_roi_required_to_clear_hurdle,
-        research_chars: ptApxResearch.markdown.length,
-      },
-      pt_apyUSD: {
-        score: ptApySummary.rubric?.score,
-        decision_class: ptApySummary.rubric?.decision_class,
-        compound_gross_apy: ptApySummary.return_profile?.compound_gross_apy,
-        points_roi_required_to_clear_hurdle:
-          ptApySummary.quantitative_risk_return_layer?.points_roi_required_to_clear_hurdle,
-        conclusion: ptApySummary.quantitative_risk_return_layer?.conclusion,
-        research_chars: ptApyResearch.markdown.length,
-      },
+      assets: Object.fromEntries(Object.entries(summaries).map(([key, summary]) => [key, pickSummary(summary)])),
+      research_chars: Object.fromEntries(Object.entries(research).map(([key, value]) => [key, value.markdown.length])),
     },
     null,
     2,

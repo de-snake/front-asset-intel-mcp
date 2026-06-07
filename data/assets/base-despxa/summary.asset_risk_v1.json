@@ -1,0 +1,142 @@
+{
+  "asset_id": "base:0x9c5c365e764829876243d0b289733b9d2b729685",
+  "asset_type": "token",
+  "symbol": "deSPXA",
+  "display_name": "Centrifuge deSPXA",
+  "chain": "base",
+  "chain_id": 8453,
+  "rubric": {
+    "version": "asset_risk_v1",
+    "score": 44,
+    "max_score": 100,
+    "decision_class": "review_required",
+    "decision_rationale": "deSPXA is a tokenized S&P 500 fund exposure with identifiable Centrifuge/Base mechanics but unresolved member/AP eligibility, transfer-hook state, Root/ward administration, NAV freshness, audit scope, and live route depth. It remains Analyze-stage only."
+  },
+  "dimensions": [
+    {
+      "id": "backing_nav_evidence",
+      "question": "Is backing/NAV evidence current, transparent, and independently reconcilable?",
+      "score": 10,
+      "max_score": 18,
+      "selected_option": "partial_attestations_or_issuer_dashboards",
+      "answer": "Centrifuge materials tie deSPXA to SPXA / Janus Henderson Anemoy S&P 500 Index Fund exposure and Base vault accounting, but live holdings, NAV reports, service providers, and cash buffers must be refreshed.",
+      "evidence": [
+        "RESULT.md §1 Executive view",
+        "RESULT.md §10 What must be checked before live use"
+      ],
+      "confidence": "medium/high",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "redemption_holder_eligibility",
+      "question": "Can the intended holder redeem or exit through a known route?",
+      "score": 5,
+      "max_score": 18,
+      "selected_option": "holder_specific_unknown_or_blocking",
+      "answer": "Primary mint/redeem access depends on member / Authorized Participant / KYC status and cannot be assumed for an ordinary holder.",
+      "evidence": [
+        "RESULT.md §1 Executive view",
+        "RESULT.md §10 What must be checked before live use"
+      ],
+      "confidence": "medium/high",
+      "missing_behavior": "block_automation"
+    },
+    {
+      "id": "market_liquidity_peg_behavior",
+      "question": "Is market exit liquid, near accounting value, and robust for the intended size?",
+      "score": 8,
+      "max_score": 18,
+      "selected_option": "observable_but_not_size_checked",
+      "answer": "Secondary DEX liquidity exists but can differ from manager/NAV price; live route quote at exact size is required.",
+      "evidence": [
+        "RESULT.md §1 Executive view",
+        "RESULT.md §10 What must be checked before live use"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "block_automation"
+    },
+    {
+      "id": "issuer_controls_governance",
+      "question": "Are issuer/admin controls limited, transparent, and slow enough for analyst-agent use?",
+      "score": 5,
+      "max_score": 14,
+      "selected_option": "strong_or_poorly_mapped_controls",
+      "answer": "Transfer-hook freeze/member controls and Centrifuge Root/ward administration can change important behavior and must be refreshed.",
+      "evidence": [
+        "RESULT.md §1 Executive view",
+        "RESULT.md §10 What must be checked before live use"
+      ],
+      "confidence": "medium/high",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "oracle_accounting_alignment",
+      "question": "Does the valuation method track executable value for this use case?",
+      "score": 6,
+      "max_score": 10,
+      "selected_option": "accounting_model_known_but_not_use_verified",
+      "answer": "USDC-based vault accounting and price-per-share mechanics are identifiable, but price timestamp/feed details and executable-value alignment are not decision-grade.",
+      "evidence": [
+        "RESULT.md §1 Executive view",
+        "RESULT.md §10 What must be checked before live use"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "audits_security_review",
+      "question": "Does the project have credible audits or formal verification covering the live risk surface?",
+      "score": 4,
+      "max_score": 12,
+      "selected_option": "weak_missing_or_unknown_security_review",
+      "answer": "Audit/formal-verification scope against the exact Base deployment remains an explicit live-use check.",
+      "evidence": [
+        "RESULT.md §10 What must be checked before live use"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "incidents_social_stress",
+      "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
+      "score": 6,
+      "max_score": 10,
+      "selected_option": "some_stress_or_incomplete_history",
+      "answer": "No scoped old-run X/social memo existed; freeze, pause, oracle, redemption-delay, NAV, and incident disclosures require a fresh check.",
+      "evidence": [
+        "RESULT.md §8 X / social research layer",
+        "RESULT.md §10 What must be checked before live use"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "review_required"
+    }
+  ],
+  "blocking_unknowns": [
+    "holder member / Authorized Participant / KYC status",
+    "current frozen/member state for holder and recipient",
+    "transfer hook behavior and Root/ward identities/delay/pause state",
+    "current price-per-share, price timestamp, and pricing-feed details",
+    "fund terms, holdings, cash buffers, custody/service providers, and NAV reports",
+    "audit/formal-verification scope for exact Base deployment",
+    "live DEX route quote for exact size",
+    "Gearbox-specific oracle/support state"
+  ],
+  "source_report": "dev/implementation/reproducible-runs/despxa-investment-research-20260604/RESULT.md",
+  "generated_from": {
+    "source_repo": "de-snake/front-knowledge-base",
+    "source_ref": "docs/rich-token-reports",
+    "source_commit": "b954049"
+  },
+  "address": "0x9c5C365e764829876243d0b289733B9D2b729685",
+  "social_research_layer": {
+    "evidence_date": "2026-06-04",
+    "status": "not_available_in_old_run",
+    "decision_effect": "A deSPXA-specific social layer should be run separately for market narrative, fund-flow sentiment, issuer announcements, or liquidity discussion.",
+    "confidence": "high for absence in corpus"
+  },
+  "quantitative_risk_return_layer": {
+    "status": "not_available_in_old_run",
+    "decision_effect": "A fresh quantitative pass is required for S&P 500/fund NAV drawdown, primary-redemption eligibility, Base liquidity, oracle/liquidation behavior, issuer-control tail risk, and fund gates/fees/timing.",
+    "confidence": "high for absence in corpus"
+  }
+}

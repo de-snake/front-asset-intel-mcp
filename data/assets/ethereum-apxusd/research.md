@@ -6,9 +6,10 @@ Asset: apyx apxUSD on Ethereum mainnet
 Token address: `0x98A878b1Cd98131B271883B390f68D2c90674665`
 Symbol: `apxUSD`
 
-This note is source-linked context for risk review. It is not an asset-selection recommendation, suitability verdict, position-size recommendation, or execution instruction.
+This note is source-linked context for risk review. It is not an investment recommendation, asset-selection recommendation, suitability verdict, position-size recommendation, or execution instruction.
 
-Detailed contract evidence was preserved separately in [technical-reports/eth-mainnet-apxusd.md](../technical-reports/eth-mainnet-apxusd.md).
+Detailed contract evidence was preserved separately in [technical-reports/eth-mainnet-apxusd.md](run/technical-reports/eth-mainnet-apxusd.md).
+This expanded public version also folds in the old-run X/social research, PT-market support artifacts, and quantitative risk/return layer where available.
 
 ## 1. Executive view
 
@@ -137,17 +138,36 @@ Risk implication: for Credit Account, liquidation, portfolio, or exit analysis, 
 
 Methodology missing_behavior: missing oracle/pricing methodology is `review_required` before collateral-oracle use; missing live route or state checks are `block_automation` for execution.
 
-## 8. Social and quantitative overlay
+## 8. X / social research layer
 
-The expanded APYx old-run layer adds X/social and quantitative context around APYx Pips, PT-apxUSD, STRC/preferred-share collateral stress, and redemption/arbitrage impairment. This layer is useful as a return-thesis and stress-narrative map, not as primary proof of reserves, eligibility, or route quality.
+The old-run X layer treats apxUSD as the base APYx synthetic-dollar token, not as a simple cash-only stablecoin. The social narrative is a blend of APYx Pips / token-allocation speculation, preferred-share / STRC-style backing, and the long-dated PT-apxUSD fixed-discount trade. The support artifact is `run/x-research/x-research-apxusd-points-stac-pt-2026-11-05.md`.
 
-For apxUSD and PT-apxUSD, the quantitative report treats the PT as conditionally underwriteable only if APYx points eligibility is strong or live reserve/redemption review lowers the expected-loss prior. PT-apxUSD 05 Nov 2026 had 8.5746% gross ROI to accounting asset over 153 days, a 7.8975% accounting-asset drawdown buffer before costs, and needed 0.4671% points ROI over 153 days to clear the 10.00% net annualized hurdle under current priors.
+Decision-useful social signals:
 
-The same report assigns apxUSD a 3.85% expected-loss prior and a 1.00% PT exit-cost assumption. Base risk-adjusted annualized return for PT-apxUSD is 8.89% before points, below the 10.00% hurdle but close enough that points eligibility or improved reserve/redemption evidence could change the decision.
+- PT-apxUSD Nov 2026 was discussed around `12.5%` fixed / implied APY, with roughly a `5%` discount to par over about `153`-`154` days in the early-June 2026 search window.
+- APYx Pips were discussed as a capital-deployment points program, but final conversion economics, FDV, eligibility, and dilution were not fixed in the evidence.
+- The risk narrative is sharper than the promotional yield narrative: social threads raised STRC price-below-par stress, compressed collateral buffer, redemption/arbitrage friction, dashboard-transparency concerns, secondary-market discounts, and long-dated PT maturity risk.
 
-Social risk narratives lower the stress-history confidence for apxUSD. Saved and social evidence includes secondary-market discount, collateral-buffer stress, and restricted-redemption/arbitrage concerns. Upgrade requires reconciled reserves, current market price near accounting value, holder-eligible redemption, and no pending admin event. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.
+The report should therefore be read as a collateral/redemption stress note plus a points-sensitive PT trade, not as a clean stablecoin carry memo.
 
-## 9. What must be checked before live use
+## 9. Quantitative risk / return layer
+
+The old quantitative report ranks PT-apxUSD as the best risk-adjusted candidate among the scoped APYx/Saturn PT markets, but still below a `10.00%` net annualized hurdle before points. The support artifacts are `run/investment-analysis/investment-analyst-report-points-pt-risk-return.md` and `run/investment-analysis/quantitative-underwriting-methodology.md`.
+
+Base PT-apxUSD underwriting snapshot:
+
+- Horizon: `153` days to 2026-11-05 maturity.
+- PT price: `0.897297`; accounting asset price: `0.974237`.
+- Gross ROI to accounting asset: `8.5746%`.
+- Simple gross APR: `20.46%`; compound gross APY: `21.68%`.
+- Accounting-asset drawdown buffer before costs: `7.8975%`.
+- Expected-loss prior: `3.85%`; exit-cost assumption: `1.00%`.
+- Risk-adjusted ROI before points: `3.7246%`; risk-adjusted annualized return before points: `8.89%`.
+- Points ROI needed to clear a `10.00%` net annualized hurdle: `0.4671%` over 153 days; points ROI needed for a `20.00%` hurdle: `4.6589%`.
+
+Conclusion: PT-apxUSD is conditionally underwriteable only if APYx points eligibility is strong, or if fresh reserve/redemption evidence lowers the apxUSD expected-loss prior. Without those upgrades, the fixed discount comes close to but does not clear the base hurdle.
+
+## 10. What must be checked before live use
 
 Before using this dossier for a live position, collateral decision, liquidation path, or execution package, refresh:
 
@@ -166,7 +186,7 @@ Before using this dossier for a live position, collateral decision, liquidation 
 
 Practical implication: unresolved reserve, audit-scope, admin-policy, primary-redemption, and legal/eligibility questions require human review. Unresolved route, pause, deny-list, pending-governance, or holder-specific restriction state should block automated execution.
 
-## 10. Evidence quality
+## 11. Evidence quality
 
 High-confidence evidence:
 
@@ -192,35 +212,32 @@ Lower-confidence or incomplete evidence:
 - live executable liquidity for a concrete size;
 - Gearbox-specific oracle and support state.
 
-## 11. Source map
+## 12. Source map
 
 Each source ID below includes the actual URL or local evidence path. Local paths are relative to this report folder unless shown as a project path.
 
-- **METH** — [methodology.md](../methodology.md). Source class: unknown. Accessed: 2026-06-04. Confidence: high. Project-specific source priority, nine-section pipeline, and missing_behavior labels.
-- **REQ** — [requirements-brief.md](../requirements-brief.md). Source class: requirements. Accessed: 2026-06-04. Confidence: high. Analyst readability structure and style constraints.
-- **R1** — [research/eth-mainnet-apxusd/onchain-admin.md](../research/eth-mainnet-apxusd/onchain-admin.md). Source class: onchain. Accessed: 2026-06-04. Confidence: high. Parent onchain/admin research: identity, proxy, roles, delays, Safe-like holders, sensitive actions.
-- **R2** — [research/eth-mainnet-apxusd/issuer-backing-security.md](../research/eth-mainnet-apxusd/issuer-backing-security.md). Source class: mixed issuer_docs/onchain/audit. Accessed: 2026-06-04. Confidence: medium-high. Parent issuer/backing/security research: mechanism, backing/NAV, transparency/attestation/audit caveats.
-- **R3** — [research/eth-mainnet-apxusd/transfer-liquidity-oracle-governance.md](../research/eth-mainnet-apxusd/transfer-liquidity-oracle-governance.md). Source class: mixed onchain/issuer_docs/market_data/governance. Accessed: 2026-06-04. Confidence: medium-high. Parent transfer/liquidity/oracle/governance research: restrictions, redemption, venues, pricing, watchlist.
-- **O1** — [ethereum-rpc.publicnode.com](https://ethereum-rpc.publicnode.com) plus [research/eth-mainnet-apxusd/raw/onchain-admin-snapshot-2026-06-04.json](../research/eth-mainnet-apxusd/raw/onchain-admin-snapshot-2026-06-04.json). Source class: onchain. Accessed: 2026-06-04. Confidence: high. Direct RPC block snapshot for token metadata, proxy slots, AccessManager roles/delays, Safe-like reads, supply cap, total supply, pause/deny-list state.
-- **O2** — [research/eth-mainnet-apxusd/raw/evm-contracts/src/ApxUSD.sol](../research/eth-mainnet-apxusd/raw/evm-contracts/src/ApxUSD.sol). Source class: onchain verified source. Accessed: 2026-06-04. Confidence: medium-high. apxUSD source behavior: ERC-20, permit, pausable, deny-list, supply cap, AccessManaged UUPS upgradeability, mint/admin functions.
-- **O3** — [research/eth-mainnet-apxusd/raw/evm-contracts/src/MinterV0.sol](../research/eth-mainnet-apxusd/raw/evm-contracts/src/MinterV0.sol). Source class: onchain verified source. Accessed: 2026-06-04. Confidence: medium-high. Signed mint order, nonce, max mint amount, and rate-limit mechanics.
-- **O4** — [research/eth-mainnet-apxusd/raw/evm-contracts/src/Roles.sol](../research/eth-mainnet-apxusd/raw/evm-contracts/src/Roles.sol) and [research/eth-mainnet-apxusd/raw/evm-contracts/src/exts/ERC20DenyListUpgradable.sol](../research/eth-mainnet-apxusd/raw/evm-contracts/src/exts/ERC20DenyListUpgradable.sol). Source class: onchain verified source. Accessed: 2026-06-04. Confidence: medium-high. Role definitions and deny-list checks on sender/receiver.
-- **G1** — [research/eth-mainnet-apxusd/raw/safe-pending-2026-06-04.json](../research/eth-mainnet-apxusd/raw/safe-pending-2026-06-04.json) and [Safe Transaction Service pending transaction API](https://safe-transaction-mainnet.safe.global/api/v1/safes/0xf9862EfC1704aC05e687f66E5cD8c130E5663cE2/multisig-transactions/?executed=false&limit=5). Source class: governance. Accessed: 2026-06-04. Confidence: medium. Pending Safe transaction caveat; payloads not exhaustively decoded.
+- **METH** — [methodology.md](run/methodology.md). Source class: unknown. Accessed: 2026-06-04. Confidence: high. Project-specific source priority, nine-section pipeline, and missing_behavior labels.
+- **REQ** — [requirements-brief.md](run/requirements-brief.md). Source class: requirements. Accessed: 2026-06-04. Confidence: high. Analyst readability structure and style constraints.
+- **R1** — [research/eth-mainnet-apxusd/onchain-admin.md](run/research/eth-mainnet-apxusd/onchain-admin.md). Source class: onchain. Accessed: 2026-06-04. Confidence: high. Parent onchain/admin research: identity, proxy, roles, delays, Safe-like holders, sensitive actions.
+- **R2** — [research/eth-mainnet-apxusd/issuer-backing-security.md](run/research/eth-mainnet-apxusd/issuer-backing-security.md). Source class: mixed issuer_docs/onchain/audit. Accessed: 2026-06-04. Confidence: medium-high. Parent issuer/backing/security research: mechanism, backing/NAV, transparency/attestation/audit caveats.
+- **R3** — [research/eth-mainnet-apxusd/transfer-liquidity-oracle-governance.md](run/research/eth-mainnet-apxusd/transfer-liquidity-oracle-governance.md). Source class: mixed onchain/issuer_docs/market_data/governance. Accessed: 2026-06-04. Confidence: medium-high. Parent transfer/liquidity/oracle/governance research: restrictions, redemption, venues, pricing, watchlist.
+- **O1** — [ethereum-rpc.publicnode.com](https://ethereum-rpc.publicnode.com) plus [research/eth-mainnet-apxusd/raw/onchain-admin-snapshot-2026-06-04.json](run/research/eth-mainnet-apxusd/raw/onchain-admin-snapshot-2026-06-04.json). Source class: onchain. Accessed: 2026-06-04. Confidence: high. Direct RPC block snapshot for token metadata, proxy slots, AccessManager roles/delays, Safe-like reads, supply cap, total supply, pause/deny-list state.
+- **O2** — [research/eth-mainnet-apxusd/raw/evm-contracts/src/ApxUSD.sol](run/research/eth-mainnet-apxusd/raw/evm-contracts/src/ApxUSD.sol). Source class: onchain verified source. Accessed: 2026-06-04. Confidence: medium-high. apxUSD source behavior: ERC-20, permit, pausable, deny-list, supply cap, AccessManaged UUPS upgradeability, mint/admin functions.
+- **O3** — [research/eth-mainnet-apxusd/raw/evm-contracts/src/MinterV0.sol](run/research/eth-mainnet-apxusd/raw/evm-contracts/src/MinterV0.sol). Source class: onchain verified source. Accessed: 2026-06-04. Confidence: medium-high. Signed mint order, nonce, max mint amount, and rate-limit mechanics.
+- **O4** — [research/eth-mainnet-apxusd/raw/evm-contracts/src/Roles.sol](run/research/eth-mainnet-apxusd/raw/evm-contracts/src/Roles.sol) and [research/eth-mainnet-apxusd/raw/evm-contracts/src/exts/ERC20DenyListUpgradable.sol](run/research/eth-mainnet-apxusd/raw/evm-contracts/src/exts/ERC20DenyListUpgradable.sol). Source class: onchain verified source. Accessed: 2026-06-04. Confidence: medium-high. Role definitions and deny-list checks on sender/receiver.
+- **G1** — [research/eth-mainnet-apxusd/raw/safe-pending-2026-06-04.json](run/research/eth-mainnet-apxusd/raw/safe-pending-2026-06-04.json) and [Safe Transaction Service pending transaction API](https://safe-transaction-mainnet.safe.global/api/v1/safes/0xf9862EfC1704aC05e687f66E5cD8c130E5663cE2/multisig-transactions/?executed=false&limit=5). Source class: governance. Accessed: 2026-06-04. Confidence: medium. Pending Safe transaction caveat; payloads not exhaustively decoded.
 - **D1** — Apyx docs, [apxUSD overview](https://docs.apyx.fi/product-overview/apxusd-overview). Source class: issuer_docs. Accessed: 2026-06-04. Confidence: medium. apxUSD mechanism, preferred-share backing, collateral allocation, peg model, eligible mint/redemption, general external pools.
 - **D2** — Apyx docs, [apyUSD overview](https://docs.apyx.fi/product-overview/apyusd-overview). Source class: issuer_docs. Accessed: 2026-06-04. Confidence: medium. Relationship between apxUSD and apyUSD; apxUSD as underlying for savings wrapper.
 - **D3** — Apyx docs, [Transparency](https://docs.apyx.fi/collateral-and-custody/transparency). Source class: issuer_docs. Accessed: 2026-06-04. Confidence: medium. Accountable, Apyx dashboard, Dune dashboard, and custodian attestation framing.
 - **D4** — Apyx docs, [Third Party Attestation](https://docs.apyx.fi/collateral-and-custody/third-party-attestation). Source class: issuer_docs. Accessed: 2026-06-04. Confidence: medium for listed PDFs, low for reserve conclusions. Wolf & Company March/April 2026 attestation links and custodian attestation claims.
 - **D5** — Apyx docs, [Audits](https://docs.apyx.fi/resources/audits). Source class: audit / issuer_docs. Accessed: 2026-06-04. Confidence: medium for listed reports. Listed Quantstamp, Certora, and Zellic audit reports.
 - **D6** — Certora public report summary, [Apyx apxUSD](https://www.certora.com/reports/apyx-apxusd). Source class: audit. Accessed: 2026-06-04. Confidence: medium. Certora March 2026 issue count and high-severity fixed/confirmed statement.
-- **C1** — [research/eth-mainnet-apxusd/raw/evm-contracts/README.md](../research/eth-mainnet-apxusd/raw/evm-contracts/README.md). Source class: issuer_docs / onchain. Accessed: 2026-06-04. Confidence: medium. Public Apyx contracts repository README: protocol overview and contract architecture.
-- **M1** — [research/eth-mainnet-apxusd/raw/dexscreener-apxusd-2026-06-04.json](../research/eth-mainnet-apxusd/raw/dexscreener-apxusd-2026-06-04.json), [DEXScreener token API](https://api.dexscreener.com/latest/dex/tokens/0x98A878b1Cd98131B271883B390f68D2c90674665), and [Curve apxUSD/USDC pair](https://dexscreener.com/ethereum/0xe1b96555bbeca40e583bbb41a11c68ca4706a414). Source class: market_data. Accessed: 2026-06-04. Confidence: medium. Point-in-time venues, prices, liquidity, volume, and route divergence.
+- **C1** — [research/eth-mainnet-apxusd/raw/evm-contracts/README.md](run/research/eth-mainnet-apxusd/raw/evm-contracts/README.md). Source class: issuer_docs / onchain. Accessed: 2026-06-04. Confidence: medium. Public Apyx contracts repository README: protocol overview and contract architecture.
+- **M1** — [research/eth-mainnet-apxusd/raw/dexscreener-apxusd-2026-06-04.json](run/research/eth-mainnet-apxusd/raw/dexscreener-apxusd-2026-06-04.json), [DEXScreener token API](https://api.dexscreener.com/latest/dex/tokens/0x98A878b1Cd98131B271883B390f68D2c90674665), and [Curve apxUSD/USDC pair](https://dexscreener.com/ethereum/0xe1b96555bbeca40e583bbb41a11c68ca4706a414). Source class: market_data. Accessed: 2026-06-04. Confidence: medium. Point-in-time venues, prices, liquidity, volume, and route divergence.
 
-## 12. Technical appendix pointer
+## 13. Technical appendix pointer
 
 For raw addresses, role identifiers, implementation slots, method names, and table-level evidence, see:
 
-- [technical-reports/eth-mainnet-apxusd.md](../technical-reports/eth-mainnet-apxusd.md)
-- [research/eth-mainnet-apxusd/](../research/eth-mainnet-apxusd/)
-
-
-Additional source pointers for the overlay: `dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md`, `run/investment-analysis/investment-analyst-report-points-pt-risk-return.md`, and `run/x-research/x-research-apxusd-points-stac-pt-2026-11-05.md` in front-knowledge-base.
+- [technical-reports/eth-mainnet-apxusd.md](run/technical-reports/eth-mainnet-apxusd.md)
+- [research/eth-mainnet-apxusd/](run/research/eth-mainnet-apxusd/)

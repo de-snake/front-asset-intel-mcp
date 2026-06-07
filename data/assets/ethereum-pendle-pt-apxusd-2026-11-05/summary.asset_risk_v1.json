@@ -175,8 +175,8 @@
     "Wallet-specific APYx Pips accrual for PT-apxUSD route",
     "Fresh expected-loss recalibration against live reserve, redemption, and market-discount evidence"
   ],
-  "source_report": "data/assets/ethereum-pendle-pt-apxusd-2026-11-05/research.md",
-  "source_front_kb_report": "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
+  "source_report": "dev/implementation/reproducible-runs/apxusd-investment-research-20260604/run/technical-reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
+  "source_front_kb_report": "dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
   "summary_mode": "precomputed_from_front_kb_report_plus_social_quant_overlay",
@@ -222,5 +222,10 @@
     "current_expected_loss_plus_exit": 0.0485,
     "decision_trigger": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, no pending admin event, and route-specific APYx points eligibility. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
     "conclusion": "Conditionally underwriteable review candidate, not clean carry before points."
+  },
+  "generated_from": {
+    "source_repo": "de-snake/front-knowledge-base",
+    "source_ref": "docs/rich-token-reports",
+    "source_commit": "b954049"
   }
 }

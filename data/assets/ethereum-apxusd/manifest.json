@@ -17,10 +17,11 @@
   "summary_path": "summary.asset_risk_v1.json",
   "research_path": "research.md",
   "source_front_kb_paths": [
-    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/eth-mainnet-apxusd.md",
-    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/technical-reports/eth-mainnet-apxusd.md",
-    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/verification/eth-mainnet-apxusd.md",
-    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/x-research/x-research-apxusd-points-stac-pt-2026-11-05.md",
-    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/investment-analysis/investment-analyst-report-points-pt-risk-return.md"
+    "dev/implementation/asset-risk-reports-mvp/investment-analysis/investment-analyst-report-points-pt-risk-return.md",
+    "dev/implementation/asset-risk-reports-mvp/reports/eth-mainnet-apxusd.md",
+    "dev/implementation/asset-risk-reports-mvp/technical-reports/eth-mainnet-apxusd.md",
+    "dev/implementation/asset-risk-reports-mvp/verification/eth-mainnet-apxusd.md",
+    "dev/implementation/asset-risk-reports-mvp/x-research/x-research-apxusd-points-stac-pt-2026-11-05.md",
+    "dev/implementation/reproducible-runs/apxusd-investment-research-20260604/RESULT.md"
   ]
 }

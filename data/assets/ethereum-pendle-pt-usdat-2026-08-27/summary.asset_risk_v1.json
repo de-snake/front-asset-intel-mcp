@@ -1,0 +1,183 @@
+{
+  "asset_id": "pendle:ethereum:market:0x9afe7a057a09cf5da748d952078c9c99938b4329",
+  "asset_type": "pendle_pt",
+  "symbol": "PT-USDat-2026-08-27",
+  "display_name": "Pendle PT USDat — 27 Aug 2026",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "rubric": {
+    "version": "asset_risk_v1",
+    "score": 52,
+    "max_score": 100,
+    "decision_class": "review_required",
+    "decision_rationale": "The PT wrapper changes maturity, exit path, and points economics while inheriting USDat issuer/eligibility/control risk. PT-USDat is a stable-price / low-return candidate whose fixed return does not clear a 10% net hurdle without credible Saturn points or a lower hurdle."
+  },
+  "dimensions": [
+    {
+      "id": "backing_nav_evidence",
+      "question": "Is backing/NAV evidence current, transparent, and independently reconcilable?",
+      "score": 9,
+      "max_score": 18,
+      "selected_option": "partial_attestations_or_issuer_dashboards",
+      "answer": "Docs support a treasury-backed launch model, but reserve/redemption freshness was not independently verified in the run.",
+      "evidence": [
+        "RESULT.md §USDat review",
+        "USDat analyst report §Backing and NAV quality"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "redemption_holder_eligibility",
+      "question": "Can the intended holder redeem or exit through a known route?",
+      "score": 6,
+      "max_score": 18,
+      "selected_option": "holder_specific_unknown_or_blocking",
+      "answer": "Saturn onboarding, freeze/pause surfaces, and Credit Account/liquidator/recipient eligibility must be proven before automation.",
+      "evidence": [
+        "RESULT.md §USDat review",
+        "RESULT.md §Missing before decision-grade proposal"
+      ],
+      "confidence": "medium/high",
+      "missing_behavior": "block_automation"
+    },
+    {
+      "id": "market_liquidity_peg_behavior",
+      "question": "Is market exit liquid, near accounting value, and robust for the intended size?",
+      "score": 13,
+      "max_score": 18,
+      "selected_option": "observable_but_not_size_checked",
+      "answer": "The observed Curve USDat/USDC venue had about $15.7M displayed liquidity and roughly balanced USDC/USDat reserves, but exact position size and route capacity were missing.",
+      "evidence": [
+        "RESULT.md §USDat review"
+      ],
+      "confidence": "medium/high",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "issuer_controls_governance",
+      "question": "Are issuer/admin controls limited, transparent, and slow enough for analyst-agent use?",
+      "score": 5,
+      "max_score": 14,
+      "selected_option": "strong_or_poorly_mapped_controls",
+      "answer": "USDat exposes issuer-controlled freeze and pause surfaces; wallet, Credit Account, liquidator, and recipient state must be checked.",
+      "evidence": [
+        "RESULT.md §USDat review",
+        "USDat analyst report §Controls, governance, and legal restrictions"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "block_automation"
+    },
+    {
+      "id": "oracle_accounting_alignment",
+      "question": "Does the valuation method track executable value for this use case?",
+      "score": 9,
+      "max_score": 10,
+      "selected_option": "oracle_tracks_executable_value",
+      "answer": "The supplied Gearbox feed reads a Curve USDat/USDC market primitive plus bounded USDC/USD child quote rather than a hardcoded 1.00 peg.",
+      "evidence": [
+        "RESULT.md §USDat review"
+      ],
+      "confidence": "high for run snapshot",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "audits_security_review",
+      "question": "Does the project have credible audits or formal verification covering the live risk surface?",
+      "score": 4,
+      "max_score": 12,
+      "selected_option": "weak_missing_or_unknown_security_review",
+      "answer": "The public package does not establish deployed-scope audit coverage for the issuer/control/redemption surface.",
+      "evidence": [
+        "RESULT.md §Missing before decision-grade proposal",
+        "USDat analyst report §Evidence quality"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "review_required"
+    },
+    {
+      "id": "incidents_social_stress",
+      "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
+      "score": 6,
+      "max_score": 10,
+      "selected_option": "some_stress_or_incomplete_history",
+      "answer": "The old X/social layer frames USDat as Saturn’s stable/risk-off leg but still flags whitelist/freeze/issuer controls, holder eligibility, reserve evidence, and live route depth.",
+      "evidence": [
+        "RESULT.md §X / social research layer"
+      ],
+      "confidence": "medium",
+      "missing_behavior": "review_required"
+    }
+  ],
+  "blocking_unknowns": [
+    "evaluated Gearbox market / Credit Manager / pool",
+    "position size and target leverage",
+    "wallet / Credit Account / liquidator eligibility for holding, transfer, redemption, freeze, and blacklist state",
+    "issuer reserve/redemption freshness",
+    "size-specific route or liquidation quote",
+    "user risk policy: HF floor, max drawdown, automation policy",
+    "fresh PT market quote, slippage, liquidity, and maturity redemption path",
+    "Pendle PT/SY/YT support and Gearbox PT oracle/feed design",
+    "route-specific Saturn Gravity Points eligibility"
+  ],
+  "source_report": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/pt-markets/pendle-pt-eth-mainnet-usdat-2026-08-27/technical-report.md",
+  "generated_from": {
+    "source_repo": "de-snake/front-knowledge-base",
+    "source_ref": "docs/rich-token-reports",
+    "source_commit": "b954049"
+  },
+  "market_address": "0x9afe7a057a09cf5da748d952078c9c99938b4329",
+  "pt_address": "0x1d69402390657308c91179aa184bf992908c1e08",
+  "sy_address": "0x7a7de491e1be5287874904e2b7c8488249a4d0a9",
+  "yt_address": "0x076a3ea71e83ca09319b161e40f5fb3bb943d3c6",
+  "underlying_asset_id": "ethereum:0x23238f20b894f29041f48d88ee91131c395aaa71",
+  "underlying_symbol": "USDat",
+  "return_profile": {
+    "protocol": "Pendle",
+    "maturity_date": "2026-08-27",
+    "horizon_days": 83,
+    "market_address": "0x9afe7a057a09cf5da748d952078c9c99938b4329",
+    "pt_address": "0x1d69402390657308c91179aa184bf992908c1e08",
+    "sy_address": "0x7a7de491e1be5287874904e2b7c8488249a4d0a9",
+    "yt_address": "0x076a3ea71e83ca09319b161e40f5fb3bb943d3c6",
+    "accounting_asset_symbol": "USDat",
+    "accounting_asset_address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+    "pt_price_usd_snapshot": 0.9802824460118074,
+    "accounting_asset_price_usd_snapshot": 0.9996386218988,
+    "pendle_implied_apy_snapshot": 0.08958335500097503,
+    "liquidity_usd_snapshot": 12678613.206734212,
+    "gross_roi": 0.019746,
+    "simple_gross_apr": 0.0868,
+    "compound_gross_apy": 0.0898,
+    "snapshot_timestamp_utc": "2026-06-04T19:33:45Z"
+  },
+  "social_research_layer": {
+    "evidence_date": "2026-06-04",
+    "return_models": [
+      "Saturn stable/risk-off leg",
+      "PT-USDat fixed/implied APY around 8.95%-10.65% in early-June X results; local Pendle snapshot 8.96% implied APY",
+      "Gravity Points upside exists but plain PT-USDat reads more like fixed-yield than highest-points-density route"
+    ],
+    "risk_narratives": [
+      "whitelist/freeze/issuer controls",
+      "holder eligibility",
+      "reserve evidence",
+      "live route depth"
+    ],
+    "decision_effect": "Supports continued analysis; does not clear live collateral or automation gates.",
+    "confidence": "medium"
+  },
+  "quantitative_risk_return_layer": {
+    "horizon_days": 83,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "gross_roi": 0.019746,
+    "simple_gross_apr": 0.0868,
+    "compound_gross_apy": 0.0898,
+    "expected_loss_prior": 0.007,
+    "exit_cost_assumption": 0.005,
+    "risk_adjusted_roi_before_points": 0.007746,
+    "risk_adjusted_annualized_return_before_points": 0.0341,
+    "points_roi_required_to_clear_hurdle": 0.014993,
+    "conclusion": "PT-USDat is the stable-price / low-return candidate and needs credible Saturn points or a lower hurdle to justify the route."
+  }
+}
