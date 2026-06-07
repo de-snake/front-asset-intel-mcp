@@ -12,7 +12,6 @@ export interface AssetManifest {
   rubric_version: string;
   summary_path: string;
   research_path: string;
-  source_front_kb_paths?: string[];
   address?: string;
   market_address?: string;
   pt_address?: string;

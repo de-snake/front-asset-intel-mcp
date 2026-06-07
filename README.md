@@ -92,7 +92,7 @@ For non-PT/direct token rows, the context is `direct_or_variable_token_return` a
 
 - `ethereum-apxusd` — Apyx apxUSD token-level research and `asset_risk_v1` summary, refreshed from the public rich report package.
 - `ethereum-pendle-pt-apxusd-2026-11-05` — Pendle PT apxUSD 05 Nov 2026 research and summary with fixed-return risk-adjusted APY / hurdle overlay.
-- `ethereum-apyusd` — Apyx apyUSD public RESULT.md report, including X/social and quantitative risk/return layers.
+- `ethereum-apyusd` — Apyx apyUSD public research package, including X/social and quantitative risk/return layers.
 - `ethereum-pendle-pt-apyusd-2026-08-27` — Pendle PT apyUSD 27 Aug 2026 report and summary, including the 83-day fixed-return recovery trade overlay.
 - `ethereum-prime` — Hastra PRIME rich public report package normalized into the asset-quality rubric.
 - `base-despxa` — Centrifuge deSPXA rich public report package normalized into the asset-quality rubric.
@@ -202,13 +202,6 @@ From this workspace, the absolute command target is:
 
 ## Source lineage
 
-Seed reports were copied or condensed from the public Front KB rich-report branch (`de-snake/front-knowledge-base`, commit `b954049`):
+Seed reports were copied or condensed from the public Front KB rich-report branch (`de-snake/front-knowledge-base`, commit `b954049`). The MCP evidence surface is local: `data/assets/<asset-slug>/research.md` plus `summary.asset_risk_v1.json`.
 
-- `dev/implementation/reproducible-runs/apxusd-investment-research-20260604/RESULT.md`
-- `dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md`
-- `dev/implementation/reproducible-runs/prime-investment-research-20260604/RESULT.md`
-- `dev/implementation/reproducible-runs/despxa-investment-research-20260604/RESULT.md`
-- `dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/RESULT.md`
-- PT market and overlay support files under those run directories, plus the older `asset-risk-reports-mvp` X/social and quantitative risk/return files where the public RESULT package incorporated them.
-
-Summaries are precomputed from those reports and preserve source pointers back to front KB.
+Summaries preserve coarse `generated_from` provenance, but manifest and summary evidence pointers intentionally point to local files or public URLs, not invisible upstream run paths.

@@ -33,8 +33,8 @@ Repository checks:
 
 Public report check in `/tmp/front-kb-rich-reports`:
 
-- Explicit `/100` scores in public `RESULT.md` files: `0`.
-- Explicit `blocked_or_cannot_underwrite` labels in public `RESULT.md` files: `0`.
+- Explicit `/100` scores in public source reports: `0`.
+- Explicit `blocked_or_cannot_underwrite` labels in public source reports: `0`.
 - Explicit `review_required` labels do exist in some reports, and many reports use plain-English equivalents such as “requires human review” and “should block automated execution”.
 
 Conclusion: the numeric score is not an extracted report fact. It is a precomputed summary-layer judgment.
@@ -202,13 +202,13 @@ Replace unstructured `blocking_unknowns` strings with typed entries while preser
     "id": "holder_eligibility",
     "scope": "user_specific",
     "blocks": ["underwriting", "execution_automation"],
-    "evidence_pointer": "RESULT.md:39"
+    "evidence_pointer": "research.md#usdat-review"
   },
   {
     "id": "live_route_quote",
     "scope": "live_market",
     "blocks": ["execution_automation"],
-    "evidence_pointer": "RESULT.md:35"
+    "evidence_pointer": "research.md#missing-before-decision-grade-proposal"
   }
 ]
 ```
