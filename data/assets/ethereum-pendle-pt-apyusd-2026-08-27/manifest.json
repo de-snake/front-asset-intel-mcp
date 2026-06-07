@@ -1,0 +1,33 @@
+{
+  "asset_id": "pendle:ethereum:market:0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952",
+  "slug": "ethereum-pendle-pt-apyusd-2026-08-27",
+  "asset_type": "pendle_pt",
+  "symbol": "PT-apyUSD-2026-08-27",
+  "display_name": "Pendle PT apyUSD — 27 Aug 2026",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "market_address": "0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952",
+  "pt_address": "0xee5c7cda577484b70b65c21235ecbd302bb290e2",
+  "sy_address": "0x04f8dca7bccd8997ac57ca6fef7c705e17d6bcb6",
+  "yt_address": "0x67553fb2ab2a411029387e1c53c0a3e55f8d10c9",
+  "underlying_asset_id": "ethereum:0x38eeb52f0771140d10c4e9a9a72349a329fe8a6a",
+  "aliases": [
+    "PT-apyUSD",
+    "pt apyUSD",
+    "PT apyUSD 2026-08-27",
+    "pendle-pt-eth-mainnet-apyusd-2026-08-27",
+    "ethereum-pendle-pt-apyusd-2026-08-27",
+    "0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952",
+    "0xee5c7cda577484b70b65c21235ecbd302bb290e2"
+  ],
+  "rubric_version": "asset_risk_v1",
+  "summary_path": "summary.asset_risk_v1.json",
+  "research_path": "research.md",
+  "source_front_kb_paths": [
+    "dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md",
+    "dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apyusd-2026-08-27.md",
+    "dev/implementation/asset-risk-reports-mvp/technical-reports/pendle-pt-eth-mainnet-apyusd-2026-08-27.md",
+    "dev/implementation/asset-risk-reports-mvp/x-research/x-research-apyusd-points-stac-pt-2026-08-27.md",
+    "dev/implementation/asset-risk-reports-mvp/investment-analysis/investment-analyst-report-points-pt-risk-return.md"
+  ]
+}

@@ -26,6 +26,8 @@
   "source_front_kb_paths": [
     "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
     "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/technical-reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
-    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/verification/pendle-pt-eth-mainnet-apxusd-2026-11-05.md"
+    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/verification/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
+    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/x-research/x-research-apxusd-points-stac-pt-2026-11-05.md",
+    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/investment-analysis/investment-analyst-report-points-pt-risk-return.md"
   ]
 }

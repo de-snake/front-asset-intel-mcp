@@ -82,13 +82,32 @@ Before any live use, refresh:
 - oracle/feed availability and freshness;
 - underlying issuer/admin/backing state from the local underlying dossier.
 
-## 8. Evidence quality
+## 8. Quantitative and social return overlay
+
+The expanded APYx old-run investment layer treats PT-apxUSD 05 Nov 2026 as the scoped PT that comes closest to the 10.00% net annualized hurdle before points. The base quantitative view uses a 153-day horizon, a 10.00% net annualized hurdle, a 20.00% opportunistic hurdle, a 3.85% apxUSD expected-loss prior, and a 1.00% exit-cost assumption.
+
+Positive drivers:
+
+- 8.5746% gross ROI to accounting asset over 153 days.
+- 7.8975% accounting-asset drawdown buffer before costs.
+- 8.89% base risk-adjusted annualized return before points.
+- Only 0.4671% APYx points ROI over 153 days needed to clear the 10.00% net annualized hurdle under current priors.
+
+Negative drivers:
+
+- Saved and social evidence includes secondary-market discount and collateral-buffer stress.
+- Primary redemption is not assumed to be universally available.
+- The expected-loss prior plus exit cost is 4.85%, slightly above the 4.3825% combined threshold required to clear the 10.00% hurdle without points.
+
+Decision trigger: upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, no pending admin event, and route-specific APYx points eligibility. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.
+
+## 9. Evidence quality
 
 Evidence quality is strongest for market identity, PT/SY/YT addresses, maturity, current API price fields, and local inherited-risk files.
 
 Evidence quality is weaker for live size-specific exit depth, Pendle contract role and upgrade state, and any Gearbox-specific oracle or support status. Those fields require fresh review before production use.
 
-## 9. Source map
+## 10. Source map
 
 - P1 — Pendle market API detail: [https://api-v2.pendle.finance/core/v1/1/markets/0xaf0349fb9b1ba07d34381870c59b560b31412660](https://api-v2.pendle.finance/core/v1/1/markets/0xaf0349fb9b1ba07d34381870c59b560b31412660); local copy `research/pendle-pt-eth-mainnet-apxusd-2026-11-05/raw/pendle-market-api-2026-06-04.json`. source_class: market_data / protocol_api. accessed: 2026-06-04. confidence: high for current API fields.
 - P2 — Pendle active markets API: [https://api-v2.pendle.finance/core/v1/1/markets/active](https://api-v2.pendle.finance/core/v1/1/markets/active); local exact-match copy `research/pendle-pt-eth-mainnet-apxusd-2026-11-05/raw/pendle-active-market-details-2026-06-04.json`. source_class: market_data / protocol_api. accessed: 2026-06-04. confidence: high for active listing.
@@ -101,6 +120,6 @@ Evidence quality is weaker for live size-specific exit depth, Pendle contract ro
 - U3 — Underlying verification artifact: `verification/eth-mainnet-apxusd.md`. source_class: local verification artifact. accessed: 2026-06-04. confidence: high for upstream QA status.
 - E1 — Market/PT/SY/YT address pointers: [market](https://etherscan.io/address/0xaf0349fb9b1ba07d34381870c59b560b31412660), [PT](https://etherscan.io/address/0xaf687b5ecb525ccea96115088999b4ed80c388b6), [SY](https://etherscan.io/address/0x4f116ee5bcd227d1a1c4f57918d694a4abe7b3fc), [YT](https://etherscan.io/address/0x7fbc01c63b0ac372ec75907f3a1d8adc8cf28e1f). source_class: explorer / onchain pointer. accessed: 2026-06-04. confidence: medium because this report did not fully audit contract roles.
 
-## 10. Technical appendix pointer
+## 11. Technical appendix pointer
 
 Technical dossier: `technical-reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md`.

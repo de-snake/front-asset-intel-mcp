@@ -13,11 +13,11 @@
   "underlying_symbol": "apxUSD",
   "rubric": {
     "version": "asset_risk_v1",
-    "score": 52,
+    "score": 49,
     "max_score": 100,
     "decision_class": "review_required",
     "score_source": "inherited_underlying_asset_risk",
-    "decision_rationale": "The PT changes timing and return profile, not the core issuer/backing/control risk. It inherits apxUSD's 52/100 asset-risk score and adds PT-specific return, maturity, AMM-exit, and oracle/feed checks."
+    "decision_rationale": "The PT changes timing and return profile, not the core issuer/backing/control risk. It inherits apxUSD asset-risk after the social-stress update (49/100) and adds PT-specific return, maturity, AMM-exit, oracle/feed, and points/hurdle checks."
   },
   "dimensions": [
     {
@@ -121,17 +121,21 @@
     {
       "id": "incidents_social_stress",
       "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
-      "score": 8,
+      "score": 5,
       "max_score": 10,
-      "selected_option": "clean_recent_stress_history",
-      "answer": "No PT-specific blocking incident is identified in the report, but underlying apxUSD stress/depeg/restriction history must remain part of live review.",
+      "selected_option": "some_stress_or_incomplete_history",
+      "answer": "No PT-specific exploit is identified, but APYx social/quant evidence includes secondary-market discount, collateral-buffer stress, redemption/arbitrage concerns, and points uncertainty that materially affects PT underwriting.",
       "evidence": [
         {
-          "source": "research.md#7-scenario-behavior-and-live-use-checks",
-          "quote": "If the underlying or accounting asset depegs, the PT discount and implied APY can stop representing clean fixed-yield economics."
+          "source": "research.md#8-quantitative-and-social-return-overlay",
+          "quote": "Saved and social evidence includes secondary-market discount and collateral-buffer stress."
+        },
+        {
+          "source": "research.md#8-quantitative-and-social-return-overlay",
+          "quote": "PT-apxUSD is the only scoped PT that comes close to the 10.00% net annualized hurdle before points."
         }
       ],
-      "confidence": "low_medium"
+      "confidence": "medium"
     }
   ],
   "return_profile": {
@@ -151,7 +155,15 @@
     "compound_gross_apy": 0.2168,
     "break_even_accounting_asset_drawdown": 0.078975,
     "liquidity_snapshot_usd": 1171288,
-    "interpretation": "The PT discount is the return buffer against apxUSD impairment, exit cost, maturity/output issues, and stale valuation. It is not a separate improvement to apxUSD asset quality."
+    "interpretation": "The PT discount is the return buffer against apxUSD impairment, exit cost, maturity/output issues, and stale valuation. It is not a separate improvement to apxUSD asset quality.",
+    "risk_adjusted_annualized_return_before_points": 0.0889,
+    "risk_adjusted_roi_before_points": 0.037246,
+    "expected_loss_prior": 0.0385,
+    "exit_cost_assumption": 0.01,
+    "points_roi_required_to_clear_10pct_hurdle": 0.004671,
+    "apyx_base_points_roi_prior": 0.0027,
+    "apyx_high_points_roi_prior": 0.0252,
+    "quantitative_conclusion": "Closest scoped APYx PT to the 10% net hurdle before points; still needs points eligibility or lower expected-loss evidence to clear the hurdle."
   },
   "blocking_unknowns": [
     "Fresh PT price, implied APY, liquidity, and size-specific route quote",
@@ -159,11 +171,56 @@
     "Holder eligibility and restriction state for apxUSD output/accounting asset",
     "Gearbox-compatible PT oracle or production valuation feed",
     "Pendle market/PT/SY/YT role and upgrade-state audit",
-    "Inherited apxUSD reserve, redemption, issuer-control, and live-liquidity unknowns"
+    "Inherited apxUSD reserve, redemption, issuer-control, and live-liquidity unknowns",
+    "Wallet-specific APYx Pips accrual for PT-apxUSD route",
+    "Fresh expected-loss recalibration against live reserve, redemption, and market-discount evidence"
   ],
   "source_report": "data/assets/ethereum-pendle-pt-apxusd-2026-11-05/research.md",
   "source_front_kb_report": "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
-  "summary_mode": "precomputed_from_front_kb_report"
+  "summary_mode": "precomputed_from_front_kb_report_plus_social_quant_overlay",
+  "social_research_layer": {
+    "evidence_date": "2026-06-04",
+    "source_refs": [
+      "front-kb RESULT.md#8-x--social-research-layer",
+      "investment-analysis/investment-analyst-report-points-pt-risk-return.md#7-token-by-token-investment-view"
+    ],
+    "return_models": [
+      {
+        "id": "apyx_pips_points",
+        "summary": "APYx Pips/points may be part of the upside case, but final APYX token economics, wallet eligibility, dilution, vesting, and route-specific accrual are not fixed enough for base-case ROI."
+      },
+      {
+        "id": "pt_apxusd_discount_plus_points",
+        "summary": "PT-apxUSD is conditionally underwriteable only if points eligibility is strong or live reserve/redemption review lowers expected loss."
+      }
+    ],
+    "risk_narratives": [
+      "STRC / preferred-share collateral stress can compress the collateral buffer and transmit into depeg or unwind pressure.",
+      "Restricted primary redemption and secondary-market discount can impair arbitrage back to accounting value."
+    ],
+    "decision_effect": "Lowered incident/social-stress score from clean to some-stress; live reserve, redemption, route, and points eligibility review remain required.",
+    "confidence": "medium"
+  },
+  "quantitative_risk_return_layer": {
+    "scope": "PT-apxUSD 05 Nov 2026",
+    "horizon_days": 153,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "opportunistic_hurdle_net_annualized": 0.2,
+    "gross_roi": 0.085746,
+    "gross_simple_apr": 0.2046,
+    "accounting_asset_drawdown_capacity_before_costs": 0.078975,
+    "expected_loss_prior": 0.0385,
+    "exit_cost_assumption": 0.01,
+    "risk_adjusted_roi_before_points": 0.037246,
+    "risk_adjusted_annualized_return_before_points": 0.0889,
+    "points_roi_required_to_clear_hurdle": 0.004671,
+    "apyx_base_points_roi_prior": 0.0027,
+    "apyx_high_points_roi_prior": 0.0252,
+    "expected_loss_plus_exit_break_even_to_clear_hurdle": 0.043825,
+    "current_expected_loss_plus_exit": 0.0485,
+    "decision_trigger": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, no pending admin event, and route-specific APYx points eligibility. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
+    "conclusion": "Conditionally underwriteable review candidate, not clean carry before points."
+  }
 }

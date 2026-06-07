@@ -1,0 +1,251 @@
+{
+  "asset_id": "pendle:ethereum:market:0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952",
+  "asset_type": "pendle_pt",
+  "symbol": "PT-apyUSD-2026-08-27",
+  "display_name": "Pendle PT apyUSD — 27 Aug 2026",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "market_address": "0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952",
+  "pt_address": "0xee5c7cda577484b70b65c21235ecbd302bb290e2",
+  "sy_address": "0x04f8dca7bccd8997ac57ca6fef7c705e17d6bcb6",
+  "yt_address": "0x67553fb2ab2a411029387e1c53c0a3e55f8d10c9",
+  "underlying_asset_id": "ethereum:0x38eeb52f0771140d10c4e9a9a72349a329fe8a6a",
+  "underlying_symbol": "apyUSD",
+  "accounting_asset": {
+    "symbol": "apxUSD",
+    "address": "0x98a878b1cd98131b271883b390f68d2c90674665"
+  },
+  "rubric": {
+    "version": "asset_risk_v1",
+    "score": 35,
+    "max_score": 100,
+    "decision_class": "blocked_or_cannot_underwrite",
+    "score_source": "inherited_underlying_asset_risk_plus_pt_social_quant_overlay",
+    "decision_rationale": "The PT changes return/maturity profile but inherits apyUSD/apxUSD asset risk. The added social and quantitative layer shows negative risk-adjusted return before points and only a thin accounting-asset drawdown buffer, so this is a points/recovery trade rather than clean fixed-income-like carry."
+  },
+  "dimensions": [
+    {
+      "id": "backing_nav_evidence",
+      "question": "Is backing/NAV evidence current, transparent, and independently reconcilable?",
+      "score": 7,
+      "max_score": 18,
+      "selected_option": "partial_attestations_or_issuer_dashboards",
+      "answer": "Inherited from apyUSD/apxUSD: preferred-share backing and attestations exist, but reserve/custody reconciliation and collateral valuation remain incomplete; social research adds STRC/preferred-share stress.",
+      "evidence": [
+        {
+          "source": "research.md#3-how-underlying-token-risk-carries-into-the-pt",
+          "quote": "incomplete reserve/custody reconciliation for apxUSD preferred-share collateral"
+        },
+        {
+          "source": "research.md#8-x--social-research-layer",
+          "quote": "STRC / preferred-share collateral stress"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "redemption_holder_eligibility",
+      "question": "Can the intended holder redeem or exit through a known route?",
+      "score": 4,
+      "max_score": 18,
+      "selected_option": "holder_specific_unknown_or_blocking",
+      "answer": "The PT inherits apyUSD receipt/unlock and apxUSD redemption constraints; maturity output/holder eligibility must be verified before live use.",
+      "evidence": [
+        {
+          "source": "research.md#7-scenario-behavior-and-live-use-checks",
+          "quote": "holder eligibility and restriction state for `apyUSD` / `apxUSD`"
+        },
+        {
+          "source": "research.md#9-quantitative-risk--return-layer",
+          "quote": "receipt / claim state is confirmed"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "market_liquidity_peg_behavior",
+      "question": "Is market exit liquid, near accounting value, and robust for the intended size?",
+      "score": 5,
+      "max_score": 18,
+      "selected_option": "thin_discounted_or_unknown",
+      "answer": "The PT has observable Pendle liquidity, but only a 3.6211% accounting-asset drawdown buffer before costs, no size-specific route quote, and social PT liquidity/maturity risk concerns.",
+      "evidence": [
+        {
+          "source": "research.md#5-liquidity-and-exit-risk",
+          "quote": "The current API liquidity snapshot was $1,091,791"
+        },
+        {
+          "source": "research.md#9-quantitative-risk--return-layer",
+          "quote": "Accounting-asset drawdown capacity before costs: only 3.6211%"
+        }
+      ],
+      "confidence": "medium_high"
+    },
+    {
+      "id": "issuer_controls_governance",
+      "question": "Are issuer/admin controls limited, transparent, and slow enough for analyst-agent use?",
+      "score": 4,
+      "max_score": 14,
+      "selected_option": "strong_or_poorly_mapped_controls",
+      "answer": "Inherited from apyUSD/apxUSD: AccessManager, upgrade, pause, deny-list, receipt, fee, and pending-governance state can affect PT settlement or output conversion.",
+      "evidence": [
+        {
+          "source": "research.md#3-how-underlying-token-risk-carries-into-the-pt",
+          "quote": "upgradeable AccessManager-controlled contract, deny-list and pause paths"
+        },
+        {
+          "source": "research.md#7-scenario-behavior-and-live-use-checks",
+          "quote": "If transfer restrictions, freeze controls, holder eligibility, or redemption access become binding"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "oracle_accounting_alignment",
+      "question": "Does the valuation method track executable value for this use case?",
+      "score": 3,
+      "max_score": 10,
+      "selected_option": "valuation_unknown_or_divergent",
+      "answer": "Pendle API pricing is known, but a production PT valuation feed/Gearbox oracle was not verified, and accounting asset value can diverge from executable exit value under stress.",
+      "evidence": [
+        {
+          "source": "research.md#6-pricingoraclevaluation-risk",
+          "quote": "it did not verify a Gearbox-compatible PT oracle or a production valuation feed"
+        },
+        {
+          "source": "research.md#8-x--social-research-layer",
+          "quote": "Redemption and arbitrage impairment"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "audits_security_review",
+      "question": "Does the project have credible audits or formal verification covering the live risk surface?",
+      "score": 9,
+      "max_score": 12,
+      "selected_option": "some_audits_scope_uncertain",
+      "answer": "Inherited Apyx audits exist, but exact deployed-scope mapping remains uncertain; the PT report did not fully audit Pendle role/upgrade state.",
+      "evidence": [
+        {
+          "source": "research.md#10-evidence-quality",
+          "quote": "Pendle contract role and upgrade state"
+        },
+        {
+          "source": "research.md#11-source-map",
+          "quote": "Underlying technical report"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "incidents_social_stress",
+      "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
+      "score": 3,
+      "max_score": 10,
+      "selected_option": "material_recent_stress",
+      "answer": "Social and quantitative evidence directly affects underwriting: collateral stress, redemption/arbitrage impairment, PT liquidity/maturity risk, and points uncertainty turn headline APY into a points/recovery trade.",
+      "evidence": [
+        {
+          "source": "research.md#8-x--social-research-layer",
+          "quote": "PT liquidity / maturity risk"
+        },
+        {
+          "source": "research.md#9-quantitative-risk--return-layer",
+          "quote": "risk-adjusted base case was negative before points"
+        }
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "return_profile": {
+    "profile_type": "fixed_maturity_principal_token",
+    "protocol": "Pendle",
+    "maturity": "2026-08-27T00:00:00.000Z",
+    "user_supplied_days_to_maturity": 83,
+    "underlying_token": {
+      "symbol": "apyUSD",
+      "address": "0x38eeb52f0771140d10c4e9a9a72349a329fe8a6a"
+    },
+    "accounting_asset": {
+      "symbol": "apxUSD",
+      "address": "0x98a878b1cd98131b271883b390f68d2c90674665"
+    },
+    "price_snapshot_date": "2026-06-04",
+    "pt_price_usd": 0.938959,
+    "accounting_asset_price_usd": 0.974237,
+    "gross_roi_to_accounting_asset": 0.037571,
+    "simple_gross_apr": 0.1652,
+    "compound_gross_apy": 0.176,
+    "break_even_accounting_asset_drawdown": 0.036211,
+    "liquidity_snapshot_usd": 1091791,
+    "expected_loss_prior": 0.061,
+    "exit_cost_assumption": 0.01,
+    "risk_adjusted_roi_before_points": -0.033429,
+    "risk_adjusted_annualized_return_before_points": -0.147,
+    "points_roi_required_to_clear_10pct_hurdle": 0.056168,
+    "apyx_high_points_roi_prior": 0.0252,
+    "interpretation": "Headline PT APY does not offset apyUSD/apxUSD expected-loss and exit-cost priors before points."
+  },
+  "social_research_layer": {
+    "evidence_date": "2026-06-04",
+    "source_refs": [
+      "research.md#8-x--social-research-layer",
+      "S18"
+    ],
+    "return_models": [
+      {
+        "id": "apyusd_exchange_rate_yield",
+        "summary": "Social/issuer-facing discussion framed apyUSD target yield around 13% APY from realized STRC/preferred-share dividends; confidence lower for realized exit value."
+      },
+      {
+        "id": "apyx_pips_points",
+        "summary": "Season 2 points described around 6% token supply and Season 1+2 around 11% early-user allocation, but final point value/eligibility/dilution/vesting remain unknown."
+      },
+      {
+        "id": "pt_apyusd_fixed_discount",
+        "summary": "PT-apyUSD social rate sheets cited roughly 17.94%–18.00% implied APY; local Pendle snapshot showed 17.60% implied APY."
+      }
+    ],
+    "risk_narratives": [
+      "STRC / preferred-share collateral stress",
+      "Redemption and arbitrage impairment",
+      "PT liquidity / maturity risk",
+      "Points dilution / value uncertainty"
+    ],
+    "decision_effect": "Supports treating apyUSD as a yield/points/recovery thesis rather than clean stable carry.",
+    "confidence": "medium_for_narrative_low_for_points_value"
+  },
+  "quantitative_risk_return_layer": {
+    "scope": "PT-apyUSD 27 Aug 2026",
+    "horizon_days": 83,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "opportunistic_hurdle_net_annualized": 0.2,
+    "gross_roi": 0.037571,
+    "gross_simple_apr": 0.1652,
+    "accounting_asset_drawdown_capacity_before_costs": 0.036211,
+    "expected_loss_prior": 0.061,
+    "exit_cost_assumption": 0.01,
+    "risk_adjusted_roi_before_points": -0.033429,
+    "risk_adjusted_annualized_return_before_points": -0.147,
+    "points_roi_required_to_clear_hurdle": 0.056168,
+    "apyx_high_points_roi_prior": 0.0252,
+    "required_points_roi_exceeds_high_case_by": 0.030968,
+    "decision_trigger": "Upgrade only if apxUSD collateral stress resolves, apyUSD market discount closes, receipt/claim state is confirmed, and wallet-specific APYx points EV exceeds 5.6168% of capital over 83 days. Downgrade if apxUSD trades below accounting value or receipt/claim exits become less predictable.",
+    "conclusion": "PT-apyUSD is a points/recovery trade, not clean fixed-income-like carry."
+  },
+  "blocking_unknowns": [
+    "Fresh PT price, implied APY, liquidity, and size-specific route quote",
+    "Maturity output asset and Pendle redemption mechanics for holder route",
+    "Holder eligibility and restriction state for apyUSD/apxUSD output/accounting asset",
+    "Gearbox-compatible PT oracle or production valuation feed",
+    "Pendle market/PT/SY/YT role and upgrade-state audit",
+    "Inherited apyUSD/apxUSD reserve, receipt, redemption, issuer-control, and live-liquidity unknowns",
+    "Wallet-specific APYx Pips eligibility and final APYX token economics"
+  ],
+  "source_report": "data/assets/ethereum-pendle-pt-apyusd-2026-08-27/research.md",
+  "source_front_kb_report": "dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md",
+  "evidence_date": "2026-06-04",
+  "summary_generated_at": "2026-06-07",
+  "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay"
+}

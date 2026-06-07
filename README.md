@@ -8,7 +8,7 @@ This repo is intentionally runtime-small: the MCP server does not call an LLM, c
 
 Long Markdown research reports are useful for diligence, but they are not a stable decision interface for an analyst agent. The server exposes two layers:
 
-- `get_asset_summary` — compact rubric JSON with uniform questions, fixed scoring buckets, evidence snippets, and blocking unknowns.
+- `get_asset_summary` — compact rubric JSON with uniform questions, fixed scoring buckets, evidence snippets, blocking unknowns, and optional social/quantitative decision overlays.
 - `get_asset_research` — full Markdown report for source review when the summary needs expansion.
 
 ## Tools
@@ -29,6 +29,9 @@ Example asset lookups:
 - `ethereum:0x98a878b1cd98131b271883b390f68d2c90674665`
 - `PT-apxUSD`
 - `0xaf0349fb9b1ba07d34381870c59b560b31412660`
+- `apyUSD`
+- `PT-apyUSD`
+- `0x30bb9ee8dc6aab322dc3a0d36063cbf06a9e5952`
 
 ### `get_asset_research`
 
@@ -36,10 +39,12 @@ Same lookup input. Returns the full Markdown research report.
 
 ## Seed assets
 
-- `ethereum-apxusd` — Apyx apxUSD token-level research and `asset_risk_v1` summary.
-- `ethereum-pendle-pt-apxusd-2026-11-05` — Pendle PT apxUSD 05 Nov 2026 research and summary.
+- `ethereum-apxusd` — Apyx apxUSD token-level research and `asset_risk_v1` summary, now with APYx social/quant stress overlay.
+- `ethereum-pendle-pt-apxusd-2026-11-05` — Pendle PT apxUSD 05 Nov 2026 research and summary, now with risk-adjusted hurdle/points overlay.
+- `ethereum-apyusd` — Apyx apyUSD public RESULT.md report, including X/social and quantitative risk/return layers.
+- `ethereum-pendle-pt-apyusd-2026-08-27` — Pendle PT apyUSD 27 Aug 2026 report and summary, including the 83-day PT-apyUSD points/recovery trade overlay.
 
-PT markets reuse the underlying asset-risk rubric. The PT only adds a `return_profile` block: maturity, PT price, accounting-asset price, gross ROI, annualized return, break-even drawdown, and liquidity snapshot. This keeps issuer/backing/control risk comparable and avoids pretending that a PT wrapper improves underlying asset quality.
+PT markets reuse the underlying asset-risk rubric. The PT only adds a `return_profile` block plus optional `social_research_layer` and `quantitative_risk_return_layer` blocks: maturity, PT price, accounting-asset price, gross ROI, annualized return, expected-loss prior, risk-adjusted return, points hurdle, break-even drawdown, and liquidity snapshot. This keeps issuer/backing/control risk comparable and avoids pretending that a PT wrapper improves underlying asset quality.
 
 ## Data layout
 
@@ -53,6 +58,14 @@ data/
       summary.asset_risk_v1.json
       research.md
     ethereum-pendle-pt-apxusd-2026-11-05/
+      manifest.json
+      summary.asset_risk_v1.json
+      research.md
+    ethereum-apyusd/
+      manifest.json
+      summary.asset_risk_v1.json
+      research.md
+    ethereum-pendle-pt-apyusd-2026-08-27/
       manifest.json
       summary.asset_risk_v1.json
       research.md
@@ -75,7 +88,7 @@ src/
 - Audits and security review: 12
 - Incidents and social stress: 10
 
-Each dimension has fixed answer buckets and score ranges. Summaries store the selected bucket, score, evidence, confidence, and blocking unknowns.
+Each dimension has fixed answer buckets and score ranges. Summaries store the selected bucket, score, evidence, confidence, blocking unknowns, and — where available — `social_research_layer` / `quantitative_risk_return_layer` overlays that expose points, hurdle, expected-loss, and risk-adjusted-return information without folding those economics into the 100-point asset-quality score.
 
 ## Install and verify
 
@@ -88,12 +101,13 @@ npm test
 
 1. TypeScript build.
 2. Data validation against manifests/rubric schema.
-3. Registry smoke lookups for apxUSD and PT-apxUSD.
+3. Registry smoke lookups for apxUSD, apyUSD, PT-apxUSD, and PT-apyUSD.
 4. Real MCP stdio smoke test:
    - initializes the MCP server;
    - checks `tools/list` exposes `get_asset_summary` and `get_asset_research`;
-   - calls `get_asset_summary` for `PT-apxUSD`;
-   - calls `get_asset_research` for `apxUSD`.
+   - calls `get_asset_summary` for `PT-apxUSD` and verifies its points hurdle overlay;
+   - calls `get_asset_summary` for `PT-apyUSD` and verifies the `5.6168%` points ROI hurdle is present;
+   - calls `get_asset_research` for `PT-apyUSD` and verifies the points/recovery-trade conclusion is present.
 
 For only the MCP protocol smoke after a build:
 
@@ -130,9 +144,14 @@ From this workspace, the absolute command target is:
 
 ## Source lineage
 
-Seed reports were copied from:
+Seed reports were copied or condensed from:
 
 - `projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/eth-mainnet-apxusd.md`
 - `projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md`
+- `front-knowledge-base/dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md`
+- `projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apyusd-2026-08-27.md`
+- `projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/x-research/x-research-apxusd-points-stac-pt-2026-11-05.md`
+- `projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/x-research/x-research-apyusd-points-stac-pt-2026-08-27.md`
+- `projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/investment-analysis/investment-analyst-report-points-pt-risk-return.md`
 
 Summaries are precomputed from those reports and preserve source pointers back to front KB.

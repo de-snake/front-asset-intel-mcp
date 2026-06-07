@@ -137,7 +137,17 @@ Risk implication: for Credit Account, liquidation, portfolio, or exit analysis, 
 
 Methodology missing_behavior: missing oracle/pricing methodology is `review_required` before collateral-oracle use; missing live route or state checks are `block_automation` for execution.
 
-## 8. What must be checked before live use
+## 8. Social and quantitative overlay
+
+The expanded APYx old-run layer adds X/social and quantitative context around APYx Pips, PT-apxUSD, STRC/preferred-share collateral stress, and redemption/arbitrage impairment. This layer is useful as a return-thesis and stress-narrative map, not as primary proof of reserves, eligibility, or route quality.
+
+For apxUSD and PT-apxUSD, the quantitative report treats the PT as conditionally underwriteable only if APYx points eligibility is strong or live reserve/redemption review lowers the expected-loss prior. PT-apxUSD 05 Nov 2026 had 8.5746% gross ROI to accounting asset over 153 days, a 7.8975% accounting-asset drawdown buffer before costs, and needed 0.4671% points ROI over 153 days to clear the 10.00% net annualized hurdle under current priors.
+
+The same report assigns apxUSD a 3.85% expected-loss prior and a 1.00% PT exit-cost assumption. Base risk-adjusted annualized return for PT-apxUSD is 8.89% before points, below the 10.00% hurdle but close enough that points eligibility or improved reserve/redemption evidence could change the decision.
+
+Social risk narratives lower the stress-history confidence for apxUSD. Saved and social evidence includes secondary-market discount, collateral-buffer stress, and restricted-redemption/arbitrage concerns. Upgrade requires reconciled reserves, current market price near accounting value, holder-eligible redemption, and no pending admin event. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.
+
+## 9. What must be checked before live use
 
 Before using this dossier for a live position, collateral decision, liquidation path, or execution package, refresh:
 
@@ -156,7 +166,7 @@ Before using this dossier for a live position, collateral decision, liquidation 
 
 Practical implication: unresolved reserve, audit-scope, admin-policy, primary-redemption, and legal/eligibility questions require human review. Unresolved route, pause, deny-list, pending-governance, or holder-specific restriction state should block automated execution.
 
-## 9. Evidence quality
+## 10. Evidence quality
 
 High-confidence evidence:
 
@@ -182,7 +192,7 @@ Lower-confidence or incomplete evidence:
 - live executable liquidity for a concrete size;
 - Gearbox-specific oracle and support state.
 
-## 10. Source map
+## 11. Source map
 
 Each source ID below includes the actual URL or local evidence path. Local paths are relative to this report folder unless shown as a project path.
 
@@ -205,9 +215,12 @@ Each source ID below includes the actual URL or local evidence path. Local paths
 - **C1** — [research/eth-mainnet-apxusd/raw/evm-contracts/README.md](../research/eth-mainnet-apxusd/raw/evm-contracts/README.md). Source class: issuer_docs / onchain. Accessed: 2026-06-04. Confidence: medium. Public Apyx contracts repository README: protocol overview and contract architecture.
 - **M1** — [research/eth-mainnet-apxusd/raw/dexscreener-apxusd-2026-06-04.json](../research/eth-mainnet-apxusd/raw/dexscreener-apxusd-2026-06-04.json), [DEXScreener token API](https://api.dexscreener.com/latest/dex/tokens/0x98A878b1Cd98131B271883B390f68D2c90674665), and [Curve apxUSD/USDC pair](https://dexscreener.com/ethereum/0xe1b96555bbeca40e583bbb41a11c68ca4706a414). Source class: market_data. Accessed: 2026-06-04. Confidence: medium. Point-in-time venues, prices, liquidity, volume, and route divergence.
 
-## 11. Technical appendix pointer
+## 12. Technical appendix pointer
 
 For raw addresses, role identifiers, implementation slots, method names, and table-level evidence, see:
 
 - [technical-reports/eth-mainnet-apxusd.md](../technical-reports/eth-mainnet-apxusd.md)
 - [research/eth-mainnet-apxusd/](../research/eth-mainnet-apxusd/)
+
+
+Additional source pointers for the overlay: `dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md`, `run/investment-analysis/investment-analyst-report-points-pt-risk-return.md`, and `run/x-research/x-research-apxusd-points-stac-pt-2026-11-05.md` in front-knowledge-base.

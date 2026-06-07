@@ -8,10 +8,10 @@
   "address": "0x98A878b1Cd98131B271883B390f68D2c90674665",
   "rubric": {
     "version": "asset_risk_v1",
-    "score": 52,
+    "score": 49,
     "max_score": 100,
     "decision_class": "review_required",
-    "decision_rationale": "apxUSD has observable technical and issuer evidence, listed audits, and secondary-market liquidity, but reserve reconciliation, holder-specific redemption eligibility, issuer controls, live route depth, and Gearbox oracle/support remain unresolved for automated analyst-agent use."
+    "decision_rationale": "apxUSD has observable technical and issuer evidence, listed audits, and secondary-market liquidity, but reserve reconciliation, holder-specific redemption eligibility, issuer controls, live route depth, Gearbox oracle/support, and newly integrated social collateral-stress/redemption-arbitrage concerns remain unresolved for automated analyst-agent use."
   },
   "dimensions": [
     {
@@ -135,17 +135,21 @@
     {
       "id": "incidents_social_stress",
       "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
-      "score": 8,
+      "score": 5,
       "max_score": 10,
-      "selected_option": "clean_recent_stress_history",
-      "answer": "The local report does not identify a confirmed blocking incident, but comprehensive incident/depeg/redemption-delay history is explicitly incomplete.",
+      "selected_option": "some_stress_or_incomplete_history",
+      "answer": "The expanded social/quant layer does not identify a confirmed exploit, but it does surface APYx collateral-buffer, STRC/preferred-share stress, secondary-market discount, and redemption/arbitrage-impairment narratives. This is no longer a clean stress-history bucket.",
       "evidence": [
         {
-          "source": "research.md#9-evidence-quality-and-missing-behavior",
-          "quote": "comprehensive incident / depeg / redemption-delay history"
+          "source": "research.md#8-social-and-quantitative-overlay",
+          "quote": "Saved and social evidence includes secondary-market discount and collateral-buffer stress."
+        },
+        {
+          "source": "research.md#8-social-and-quantitative-overlay",
+          "quote": "Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route."
         }
       ],
-      "confidence": "low_medium"
+      "confidence": "medium"
     }
   ],
   "blocking_unknowns": [
@@ -154,11 +158,47 @@
     "User-specific jurisdiction, whitelist, and redemption eligibility",
     "Live executable liquidity for concrete size",
     "Gearbox-specific oracle and support state",
-    "Pending Safe payload decoding and deny-list inventory"
+    "Pending Safe payload decoding and deny-list inventory",
+    "Wallet-specific APYx Pips eligibility and final token economics",
+    "Social/quantitative overlay from APYx old-run research requires live reserve/redemption refresh"
   ],
   "source_report": "data/assets/ethereum-apxusd/research.md",
   "source_front_kb_report": "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/eth-mainnet-apxusd.md",
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
-  "summary_mode": "precomputed_from_front_kb_report"
+  "summary_mode": "precomputed_from_front_kb_report_plus_social_quant_overlay",
+  "social_research_layer": {
+    "evidence_date": "2026-06-04",
+    "source_refs": [
+      "front-kb RESULT.md#8-x--social-research-layer",
+      "investment-analysis/investment-analyst-report-points-pt-risk-return.md#7-token-by-token-investment-view"
+    ],
+    "return_models": [
+      {
+        "id": "apyx_pips_points",
+        "summary": "APYx Pips/points may be part of the upside case, but final APYX token economics, wallet eligibility, dilution, vesting, and route-specific accrual are not fixed enough for base-case ROI."
+      },
+      {
+        "id": "pt_apxusd_discount_plus_points",
+        "summary": "PT-apxUSD is conditionally underwriteable only if points eligibility is strong or live reserve/redemption review lowers expected loss."
+      }
+    ],
+    "risk_narratives": [
+      "STRC / preferred-share collateral stress can compress the collateral buffer and transmit into depeg or unwind pressure.",
+      "Restricted primary redemption and secondary-market discount can impair arbitrage back to accounting value."
+    ],
+    "decision_effect": "Lowered incident/social-stress score from clean to some-stress; live reserve, redemption, route, and points eligibility review remain required.",
+    "confidence": "medium"
+  },
+  "quantitative_risk_return_layer": {
+    "scope": "apxUSD risk prior feeding PT-apxUSD underwriting",
+    "horizon_days": 153,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "opportunistic_hurdle_net_annualized": 0.2,
+    "expected_loss_prior": 0.0385,
+    "exit_cost_assumption_for_pt": 0.01,
+    "pt_apxusd_points_roi_required_to_clear_hurdle": 0.004671,
+    "decision_trigger": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, and no pending admin event. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
+    "conclusion": "apxUSD remains review-required; PT-apxUSD comes close to the 10% hurdle only after points or lower expected-loss evidence."
+  }
 }

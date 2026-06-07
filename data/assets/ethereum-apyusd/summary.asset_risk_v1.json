@@ -1,0 +1,212 @@
+{
+  "asset_id": "ethereum:0x38eeb52f0771140d10c4e9a9a72349a329fe8a6a",
+  "asset_type": "token",
+  "symbol": "apyUSD",
+  "display_name": "Apyx apyUSD",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "address": "0x38EEb52F0771140d10c4E9A9a72349A329Fe8a6A",
+  "underlying_asset_id": "ethereum:0x98a878b1cd98131b271883b390f68d2c90674665",
+  "underlying_symbol": "apxUSD",
+  "rubric": {
+    "version": "asset_risk_v1",
+    "score": 35,
+    "max_score": 100,
+    "decision_class": "blocked_or_cannot_underwrite",
+    "decision_rationale": "apyUSD adds vault-share, receipt/unlock, market-discount, and accounting-value divergence on top of apxUSD issuer/backing/redemption risk. The new social and quantitative layer makes the base case negative before points and blocks automated live use until reserve, receipt, route, restriction, oracle, and points eligibility are refreshed."
+  },
+  "dimensions": [
+    {
+      "id": "backing_nav_evidence",
+      "question": "Is backing/NAV evidence current, transparent, and independently reconcilable?",
+      "score": 7,
+      "max_score": 18,
+      "selected_option": "partial_attestations_or_issuer_dashboards",
+      "answer": "apyUSD is an ERC-4626-like vault share over apxUSD. Apyx docs and attestations exist, but reserve/custody reconciliation to live supply and preferred-share collateral valuation remain incomplete; social research adds STRC/preferred-share collateral-stress concerns.",
+      "evidence": [
+        {
+          "source": "research.md#1-executive-view",
+          "quote": "apyUSD is a yield-bearing vault share issued by Apyx. Holders deposit apxUSD and receive apyUSD."
+        },
+        {
+          "source": "research.md#8-x--social-research-layer",
+          "quote": "STRC / preferred-share collateral stress"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "redemption_holder_eligibility",
+      "question": "Can the intended holder redeem or exit through a known route?",
+      "score": 4,
+      "max_score": 18,
+      "selected_option": "holder_specific_unknown_or_blocking",
+      "answer": "apyUSD exit depends on vault unlock/receipt mechanics, fees/duration, apxUSD output, and holder-specific restriction/redemption state. The report says unresolved route, pause, deny-list, receipt, and pending-governance state blocks automated execution.",
+      "evidence": [
+        {
+          "source": "research.md#10-what-must-be-checked-before-live-use",
+          "quote": "current vault-side unlocking fee and vesting state"
+        },
+        {
+          "source": "research.md#10-what-must-be-checked-before-live-use",
+          "quote": "apxUSD primary mint/redeem SLA and eligible-participant process"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "market_liquidity_peg_behavior",
+      "question": "Is market exit liquid, near accounting value, and robust for the intended size?",
+      "score": 5,
+      "max_score": 18,
+      "selected_option": "thin_discounted_or_unknown",
+      "answer": "Curve/DEX route evidence exists, but live size-specific apyUSD/apxUSD and apxUSD/USDC route quotes are missing. Social and quantitative evidence highlight market discounts and arbitrage impairment risk.",
+      "evidence": [
+        {
+          "source": "research.md#7-valuation-and-oracle-risk",
+          "quote": "do not use the vault exchange rate alone as liquidation value, portfolio value, or exit value"
+        },
+        {
+          "source": "research.md#9-quantitative-risk--return-layer",
+          "quote": "Direct apyUSD yield-token exposure also fails the old base-case risk adjustment"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "issuer_controls_governance",
+      "question": "Are issuer/admin controls limited, transparent, and slow enough for analyst-agent use?",
+      "score": 4,
+      "max_score": 14,
+      "selected_option": "strong_or_poorly_mapped_controls",
+      "answer": "On-chain evidence maps proxy/implementation/authority, AccessManager, pause, deny-list, receipt/vesting/fee values, and Safe-like reads, but pending governance state and restriction inventory require refresh.",
+      "evidence": [
+        {
+          "source": "research.md#10-what-must-be-checked-before-live-use",
+          "quote": "AccessManager role-0 holder and role mappings"
+        },
+        {
+          "source": "research.md#10-what-must-be-checked-before-live-use",
+          "quote": "Safe owners, threshold, modules, guard, and pending transactions"
+        }
+      ],
+      "confidence": "medium_high"
+    },
+    {
+      "id": "oracle_accounting_alignment",
+      "question": "Does the valuation method track executable value for this use case?",
+      "score": 3,
+      "max_score": 10,
+      "selected_option": "valuation_unknown_or_divergent",
+      "answer": "Vault exchange-rate accounting can diverge from executable market value, apxUSD price, final USDC route, and receipt/eligibility state. Gearbox-specific oracle/support state is unresolved.",
+      "evidence": [
+        {
+          "source": "research.md#7-valuation-and-oracle-risk",
+          "quote": "the accounting rate can be higher than what the market will pay"
+        },
+        {
+          "source": "research.md#10-what-must-be-checked-before-live-use",
+          "quote": "Gearbox-specific oracle/support state"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "audits_security_review",
+      "question": "Does the project have credible audits or formal verification covering the live risk surface?",
+      "score": 9,
+      "max_score": 12,
+      "selected_option": "some_audits_scope_uncertain",
+      "answer": "Apyx docs list Quantstamp, Certora, and Zellic reports, but exact deployed-scope mapping and unresolved finding status remain incomplete.",
+      "evidence": [
+        {
+          "source": "research.md#12-source-map",
+          "quote": "Listed Quantstamp, Certora, and Zellic reports."
+        },
+        {
+          "source": "research.md#11-evidence-quality",
+          "quote": "exact deployed-scope audit mapping"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "incidents_social_stress",
+      "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
+      "score": 3,
+      "max_score": 10,
+      "selected_option": "material_recent_stress",
+      "answer": "X/social research surfaces collateral-buffer stress, redemption/arbitrage impairment, PT liquidity/maturity risk, market-discount concerns, and points value uncertainty. No confirmed exploit is cited, but the stress narratives materially affect underwriting.",
+      "evidence": [
+        {
+          "source": "research.md#8-x--social-research-layer",
+          "quote": "STRC / preferred-share collateral stress"
+        },
+        {
+          "source": "research.md#8-x--social-research-layer",
+          "quote": "Redemption and arbitrage impairment"
+        },
+        {
+          "source": "research.md#9-quantitative-risk--return-layer",
+          "quote": "risk-adjusted base case was negative before points"
+        }
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "social_research_layer": {
+    "evidence_date": "2026-06-04",
+    "source_refs": [
+      "research.md#8-x--social-research-layer",
+      "S18"
+    ],
+    "return_models": [
+      {
+        "id": "apyusd_exchange_rate_yield",
+        "summary": "Social/issuer-facing discussion framed apyUSD target yield around 13% APY from realized STRC/preferred-share dividends; confidence lower for realized exit value."
+      },
+      {
+        "id": "apyx_pips_points",
+        "summary": "Season 2 points described around 6% token supply and Season 1+2 around 11% early-user allocation, but final point value/eligibility/dilution/vesting remain unknown."
+      },
+      {
+        "id": "pt_apyusd_fixed_discount",
+        "summary": "PT-apyUSD social rate sheets cited roughly 17.94%–18.00% implied APY; local Pendle snapshot showed 17.60% implied APY."
+      }
+    ],
+    "risk_narratives": [
+      "STRC / preferred-share collateral stress",
+      "Redemption and arbitrage impairment",
+      "PT liquidity / maturity risk",
+      "Points dilution / value uncertainty"
+    ],
+    "decision_effect": "Supports treating apyUSD as a yield/points/recovery thesis rather than clean stable carry.",
+    "confidence": "medium_for_narrative_low_for_points_value"
+  },
+  "quantitative_risk_return_layer": {
+    "scope": "direct apyUSD yield-token exposure plus PT-apyUSD old-run priors",
+    "horizon_days": 83,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "opportunistic_hurdle_net_annualized": 0.2,
+    "apyusd_social_yield_apy": 0.13,
+    "gross_yield_roi_over_horizon": 0.028182,
+    "expected_loss_prior": 0.061,
+    "direct_apyusd_risk_adjusted_roi_before_points": -0.032818,
+    "pt_apyusd_points_roi_required_to_clear_hurdle": 0.056168,
+    "decision_trigger": "Upgrade only if apxUSD collateral stress resolves, apyUSD market discount closes, receipt/claim state is confirmed, and wallet-specific APYx points EV exceeds 5.6168% of capital over 83 days.",
+    "conclusion": "Direct apyUSD yield and PT-apyUSD fixed discount fail the old base-case risk adjustment before points."
+  },
+  "blocking_unknowns": [
+    "Current reserve/custody/attestation reconciliation for apxUSD collateral backing apyUSD",
+    "Current apyUSD implementation, authority, pause, deny-list, receipt, vesting, and fee state",
+    "Holder-specific unlock/receipt/claim and apxUSD redemption eligibility",
+    "Live apyUSD/apxUSD and apxUSD/USDC route quotes for intended size",
+    "Gearbox-specific oracle/support state and valuation method",
+    "Wallet-specific APYx Pips eligibility, dilution, vesting, and liquidity terms"
+  ],
+  "source_report": "data/assets/ethereum-apyusd/research.md",
+  "source_front_kb_report": "dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md",
+  "evidence_date": "2026-06-04",
+  "summary_generated_at": "2026-06-07",
+  "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay"
+}
