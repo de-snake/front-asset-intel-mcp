@@ -24,7 +24,7 @@
       "options": [
         {
           "id": "current_reconciled_reserves",
-          "condition": "Current reserve reconciliation, transparent custody, and live supply/backing match.",
+          "condition": "Realtime or daily backing portfolio/reserve reporting with asset-level granularity, transparent custody, and independently reconciled live supply/backing match.",
           "score_range": [
             15,
             18
@@ -35,7 +35,7 @@
         },
         {
           "id": "partial_attestations_or_issuer_dashboards",
-          "condition": "Issuer docs, dashboards, or attestations exist but are not fully reconciled to live supply and custody.",
+          "condition": "Daily/weekly attestations or issuer dashboards exist but are aggregated, not fully granular, not independently reconciled to live supply/custody, or not current enough for automated use.",
           "score_range": [
             7,
             14
@@ -46,7 +46,7 @@
         },
         {
           "id": "weak_or_unknown_backing",
-          "condition": "Backing/NAV model is missing, stale, opaque, or not independently verifiable.",
+          "condition": "Monthly/stale/high-level attestations, no portfolio granularity, missing backing/NAV model, opaque custody, or evidence that is not independently verifiable.",
           "score_range": [
             0,
             6

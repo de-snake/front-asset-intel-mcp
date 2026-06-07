@@ -11,6 +11,17 @@ interface JsonRpcResponse {
   error?: unknown;
 }
 
+type DimensionPossibleGrade = {
+  id: string;
+  condition: string;
+  score_range: [number, number];
+  score_band: string;
+  default_status: string;
+  default_evidence_state: string;
+  is_selected: boolean;
+  relation_to_selected: "lower_score" | "selected" | "higher_score";
+};
+
 type SummaryDimension = {
   id: string;
   score: number;
@@ -18,6 +29,7 @@ type SummaryDimension = {
   score_band: string;
   status: string;
   evidence_state: string;
+  possible_grades: DimensionPossibleGrade[];
 };
 
 type SimpleTokenReturnEstimate = {
@@ -25,6 +37,20 @@ type SimpleTokenReturnEstimate = {
   estimated_points_roi_over_horizon: number;
   risk_adjusted_roi_after_base_points: number;
   risk_adjusted_annualized_return_after_base_points: number;
+};
+
+type ReturnContext = {
+  kind: "direct_or_variable_token_return" | "fixed_maturity_pt_return";
+  source_basis: "full_local_research_package";
+  token_return_estimate?: SimpleTokenReturnEstimate;
+  pt_return_profile?: {
+    gross_roi?: number;
+    compound_gross_apy?: number;
+    risk_adjusted_roi_after_expected_loss_and_exit?: number;
+    risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
+  };
+  social_research_layer?: Record<string, unknown>;
+  quantitative_risk_return_layer?: Record<string, unknown>;
 };
 
 type AgentDisplay = {
@@ -54,6 +80,13 @@ type Summary = {
   rubric: { score: number; score_label: string; score_status: string; decision_class: string };
   agent_display: AgentDisplay;
   dimensions: SummaryDimension[];
+  scoring_helper?: {
+    purpose: string;
+    use_as: string;
+    rubric_version: string;
+    rubric_max_score: number;
+    possible_grades_location: "dimensions[].possible_grades";
+  };
   return_profile?: {
     gross_roi?: number;
     compound_gross_apy?: number;
@@ -61,6 +94,7 @@ type Summary = {
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
   };
   simple_token_return_estimate?: SimpleTokenReturnEstimate;
+  return_context?: ReturnContext;
   quantitative_risk_return_layer?: {
     risk_adjusted_roi_after_expected_loss_and_exit?: number;
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
@@ -122,10 +156,10 @@ function parseResearch(id: number, label: string): string {
   return text;
 }
 
-function parseSimpleTokenEstimateFromResearch(text: string, label: string): SimpleTokenReturnEstimate {
-  const match = /```json\n([\s\S]*?)\n```/.exec(text);
-  assert(match?.[1], `${label} research missing simple-token estimate JSON block`);
-  return JSON.parse(match[1]) as SimpleTokenReturnEstimate;
+function parseReturnContextFromResearch(text: string, label: string): ReturnContext {
+  const match = /## Normalized return context[\s\S]*?```json\n([\s\S]*?)\n```/.exec(text);
+  assert(match?.[1], `${label} research missing normalized return_context JSON block`);
+  return JSON.parse(match[1]) as ReturnContext;
 }
 
 async function waitForResponseCount(expectedResponseCount: number, label: string): Promise<void> {
@@ -161,12 +195,12 @@ send({ jsonrpc: "2.0", method: "notifications/initialized", params: {} });
 send({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} });
 
 const summaryLookups = [
-  { id: 3, label: "apxUSD", symbol: "apxUSD", expectedSymbol: "apxUSD", expectedScore: 49, expectedOrganicRoi: 0, expectedPointsRoi: 0.0027, expectedRiskAdjustedRoi: -0.0323 },
-  { id: 4, label: "apyUSD", symbol: "apyUSD", expectedSymbol: "apyUSD", expectedScore: 35, expectedOrganicRoi: 0.028182, expectedPointsRoi: 0.0027, expectedRiskAdjustedRoi: -0.019118 },
+  { id: 3, label: "apxUSD", symbol: "apxUSD", expectedSymbol: "apxUSD", expectedScore: 49, expectedOrganicRoi: 0, expectedPointsRoi: 0.033921, expectedRiskAdjustedRoi: -0.001079 },
+  { id: 4, label: "apyUSD", symbol: "apyUSD", expectedSymbol: "apyUSD", expectedScore: 35, expectedOrganicRoi: 0.045233, expectedPointsRoi: 0.016961, expectedRiskAdjustedRoi: 0.012194 },
   { id: 5, label: "PRIME", symbol: "PRIME", expectedSymbol: "PRIME", expectedScore: 41, expectedOrganicRoi: 0.01979, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.04021 },
   { id: 6, label: "deSPXA", symbol: "deSPXA", expectedSymbol: "deSPXA", expectedScore: 44, expectedOrganicRoi: 0.017655, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.037345 },
-  { id: 7, label: "USDat", symbol: "USDat", expectedSymbol: "USDat", expectedScore: 52, expectedOrganicRoi: 0, expectedPointsRoi: 0.002063, expectedRiskAdjustedRoi: -0.006937 },
-  { id: 8, label: "sUSDat", symbol: "sUSDat", expectedSymbol: "sUSDat", expectedScore: 40, expectedOrganicRoi: 0.027145, expectedPointsRoi: 0.002063, expectedRiskAdjustedRoi: -0.033292 },
+  { id: 7, label: "USDat", symbol: "USDat", expectedSymbol: "USDat", expectedScore: 52, expectedOrganicRoi: 0, expectedPointsRoi: 0.056663, expectedRiskAdjustedRoi: 0.047663 },
+  { id: 8, label: "sUSDat", symbol: "sUSDat", expectedSymbol: "sUSDat", expectedScore: 40, expectedOrganicRoi: 0.021575, expectedPointsRoi: 0.008095, expectedRiskAdjustedRoi: -0.03283 },
   {
     id: 9,
     label: "PT-apxUSD",
@@ -250,12 +284,12 @@ send({
 });
 
 const simpleResearchLookups = [
-  { id: 16, label: "apxUSD", symbol: "apxUSD", expectedOrganicRoi: 0, expectedPointsRoi: 0.0027, expectedRiskAdjustedRoi: -0.0323 },
-  { id: 17, label: "apyUSD", symbol: "apyUSD", expectedOrganicRoi: 0.028182, expectedPointsRoi: 0.0027, expectedRiskAdjustedRoi: -0.019118 },
+  { id: 16, label: "apxUSD", symbol: "apxUSD", expectedOrganicRoi: 0, expectedPointsRoi: 0.033921, expectedRiskAdjustedRoi: -0.001079 },
+  { id: 17, label: "apyUSD", symbol: "apyUSD", expectedOrganicRoi: 0.045233, expectedPointsRoi: 0.016961, expectedRiskAdjustedRoi: 0.012194 },
   { id: 18, label: "PRIME", symbol: "PRIME", expectedOrganicRoi: 0.01979, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.04021 },
   { id: 19, label: "deSPXA", symbol: "deSPXA", expectedOrganicRoi: 0.017655, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.037345 },
-  { id: 20, label: "USDat", symbol: "USDat", expectedOrganicRoi: 0, expectedPointsRoi: 0.002063, expectedRiskAdjustedRoi: -0.006937 },
-  { id: 21, label: "sUSDat", symbol: "sUSDat", expectedOrganicRoi: 0.027145, expectedPointsRoi: 0.002063, expectedRiskAdjustedRoi: -0.033292 },
+  { id: 20, label: "USDat", symbol: "USDat", expectedOrganicRoi: 0, expectedPointsRoi: 0.056663, expectedRiskAdjustedRoi: 0.047663 },
+  { id: 21, label: "sUSDat", symbol: "sUSDat", expectedOrganicRoi: 0.021575, expectedPointsRoi: 0.008095, expectedRiskAdjustedRoi: -0.03283 },
 ];
 
 await waitForResponseCount(15, "initial summary/PT research calls");
@@ -289,12 +323,33 @@ for (const lookup of summaryLookups) {
   assert(summary.agent_display.execution_automation_status.startsWith("blocked"), `${lookup.label} automation status should block`);
   assert(summary.agent_display.primary_blockers.length > 0, `${lookup.label} primary blockers missing`);
   assert(summary.dimensions.length === 7, `${lookup.label} expected seven rubric dimensions`);
+  assert(summary.scoring_helper, `${lookup.label} scoring_helper metadata missing`);
+  assert(summary.scoring_helper.possible_grades_location === "dimensions[].possible_grades", `${lookup.label} scoring helper location mismatch`);
+  assert(summary.scoring_helper.use_as.includes("dimensions[].possible_grades"), `${lookup.label} scoring helper use_as should point to possible_grades`);
+  assert(summary.return_context, `${lookup.label} normalized return_context missing`);
+  assert(summary.return_context.source_basis === "full_local_research_package", `${lookup.label} return_context source_basis mismatch`);
+  assert(summary.return_context.social_research_layer, `${lookup.label} return_context missing social/X layer`);
   for (const dimension of summary.dimensions) {
     assert(typeof dimension.score === "number", `${lookup.label} dimension ${dimension.id} missing score`);
     assert(typeof dimension.max_score === "number", `${lookup.label} dimension ${dimension.id} missing max_score`);
     assert(dimension.score_band, `${lookup.label} dimension ${dimension.id} missing score_band`);
     assert(dimension.status, `${lookup.label} dimension ${dimension.id} missing status`);
     assert(dimension.evidence_state, `${lookup.label} dimension ${dimension.id} missing evidence_state`);
+    assert(dimension.possible_grades.length === 3, `${lookup.label} dimension ${dimension.id} should include three comparable grade buckets`);
+    assert(
+      dimension.possible_grades.filter((grade) => grade.is_selected).length === 1,
+      `${lookup.label} dimension ${dimension.id} should mark exactly one selected grade`,
+    );
+    assert(
+      dimension.possible_grades.some((grade) => grade.relation_to_selected === "selected"),
+      `${lookup.label} dimension ${dimension.id} possible_grades missing selected relation`,
+    );
+    if (dimension.id === "backing_nav_evidence") {
+      const conditions = dimension.possible_grades.map((grade) => grade.condition).join("\n");
+      assert(conditions.includes("Realtime or daily backing portfolio/reserve reporting"), `${lookup.label} backing grades missing top anchor`);
+      assert(conditions.includes("Daily/weekly attestations or issuer dashboards"), `${lookup.label} backing grades missing middle attestation anchor`);
+      assert(conditions.includes("Monthly/stale/high-level attestations"), `${lookup.label} backing grades missing low anchor`);
+    }
   }
   if (lookup.label === "USDat") {
     const byId = Object.fromEntries(summary.dimensions.map((dimension) => [dimension.id, dimension]));
@@ -307,6 +362,8 @@ for (const lookup of summaryLookups) {
     assert(byId.incidents_social_stress?.evidence_state === "negative_evidence", "apyUSD incident evidence state should flag negative evidence");
   }
   if (lookup.expectedOrganicRoi !== undefined) {
+    assert(summary.return_context.kind === "direct_or_variable_token_return", `${lookup.label} return_context should be direct/variable token kind`);
+    assert(summary.return_context.token_return_estimate, `${lookup.label} return_context missing token estimate`);
     assert(summary.simple_token_return_estimate, `${lookup.label} simple token return estimate missing`);
     assert(summary.agent_display.simple_token_return_estimate, `${lookup.label} table simple token return estimate missing`);
     assert(
@@ -326,6 +383,8 @@ for (const lookup of summaryLookups) {
     );
   }
   if (lookup.expectedCompoundGrossApy !== undefined) {
+    assert(summary.return_context.kind === "fixed_maturity_pt_return", `${lookup.label} return_context should be fixed-maturity PT kind`);
+    assert(summary.return_context.pt_return_profile, `${lookup.label} return_context missing PT return profile`);
     assert(
       summary.return_profile?.compound_gross_apy === lookup.expectedCompoundGrossApy,
       `${lookup.label} return_profile missing expected APY`,
@@ -371,19 +430,32 @@ for (const lookup of simpleResearchLookups) {
 
 for (const lookup of simpleResearchLookups) {
   const researchText = parseResearch(lookup.id, lookup.label);
-  assert(researchText.includes("simple_token_return_estimate: included"), `${lookup.label} research should declare included simple-token estimate`);
-  assert(researchText.includes("## Precomputed simple-token return estimate"), `${lookup.label} research missing precomputed estimate section`);
-  assert(researchText.includes("Organic ROI over"), `${lookup.label} research missing organic ROI line`);
-  assert(researchText.includes("Estimated points ROI over"), `${lookup.label} research missing points ROI line`);
+  assert(researchText.includes("return_context: included"), `${lookup.label} research should declare included return_context`);
+  assert(researchText.includes("return_context_kind: direct_or_variable_token_return"), `${lookup.label} research should declare direct/variable return_context kind`);
+  assert(researchText.includes("## Normalized return context"), `${lookup.label} research missing normalized return context section`);
+  assert(researchText.includes("### Direct / variable-token ROI"), `${lookup.label} research missing direct/variable ROI section`);
+  assert(researchText.includes("Organic / variable ROI over"), `${lookup.label} research missing organic/variable ROI line`);
+  assert(researchText.includes("Fresh farming points ROI over"), `${lookup.label} research missing fresh farming points ROI line`);
   assert(researchText.includes("Risk-adjusted ROI after base points"), `${lookup.label} research missing risk-adjusted ROI line`);
+  assert(researchText.includes("Social/X"), `${lookup.label} research missing social/X overlay context`);
   assert(researchText.includes("## Source research report"), `${lookup.label} research missing source report separator`);
-  const estimate = parseSimpleTokenEstimateFromResearch(researchText, lookup.label);
+  const context = parseReturnContextFromResearch(researchText, lookup.label);
+  assert(context.kind === "direct_or_variable_token_return", `${lookup.label} research return_context kind changed`);
+  assert(context.source_basis === "full_local_research_package", `${lookup.label} research return_context source basis changed`);
+  const estimate = context.token_return_estimate;
+  assert(estimate, `${lookup.label} research return_context missing token estimate`);
   assert(estimate.organic_roi_over_horizon === lookup.expectedOrganicRoi, `${lookup.label} research organic ROI estimate changed`);
   assert(estimate.estimated_points_roi_over_horizon === lookup.expectedPointsRoi, `${lookup.label} research points ROI estimate changed`);
   assert(estimate.risk_adjusted_roi_after_base_points === lookup.expectedRiskAdjustedRoi, `${lookup.label} research risk-adjusted ROI estimate changed`);
 }
 
 const ptApyResearchText = parseResearch(13, "PT-apyUSD");
+assert(ptApyResearchText.includes("return_context_kind: fixed_maturity_pt_return"), "PT-apyUSD research should declare fixed-maturity return context");
+assert(ptApyResearchText.includes("### PT fixed-maturity ROI"), "PT-apyUSD research missing PT ROI context section");
+assert(ptApyResearchText.includes("Risk-adjusted annualized return after expected loss and exit"), "PT-apyUSD research missing risk-adjusted APY line");
+const ptApyContext = parseReturnContextFromResearch(ptApyResearchText, "PT-apyUSD");
+assert(ptApyContext.kind === "fixed_maturity_pt_return", "PT-apyUSD research return_context kind changed");
+assert(ptApyContext.pt_return_profile?.compound_gross_apy === 0.176, "PT-apyUSD research return_context APY changed");
 assert(
   ptApyResearchText.includes("risk-adjusted base case was negative after expected loss and exit cost"),
   "PT-apyUSD research markdown missing fixed-return risk-adjusted conclusion",
@@ -394,10 +466,16 @@ assert(
 );
 
 const ptUsdatResearchText = parseResearch(14, "PT-USDat");
+const ptUsdatContext = parseReturnContextFromResearch(ptUsdatResearchText, "PT-USDat");
+assert(ptUsdatContext.kind === "fixed_maturity_pt_return", "PT-USDat research return_context kind changed");
+assert(ptUsdatContext.pt_return_profile?.compound_gross_apy === 0.0898, "PT-USDat research return_context APY changed");
 assert(ptUsdatResearchText.includes("fixed-return base case is positive but below"), "PT-USDat research markdown missing fixed-return hurdle conclusion");
 assert(!ptUsdatResearchText.toLowerCase().includes("points roi"), "PT-USDat research markdown should not contain points ROI hurdle text");
 
 const ptSusdatResearchText = parseResearch(15, "PT-sUSDat");
+const ptSusdatContext = parseReturnContextFromResearch(ptSusdatResearchText, "PT-sUSDat");
+assert(ptSusdatContext.kind === "fixed_maturity_pt_return", "PT-sUSDat research return_context kind changed");
+assert(ptSusdatContext.pt_return_profile?.compound_gross_apy === 0.3364, "PT-sUSDat research return_context APY changed");
 assert(ptSusdatResearchText.includes("fixed-return base case is negative after expected loss and exit cost"), "PT-sUSDat research markdown missing fixed-return loss conclusion");
 assert(ptSusdatResearchText.includes("STRC/NAV/queue expected loss"), "PT-sUSDat research markdown missing expected-loss conclusion");
 
@@ -422,6 +500,12 @@ console.log(
             execution_automation_status: summary.agent_display.execution_automation_status,
             primary_blockers: summary.agent_display.primary_blockers.slice(0, 2),
             dimensions_with_status: summary.dimensions.length,
+            scoring_helper_possible_grades: summary.scoring_helper?.possible_grades_location,
+            return_context_kind: summary.return_context?.kind,
+            return_context_source_basis: summary.return_context?.source_basis,
+            return_context_has_social_x: Boolean(summary.return_context?.social_research_layer),
+            return_context_has_quant: Boolean(summary.return_context?.quantitative_risk_return_layer),
+            possible_grade_buckets_per_dimension: summary.dimensions[0]?.possible_grades.length,
             blocking_dimensions: summary.dimensions
               .filter((dimension) => dimension.status === "block_automation" || dimension.status === "cannot_underwrite")
               .map((dimension) => `${dimension.id}:${dimension.score}/${dimension.max_score}:${dimension.status}`),

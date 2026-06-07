@@ -198,36 +198,38 @@
     ],
     "next_action": "Resolve named live inputs before any Preview/Execute automation.",
     "table_note": "USDat is the stronger Analyze-stage Saturn candidate because the Gearbox feed is market-derived and public Curve liquidity was materially deeper, but issuer eligibility, freeze/pause state, reserve freshness, route capacity, and user policy remain unresolved.",
-    "simple_token_return_display": "Organic ROI 0.00% over 83d + points ROI 0.21% - expected loss 0.40% (band 0.20%-0.70%) - exit 0.50% = risk-adjusted ROI -0.69% (band -0.99% to -0.49%; -3.05% annualized base)",
+    "simple_token_return_display": "Organic ROI 0.00% over 63d + fresh farming points ROI 5.67% - expected loss 0.40% (band 0.20%-0.70%) - exit 0.50% = risk-adjusted ROI 4.77% (band 4.47% to 4.97%; 27.61% annualized base)",
     "simple_token_return_estimate": {
       "scope": "direct_token_hold_not_pendle_pt",
-      "horizon_days": 83,
+      "horizon_days": 63,
       "organic_yield_apy_estimate": 0.0,
       "organic_yield_apy_range_estimate": [
         0.0,
         0.0
       ],
       "organic_roi_over_horizon": 0.0,
-      "estimated_points_roi_over_horizon": 0.002063,
-      "estimated_points_annualized_return": 0.009072,
-      "points_program": "Saturn Gravity Points",
+      "estimated_points_roi_over_horizon": 0.056663,
+      "estimated_points_annualized_return": 0.328286,
+      "points_program": "Saturn Gravity Points conditional fresh farming thesis",
       "points_roi_scenarios_over_horizon": {
-        "low": 9e-05,
-        "base": 0.002063,
-        "high": 0.0195
+        "low": 0.006296,
+        "base": 0.056663,
+        "high": 0.377752
       },
       "expected_loss_prior": 0.004,
       "exit_cost_assumption": 0.005,
       "risk_adjusted_roi_before_points": -0.009,
-      "risk_adjusted_roi_after_base_points": -0.006937,
-      "risk_adjusted_annualized_return_after_base_points": -0.030506,
+      "risk_adjusted_roi_after_base_points": 0.047663,
+      "risk_adjusted_annualized_return_after_base_points": 0.276143,
       "underwriting_hurdle_net_annualized": 0.1,
-      "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
-      "basis": "USDat is modeled as Saturn’s non-yielding stable/risk-off leg. Saturn Gravity Points use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old Saturn PT-USDat quant prior; exit cost follows the Saturn PT-USDat route-cost prior.",
-      "confidence": "medium for non-yielding token classification; low for route-specific points accrual until eligibility is proven",
+      "method": "fresh_points_farming_thesis: points_roi = conditional_allocation_pct * fdv_scenario * remaining_days / season_days * route_multiplier / weighted_points_denominator_scenario; base points use conditional $300M FDV, 7x hold-USDat multiplier, and a 10x raw-TVL weighted-denominator scenario. risk_adjusted_roi_after_base_points = organic_roi_over_horizon + base fresh-farming points ROI - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days.",
+      "basis": "USDat direct hold is modeled as a conditional fresh Saturn Gravity Points farming route, not the old cheap points-prior. Saturn docs confirm Season 1 dates and 7x hold-USDat accrual; the 5% token allocation remains a conditional third-party airdrop thesis, so confidence is low until official tokenomics/claim docs or a live points denominator are fetched. DefiLlama Saturn SUSDAT TVL is used only as a live raw-TVL proxy and converted to 1x-equivalent weighted-denominator scenarios.",
+      "confidence": "medium for date/multiplier inputs; low for 5% allocation and denominator scenario until official allocation and live total points denominator are fetched",
       "evidence": [
-        "ethereum-usdat/research.md lines 35-37, 68-72, 80-89",
-        "investment-analyst-report-points-pt-risk-return.md lines 59-63, 276-277"
+        "Saturn docs §Season 1: campaign started Apr 8 2026 and ends Aug 8 2026 or $500M TVL",
+        "Saturn docs §Point allocations / Allocations: Hold USDat earns 7x Gravity Points",
+        "Airdrops.io Saturn Credit: reports potential up-to-5% allocation, proportional to Gravity Points, conditional on governance token launch",
+        "DefiLlama yields API fetched 2026-06-07: Saturn SUSDAT TVL $94,913,240"
       ],
       "expected_loss_prior_scenarios": {
         "low": 0.002,
@@ -235,41 +237,84 @@
         "high": 0.007
       },
       "risk_adjusted_roi_scenarios_after_base_points": {
-        "low_loss": -0.004937,
-        "base": -0.006937,
-        "high_loss": -0.009937
+        "low_loss": 0.049663,
+        "base": 0.047663,
+        "high_loss": 0.044663
+      },
+      "points_thesis_kind": "fresh_quant_farming_thesis",
+      "points_farming_thesis": {
+        "kind": "fresh_quant_farming_thesis",
+        "as_of": "2026-06-07",
+        "program": "Saturn Gravity Points Season 1",
+        "program_allocation_pct_of_supply": 0.05,
+        "program_allocation_status": "conditional third-party airdrop thesis; Saturn docs confirm points mechanics but the 5% governance-token allocation was not confirmed in the official docs fetched in this run",
+        "season_start": "2026-04-08",
+        "season_end": "2026-08-08",
+        "season_days": 123,
+        "remaining_days": 63,
+        "remaining_season_fraction": 0.512195,
+        "fdv_scenarios_usd": {
+          "low": 100000000,
+          "base": 300000000,
+          "high": 1000000000
+        },
+        "raw_tvl_proxy_usd": 94913240,
+        "raw_tvl_proxy_source": "DefiLlama yields API Saturn SUSDAT TVL fetched 2026-06-07",
+        "weighted_denominator_scenario_method": "raw_tvl_proxy_usd × denominator_multiplier; denominator is 1x-equivalent weighted Gravity Points TVL, not raw TVL",
+        "weighted_denominator_multipliers": {
+          "low": 30,
+          "base": 10,
+          "high": 5
+        },
+        "weighted_denominator_scenarios_usd": {
+          "low": 2847397200,
+          "base": 949132400,
+          "high": 474566200
+        },
+        "formula": "points_roi = conditional_allocation_pct * fdv_usd * remaining_days / season_days * route_multiplier / weighted_points_denominator_usd",
+        "freshness_status": "uses live/raw TVL proxy and current docs; exact total Gravity Points denominator and official token-allocation confirmation not available from public source in this run",
+        "confidence": "medium for date/multiplier inputs; low for 5% allocation and denominator scenario until official allocation and live total points denominator are fetched",
+        "route": "hold USDat",
+        "route_multiplier": 7,
+        "roi_scenarios_over_horizon": {
+          "low": 0.006296,
+          "base": 0.056663,
+          "high": 0.377752
+        }
       }
     }
   },
   "simple_token_return_estimate": {
     "scope": "direct_token_hold_not_pendle_pt",
-    "horizon_days": 83,
+    "horizon_days": 63,
     "organic_yield_apy_estimate": 0.0,
     "organic_yield_apy_range_estimate": [
       0.0,
       0.0
     ],
     "organic_roi_over_horizon": 0.0,
-    "estimated_points_roi_over_horizon": 0.002063,
-    "estimated_points_annualized_return": 0.009072,
-    "points_program": "Saturn Gravity Points",
+    "estimated_points_roi_over_horizon": 0.056663,
+    "estimated_points_annualized_return": 0.328286,
+    "points_program": "Saturn Gravity Points conditional fresh farming thesis",
     "points_roi_scenarios_over_horizon": {
-      "low": 9e-05,
-      "base": 0.002063,
-      "high": 0.0195
+      "low": 0.006296,
+      "base": 0.056663,
+      "high": 0.377752
     },
     "expected_loss_prior": 0.004,
     "exit_cost_assumption": 0.005,
     "risk_adjusted_roi_before_points": -0.009,
-    "risk_adjusted_roi_after_base_points": -0.006937,
-    "risk_adjusted_annualized_return_after_base_points": -0.030506,
+    "risk_adjusted_roi_after_base_points": 0.047663,
+    "risk_adjusted_annualized_return_after_base_points": 0.276143,
     "underwriting_hurdle_net_annualized": 0.1,
-    "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
-    "basis": "USDat is modeled as Saturn’s non-yielding stable/risk-off leg. Saturn Gravity Points use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old Saturn PT-USDat quant prior; exit cost follows the Saturn PT-USDat route-cost prior.",
-    "confidence": "medium for non-yielding token classification; low for route-specific points accrual until eligibility is proven",
+    "method": "fresh_points_farming_thesis: points_roi = conditional_allocation_pct * fdv_scenario * remaining_days / season_days * route_multiplier / weighted_points_denominator_scenario; base points use conditional $300M FDV, 7x hold-USDat multiplier, and a 10x raw-TVL weighted-denominator scenario. risk_adjusted_roi_after_base_points = organic_roi_over_horizon + base fresh-farming points ROI - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days.",
+    "basis": "USDat direct hold is modeled as a conditional fresh Saturn Gravity Points farming route, not the old cheap points-prior. Saturn docs confirm Season 1 dates and 7x hold-USDat accrual; the 5% token allocation remains a conditional third-party airdrop thesis, so confidence is low until official tokenomics/claim docs or a live points denominator are fetched. DefiLlama Saturn SUSDAT TVL is used only as a live raw-TVL proxy and converted to 1x-equivalent weighted-denominator scenarios.",
+    "confidence": "medium for date/multiplier inputs; low for 5% allocation and denominator scenario until official allocation and live total points denominator are fetched",
     "evidence": [
-      "ethereum-usdat/research.md lines 35-37, 68-72, 80-89",
-      "investment-analyst-report-points-pt-risk-return.md lines 59-63, 276-277"
+      "Saturn docs §Season 1: campaign started Apr 8 2026 and ends Aug 8 2026 or $500M TVL",
+      "Saturn docs §Point allocations / Allocations: Hold USDat earns 7x Gravity Points",
+      "Airdrops.io Saturn Credit: reports potential up-to-5% allocation, proportional to Gravity Points, conditional on governance token launch",
+      "DefiLlama yields API fetched 2026-06-07: Saturn SUSDAT TVL $94,913,240"
     ],
     "expected_loss_prior_scenarios": {
       "low": 0.002,
@@ -277,9 +322,50 @@
       "high": 0.007
     },
     "risk_adjusted_roi_scenarios_after_base_points": {
-      "low_loss": -0.004937,
-      "base": -0.006937,
-      "high_loss": -0.009937
+      "low_loss": 0.049663,
+      "base": 0.047663,
+      "high_loss": 0.044663
+    },
+    "points_thesis_kind": "fresh_quant_farming_thesis",
+    "points_farming_thesis": {
+      "kind": "fresh_quant_farming_thesis",
+      "as_of": "2026-06-07",
+      "program": "Saturn Gravity Points Season 1",
+      "program_allocation_pct_of_supply": 0.05,
+      "program_allocation_status": "conditional third-party airdrop thesis; Saturn docs confirm points mechanics but the 5% governance-token allocation was not confirmed in the official docs fetched in this run",
+      "season_start": "2026-04-08",
+      "season_end": "2026-08-08",
+      "season_days": 123,
+      "remaining_days": 63,
+      "remaining_season_fraction": 0.512195,
+      "fdv_scenarios_usd": {
+        "low": 100000000,
+        "base": 300000000,
+        "high": 1000000000
+      },
+      "raw_tvl_proxy_usd": 94913240,
+      "raw_tvl_proxy_source": "DefiLlama yields API Saturn SUSDAT TVL fetched 2026-06-07",
+      "weighted_denominator_scenario_method": "raw_tvl_proxy_usd × denominator_multiplier; denominator is 1x-equivalent weighted Gravity Points TVL, not raw TVL",
+      "weighted_denominator_multipliers": {
+        "low": 30,
+        "base": 10,
+        "high": 5
+      },
+      "weighted_denominator_scenarios_usd": {
+        "low": 2847397200,
+        "base": 949132400,
+        "high": 474566200
+      },
+      "formula": "points_roi = conditional_allocation_pct * fdv_usd * remaining_days / season_days * route_multiplier / weighted_points_denominator_usd",
+      "freshness_status": "uses live/raw TVL proxy and current docs; exact total Gravity Points denominator and official token-allocation confirmation not available from public source in this run",
+      "confidence": "medium for date/multiplier inputs; low for 5% allocation and denominator scenario until official allocation and live total points denominator are fetched",
+      "route": "hold USDat",
+      "route_multiplier": 7,
+      "roi_scenarios_over_horizon": {
+        "low": 0.006296,
+        "base": 0.056663,
+        "high": 0.377752
+      }
     }
   }
 }

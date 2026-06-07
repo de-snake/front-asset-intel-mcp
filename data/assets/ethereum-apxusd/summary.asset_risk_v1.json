@@ -263,36 +263,38 @@
     ],
     "next_action": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, and no pending admin event. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
     "table_note": "apxUSD has observable technical and issuer evidence, listed audits, and secondary-market liquidity, but reserve reconciliation, holder-specific redemption eligibility, issuer controls, live route depth, Gearbox oracle/support, and newly integrated social collateral-stress/redemption-arbitrage concerns remain unresolved for automated analyst-agent use.",
-    "simple_token_return_display": "Organic ROI 0.00% over 153d + points ROI 0.27% - expected loss 2.50% (band 1.50%-3.85%) - exit 1.00% = risk-adjusted ROI -3.23% (band -4.58% to -2.23%; -7.71% annualized base)",
+    "simple_token_return_display": "Organic ROI 0.00% over 127d + fresh farming points ROI 3.39% - expected loss 2.50% (band 1.50%-3.85%) - exit 1.00% = risk-adjusted ROI -0.11% (band -1.46% to 0.89%; -0.31% annualized base)",
     "simple_token_return_estimate": {
       "scope": "direct_token_hold_not_pendle_pt",
-      "horizon_days": 153,
+      "horizon_days": 127,
       "organic_yield_apy_estimate": 0.0,
       "organic_yield_apy_range_estimate": [
         0.0,
         0.0
       ],
       "organic_roi_over_horizon": 0.0,
-      "estimated_points_roi_over_horizon": 0.0027,
-      "estimated_points_annualized_return": 0.006441,
-      "points_program": "APYx Pips",
+      "estimated_points_roi_over_horizon": 0.033921,
+      "estimated_points_annualized_return": 0.097489,
+      "points_program": "APYx Pips Season 2 fresh farming thesis",
       "points_roi_scenarios_over_horizon": {
-        "low": 0.00012,
-        "base": 0.0027,
-        "high": 0.0252
+        "low": 0.004523,
+        "base": 0.033921,
+        "high": 0.226142
       },
       "expected_loss_prior": 0.025,
       "exit_cost_assumption": 0.01,
       "risk_adjusted_roi_before_points": -0.035,
-      "risk_adjusted_roi_after_base_points": -0.0323,
-      "risk_adjusted_annualized_return_after_base_points": -0.077056,
+      "risk_adjusted_roi_after_base_points": -0.001079,
+      "risk_adjusted_annualized_return_after_base_points": -0.003101,
       "underwriting_hurdle_net_annualized": 0.1,
-      "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
-      "basis": "apxUSD is modeled as the non-yielding APYx base dollar exposure; APYx Pips use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old APYx PT-apxUSD quant prior; exit cost still mirrors the APYx PT exit-cost assumption.",
-      "confidence": "medium for APYx priors; low for route-specific points accrual until wallet/instrument eligibility is proven",
+      "method": "fresh_points_farming_thesis: points_roi = allocation_pct * fdv_scenario * remaining_days / season_days * route_multiplier / weighted_points_denominator_scenario; base points use $300M FDV, 8x hold-apxUSD multiplier, and a 20x raw-TVL weighted-denominator scenario. risk_adjusted_roi_after_base_points = organic_roi_over_horizon + base fresh-farming points ROI - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days.",
+      "basis": "apxUSD direct hold is modeled as a fresh APYx Pips Season 2 farming route, not the old cheap points-prior. APYx docs confirm a 6% Season 2 allocation, May 23-Oct 11 season, and 8x hold-apxUSD accrual; DefiLlama APXUSD apyUSD-vault TVL is used only as a live raw-TVL proxy and converted to conservative 1x-equivalent weighted-denominator scenarios because the live total Pips denominator/leaderboard was not publicly fetched in this run.",
+      "confidence": "low/medium for allocation/date/multiplier inputs; low for denominator scenario until live total Pips denominator is fetched",
       "evidence": [
-        "investment-analyst-report-points-pt-risk-return.md lines 49-57, 74-78, 272-275",
-        "ethereum-apxusd/research.md lines 160-168"
+        "Apyx docs §Season 2 Details: 6,000,000 APYX / 6% total supply for Season 2",
+        "Apyx docs §How Season 2 Works: Pips = USD Value × Multiplier and Season 2 runs May 23-Oct 11 2026",
+        "Apyx blog §How To Earn Pips in Season 2: Hold apxUSD earns 8x Pips",
+        "DefiLlama yields API fetched 2026-06-07: APXUSD apyUSD vault TVL $189,834,907"
       ],
       "expected_loss_prior_scenarios": {
         "low": 0.015,
@@ -300,41 +302,84 @@
         "high": 0.0385
       },
       "risk_adjusted_roi_scenarios_after_base_points": {
-        "low_loss": -0.0223,
-        "base": -0.0323,
-        "high_loss": -0.0458
+        "low_loss": 0.008921,
+        "base": -0.001079,
+        "high_loss": -0.014579
+      },
+      "points_thesis_kind": "fresh_quant_farming_thesis",
+      "points_farming_thesis": {
+        "kind": "fresh_quant_farming_thesis",
+        "as_of": "2026-06-07",
+        "program": "APYx Pips Season 2",
+        "program_allocation_pct_of_supply": 0.06,
+        "program_allocation_tokens": "6,000,000 APYX",
+        "season_start": "2026-05-23",
+        "season_end": "2026-10-11",
+        "season_days": 142,
+        "remaining_days": 127,
+        "remaining_season_fraction": 0.894366,
+        "fdv_scenarios_usd": {
+          "low": 100000000,
+          "base": 300000000,
+          "high": 1000000000
+        },
+        "raw_tvl_proxy_usd": 189834907,
+        "raw_tvl_proxy_source": "DefiLlama yields API APXUSD apyUSD vault TVL fetched 2026-06-07",
+        "weighted_denominator_scenario_method": "raw_tvl_proxy_usd × denominator_multiplier; denominator is 1x-equivalent weighted Pips TVL, not raw TVL",
+        "weighted_denominator_multipliers": {
+          "low": 50,
+          "base": 20,
+          "high": 10
+        },
+        "weighted_denominator_scenarios_usd": {
+          "low": 9491745350,
+          "base": 3796698140,
+          "high": 1898349070
+        },
+        "formula": "points_roi = allocation_pct * fdv_usd * remaining_days / season_days * route_multiplier / weighted_points_denominator_usd",
+        "freshness_status": "uses live/raw TVL proxy and current docs; exact leaderboard denominator not available from public source in this run",
+        "confidence": "low/medium for allocation/date/multiplier inputs; low for denominator scenario until live total Pips denominator is fetched",
+        "route": "hold apxUSD",
+        "route_multiplier": 8,
+        "roi_scenarios_over_horizon": {
+          "low": 0.004523,
+          "base": 0.033921,
+          "high": 0.226142
+        }
       }
     }
   },
   "simple_token_return_estimate": {
     "scope": "direct_token_hold_not_pendle_pt",
-    "horizon_days": 153,
+    "horizon_days": 127,
     "organic_yield_apy_estimate": 0.0,
     "organic_yield_apy_range_estimate": [
       0.0,
       0.0
     ],
     "organic_roi_over_horizon": 0.0,
-    "estimated_points_roi_over_horizon": 0.0027,
-    "estimated_points_annualized_return": 0.006441,
-    "points_program": "APYx Pips",
+    "estimated_points_roi_over_horizon": 0.033921,
+    "estimated_points_annualized_return": 0.097489,
+    "points_program": "APYx Pips Season 2 fresh farming thesis",
     "points_roi_scenarios_over_horizon": {
-      "low": 0.00012,
-      "base": 0.0027,
-      "high": 0.0252
+      "low": 0.004523,
+      "base": 0.033921,
+      "high": 0.226142
     },
     "expected_loss_prior": 0.025,
     "exit_cost_assumption": 0.01,
     "risk_adjusted_roi_before_points": -0.035,
-    "risk_adjusted_roi_after_base_points": -0.0323,
-    "risk_adjusted_annualized_return_after_base_points": -0.077056,
+    "risk_adjusted_roi_after_base_points": -0.001079,
+    "risk_adjusted_annualized_return_after_base_points": -0.003101,
     "underwriting_hurdle_net_annualized": 0.1,
-    "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
-    "basis": "apxUSD is modeled as the non-yielding APYx base dollar exposure; APYx Pips use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old APYx PT-apxUSD quant prior; exit cost still mirrors the APYx PT exit-cost assumption.",
-    "confidence": "medium for APYx priors; low for route-specific points accrual until wallet/instrument eligibility is proven",
+    "method": "fresh_points_farming_thesis: points_roi = allocation_pct * fdv_scenario * remaining_days / season_days * route_multiplier / weighted_points_denominator_scenario; base points use $300M FDV, 8x hold-apxUSD multiplier, and a 20x raw-TVL weighted-denominator scenario. risk_adjusted_roi_after_base_points = organic_roi_over_horizon + base fresh-farming points ROI - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days.",
+    "basis": "apxUSD direct hold is modeled as a fresh APYx Pips Season 2 farming route, not the old cheap points-prior. APYx docs confirm a 6% Season 2 allocation, May 23-Oct 11 season, and 8x hold-apxUSD accrual; DefiLlama APXUSD apyUSD-vault TVL is used only as a live raw-TVL proxy and converted to conservative 1x-equivalent weighted-denominator scenarios because the live total Pips denominator/leaderboard was not publicly fetched in this run.",
+    "confidence": "low/medium for allocation/date/multiplier inputs; low for denominator scenario until live total Pips denominator is fetched",
     "evidence": [
-      "investment-analyst-report-points-pt-risk-return.md lines 49-57, 74-78, 272-275",
-      "ethereum-apxusd/research.md lines 160-168"
+      "Apyx docs §Season 2 Details: 6,000,000 APYX / 6% total supply for Season 2",
+      "Apyx docs §How Season 2 Works: Pips = USD Value × Multiplier and Season 2 runs May 23-Oct 11 2026",
+      "Apyx blog §How To Earn Pips in Season 2: Hold apxUSD earns 8x Pips",
+      "DefiLlama yields API fetched 2026-06-07: APXUSD apyUSD vault TVL $189,834,907"
     ],
     "expected_loss_prior_scenarios": {
       "low": 0.015,
@@ -342,9 +387,50 @@
       "high": 0.0385
     },
     "risk_adjusted_roi_scenarios_after_base_points": {
-      "low_loss": -0.0223,
-      "base": -0.0323,
-      "high_loss": -0.0458
+      "low_loss": 0.008921,
+      "base": -0.001079,
+      "high_loss": -0.014579
+    },
+    "points_thesis_kind": "fresh_quant_farming_thesis",
+    "points_farming_thesis": {
+      "kind": "fresh_quant_farming_thesis",
+      "as_of": "2026-06-07",
+      "program": "APYx Pips Season 2",
+      "program_allocation_pct_of_supply": 0.06,
+      "program_allocation_tokens": "6,000,000 APYX",
+      "season_start": "2026-05-23",
+      "season_end": "2026-10-11",
+      "season_days": 142,
+      "remaining_days": 127,
+      "remaining_season_fraction": 0.894366,
+      "fdv_scenarios_usd": {
+        "low": 100000000,
+        "base": 300000000,
+        "high": 1000000000
+      },
+      "raw_tvl_proxy_usd": 189834907,
+      "raw_tvl_proxy_source": "DefiLlama yields API APXUSD apyUSD vault TVL fetched 2026-06-07",
+      "weighted_denominator_scenario_method": "raw_tvl_proxy_usd × denominator_multiplier; denominator is 1x-equivalent weighted Pips TVL, not raw TVL",
+      "weighted_denominator_multipliers": {
+        "low": 50,
+        "base": 20,
+        "high": 10
+      },
+      "weighted_denominator_scenarios_usd": {
+        "low": 9491745350,
+        "base": 3796698140,
+        "high": 1898349070
+      },
+      "formula": "points_roi = allocation_pct * fdv_usd * remaining_days / season_days * route_multiplier / weighted_points_denominator_usd",
+      "freshness_status": "uses live/raw TVL proxy and current docs; exact leaderboard denominator not available from public source in this run",
+      "confidence": "low/medium for allocation/date/multiplier inputs; low for denominator scenario until live total Pips denominator is fetched",
+      "route": "hold apxUSD",
+      "route_multiplier": 8,
+      "roi_scenarios_over_horizon": {
+        "low": 0.004523,
+        "base": 0.033921,
+        "high": 0.226142
+      }
     }
   }
 }

@@ -229,6 +229,16 @@
         "low_loss": -0.012345,
         "base": -0.037345,
         "high_loss": -0.097345
+      },
+      "points_thesis_kind": "no_confirmed_points_program",
+      "points_farming_thesis": {
+        "kind": "no_confirmed_points_program",
+        "as_of": "2026-06-07",
+        "program": "none identified in local research package",
+        "route": "direct token hold",
+        "formula": "points_roi = 0 because no confirmed points program was identified in the local source package",
+        "freshness_status": "not a farming thesis; requires a fresh external pass before assigning non-zero points value",
+        "confidence": "low/medium that no points program exists; low for stale local package freshness"
       }
     }
   },
@@ -271,6 +281,16 @@
       "low_loss": -0.012345,
       "base": -0.037345,
       "high_loss": -0.097345
+    },
+    "points_thesis_kind": "no_confirmed_points_program",
+    "points_farming_thesis": {
+      "kind": "no_confirmed_points_program",
+      "as_of": "2026-06-07",
+      "program": "none identified in local research package",
+      "route": "direct token hold",
+      "formula": "points_roi = 0 because no confirmed points program was identified in the local source package",
+      "freshness_status": "not a farming thesis; requires a fresh external pass before assigning non-zero points value",
+      "confidence": "low/medium that no points program exists; low for stale local package freshness"
     }
   }
 }

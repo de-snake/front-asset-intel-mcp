@@ -1,12 +1,28 @@
 import { getAssetResearch, getAssetSummary } from "./registry.js";
 
-type SummaryDimension = { id: string; score: number; max_score: number; score_band: string; status: string };
+type SummaryDimension = {
+  id: string;
+  score: number;
+  max_score: number;
+  score_band: string;
+  status: string;
+  possible_grades?: Array<{ id: string; condition: string; is_selected: boolean; relation_to_selected: string }>;
+};
 
 type SimpleTokenReturnEstimate = {
   organic_roi_over_horizon?: number;
   estimated_points_roi_over_horizon?: number;
   risk_adjusted_roi_after_base_points?: number;
   risk_adjusted_annualized_return_after_base_points?: number;
+};
+
+type ReturnContext = {
+  kind: "direct_or_variable_token_return" | "fixed_maturity_pt_return";
+  source_basis: "full_local_research_package";
+  token_return_estimate?: SimpleTokenReturnEstimate;
+  pt_return_profile?: Record<string, unknown>;
+  social_research_layer?: Record<string, unknown>;
+  quantitative_risk_return_layer?: Record<string, unknown>;
 };
 
 type AgentDisplay = {
@@ -42,6 +58,7 @@ type Summary = {
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
   };
   simple_token_return_estimate?: SimpleTokenReturnEstimate;
+  return_context?: ReturnContext;
   quantitative_risk_return_layer?: {
     risk_adjusted_roi_after_expected_loss_and_exit?: number;
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
@@ -68,11 +85,17 @@ function pickSummary(summary: Summary): Record<string, unknown> {
     execution_automation_status: summary.agent_display?.execution_automation_status,
     primary_blockers: summary.agent_display?.primary_blockers?.slice(0, 2),
     next_action: summary.agent_display?.next_action,
+    return_context_kind: summary.return_context?.kind,
+    return_context_source_basis: summary.return_context?.source_basis,
+    social_x_context: Boolean(summary.return_context?.social_research_layer),
+    quantitative_return_context: Boolean(summary.return_context?.quantitative_risk_return_layer),
     dimension_statuses: summary.dimensions?.map((dimension) => ({
       id: dimension.id,
       score: `${dimension.score}/${dimension.max_score}`,
       score_band: dimension.score_band,
       status: dimension.status,
+      possible_grade_buckets: dimension.possible_grades?.length,
+      selected_grade: dimension.possible_grades?.find((grade) => grade.is_selected)?.id,
     })),
   };
 
@@ -130,6 +153,12 @@ for (const [key, research] of Object.entries(simpleResearch)) {
     JSON.stringify(research.simple_token_return_estimate) === JSON.stringify(summary.simple_token_return_estimate),
     `${key} research estimate must mirror summary estimate`,
   );
+  assert(summary.return_context?.kind === "direct_or_variable_token_return", `${key} summary missing direct/variable return context`);
+  assert(research.return_context?.kind === "direct_or_variable_token_return", `${key} research missing direct/variable return context`);
+  assert(
+    JSON.stringify(research.return_context) === JSON.stringify(summary.return_context),
+    `${key} research return_context must mirror summary return_context`,
+  );
 }
 
 const research = {
@@ -142,6 +171,13 @@ const research = {
 for (const [key, ptResearch] of Object.entries(research)) {
   assert(!ptResearch.simple_token_return_display, `${key} PT research must not expose simple-token points display`);
   assert(!ptResearch.simple_token_return_estimate, `${key} PT research must not expose simple-token points estimate`);
+  const summary = summaries[key as keyof typeof research] as Summary;
+  assert(summary.return_context?.kind === "fixed_maturity_pt_return", `${key} summary missing fixed-maturity PT return context`);
+  assert(ptResearch.return_context?.kind === "fixed_maturity_pt_return", `${key} research missing fixed-maturity PT return context`);
+  assert(
+    JSON.stringify(ptResearch.return_context) === JSON.stringify(summary.return_context),
+    `${key} research return_context must mirror summary return_context`,
+  );
 }
 
 console.log(

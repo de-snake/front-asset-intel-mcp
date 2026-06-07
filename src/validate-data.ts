@@ -4,14 +4,20 @@ import { DATA_ROOT, getAssetResearch, getAssetSummary, listAssetEntries } from "
 
 type RubricOption = {
   id: string;
+  condition: string;
   score_range: [number, number];
   score_band: string;
   default_status: string;
   default_evidence_state: string;
 };
-type RubricDimension = { id: string; max_score: number; options: RubricOption[] };
+type RubricDimension = { id: string; question: string; max_score: number; options: RubricOption[] };
 type Rubric = { version: string; max_score: number; dimensions: RubricDimension[] };
 type EvidencePointer = string | { source: string; quote?: string };
+
+type DimensionPossibleGrade = RubricOption & {
+  is_selected: boolean;
+  relation_to_selected: "lower_score" | "selected" | "higher_score";
+};
 
 type SummaryDimension = {
   id: string;
@@ -26,7 +32,36 @@ type SummaryDimension = {
   answer: string;
   evidence: EvidencePointer[];
   confidence: string;
+  possible_grades?: DimensionPossibleGrade[];
 };
+type PointsThesisKind = "fresh_quant_farming_thesis" | "no_confirmed_points_program";
+
+type PointsFarmingThesis = {
+  kind: PointsThesisKind;
+  as_of: string;
+  program: string;
+  route: string;
+  formula: string;
+  freshness_status: string;
+  confidence: string;
+  route_multiplier?: number;
+  program_allocation_pct_of_supply?: number;
+  program_allocation_tokens?: string;
+  program_allocation_status?: string;
+  season_start?: string;
+  season_end?: string;
+  season_days?: number;
+  remaining_days?: number;
+  remaining_season_fraction?: number;
+  fdv_scenarios_usd?: { low: number; base: number; high: number };
+  raw_tvl_proxy_usd?: number;
+  raw_tvl_proxy_source?: string;
+  weighted_denominator_scenario_method?: string;
+  weighted_denominator_multipliers?: { low: number; base: number; high: number };
+  weighted_denominator_scenarios_usd?: { low: number; base: number; high: number };
+  roi_scenarios_over_horizon?: { low: number; base: number; high: number };
+};
+
 type SimpleTokenReturnEstimate = {
   scope: string;
   horizon_days: number;
@@ -49,6 +84,8 @@ type SimpleTokenReturnEstimate = {
   basis: string;
   confidence: string;
   evidence: string[];
+  points_thesis_kind: PointsThesisKind;
+  points_farming_thesis: PointsFarmingThesis;
 };
 
 type AgentDisplay = {
@@ -68,6 +105,20 @@ type AgentDisplay = {
   simple_token_return_display?: string;
   simple_token_return_estimate?: SimpleTokenReturnEstimate;
 };
+
+type ReturnContext = {
+  kind: "direct_or_variable_token_return" | "fixed_maturity_pt_return";
+  source_basis: "full_local_research_package";
+  source_fields: string[];
+  summary_mode?: string;
+  display?: string;
+  token_return_estimate?: SimpleTokenReturnEstimate;
+  pt_return_profile?: Record<string, unknown>;
+  quantitative_risk_return_layer?: Record<string, unknown>;
+  social_research_layer?: Record<string, unknown>;
+  notes: string[];
+};
+
 type Summary = {
   summary_schema_version: string;
   asset_id: string;
@@ -84,7 +135,16 @@ type Summary = {
   };
   agent_display: AgentDisplay;
   dimensions: SummaryDimension[];
+  scoring_helper?: {
+    purpose: string;
+    use_as: string;
+    rubric_version: string;
+    rubric_max_score: number;
+    note: string;
+    possible_grades_location: "dimensions[].possible_grades";
+  };
   return_profile?: unknown;
+  return_context?: ReturnContext;
   simple_token_return_estimate?: SimpleTokenReturnEstimate;
   blocking_unknowns: string[];
   source_report: string;
@@ -104,6 +164,12 @@ function evidencePointerHasContent(item: EvidencePointer): boolean {
     return item.trim().length > 0;
   }
   return typeof item.source === "string" && item.source.trim().length > 0;
+}
+
+function expectedRelationToSelected(option: RubricOption, dimension: SummaryDimension): DimensionPossibleGrade["relation_to_selected"] {
+  if (option.id === dimension.selected_option) return "selected";
+  if (option.score_range[1] < dimension.score) return "lower_score";
+  return "higher_score";
 }
 
 const rubricPath = path.join(DATA_ROOT, "rubrics", "asset_risk_v1.json");
@@ -261,6 +327,38 @@ function validateSimpleTokenReturnEstimate(slug: string, summary: Summary): void
   assert(estimate.basis.length > 80, `${slug}: estimate basis too short`);
   assert(estimate.confidence.length > 0, `${slug}: estimate confidence missing`);
   assert(Array.isArray(estimate.evidence) && estimate.evidence.length > 0, `${slug}: estimate evidence missing`);
+  assert(estimate.points_farming_thesis, `${slug}: missing points_farming_thesis`);
+  assert(
+    estimate.points_thesis_kind === estimate.points_farming_thesis.kind,
+    `${slug}: points_thesis_kind must mirror points_farming_thesis.kind`,
+  );
+  assert(estimate.points_farming_thesis.as_of.length > 0, `${slug}: points_farming_thesis.as_of missing`);
+  assert(estimate.points_farming_thesis.formula.includes("points_roi"), `${slug}: points_farming_thesis formula must name points_roi`);
+  if (estimate.points_thesis_kind === "fresh_quant_farming_thesis") {
+    assert(
+      estimate.method.includes("fresh_points_farming_thesis"),
+      `${slug}: fresh points estimate method must be explicit`,
+    );
+    assert(
+      estimate.points_program.toLowerCase().includes("fresh") || estimate.points_program.toLowerCase().includes("conditional"),
+      `${slug}: points_program must label the fresh/conditional farming thesis`,
+    );
+    assert(estimate.points_farming_thesis.route_multiplier && estimate.points_farming_thesis.route_multiplier > 0, `${slug}: fresh farming thesis missing route_multiplier`);
+    assert(estimate.points_farming_thesis.program_allocation_pct_of_supply && estimate.points_farming_thesis.program_allocation_pct_of_supply > 0, `${slug}: fresh farming thesis missing allocation pct`);
+    assert(estimate.points_farming_thesis.remaining_days === estimate.horizon_days, `${slug}: fresh farming thesis remaining_days must match horizon_days`);
+    assert(estimate.points_farming_thesis.season_days && estimate.points_farming_thesis.season_days >= estimate.horizon_days, `${slug}: fresh farming thesis season_days invalid`);
+    assert(estimate.points_farming_thesis.raw_tvl_proxy_usd && estimate.points_farming_thesis.raw_tvl_proxy_usd > 0, `${slug}: fresh farming thesis missing raw TVL proxy`);
+    assert(estimate.points_farming_thesis.roi_scenarios_over_horizon, `${slug}: fresh farming thesis missing ROI scenarios`);
+    assert(
+      JSON.stringify(estimate.points_farming_thesis.roi_scenarios_over_horizon) === JSON.stringify(estimate.points_roi_scenarios_over_horizon),
+      `${slug}: fresh farming thesis ROI scenarios must mirror points_roi_scenarios_over_horizon`,
+    );
+  } else {
+    assert(
+      estimate.estimated_points_roi_over_horizon === 0,
+      `${slug}: no_confirmed_points_program estimates must keep points ROI at zero`,
+    );
+  }
 }
 
 for (const dimension of rubric.dimensions) {
@@ -291,6 +389,17 @@ for (const entry of entries) {
   assert(summary.asset_id === manifest.asset_id, `${manifest.slug}: summary asset_id mismatch`);
   assert(summary.symbol === manifest.symbol, `${manifest.slug}: summary symbol mismatch`);
   assert(summary.rubric.version === manifest.rubric_version, `${manifest.slug}: rubric version mismatch`);
+  assert(summary.scoring_helper, `${manifest.slug}: missing scoring_helper metadata`);
+  assert(summary.scoring_helper.rubric_version === rubric.version, `${manifest.slug}: scoring_helper rubric version mismatch`);
+  assert(summary.scoring_helper.rubric_max_score === rubric.max_score, `${manifest.slug}: scoring_helper rubric max mismatch`);
+  assert(summary.scoring_helper.possible_grades_location === "dimensions[].possible_grades", `${manifest.slug}: scoring_helper possible_grades_location mismatch`);
+  assert(summary.scoring_helper.purpose.includes("scoring helper"), `${manifest.slug}: scoring_helper purpose should name scoring helper use`);
+  assert(summary.scoring_helper.use_as.includes("dimensions[].possible_grades"), `${manifest.slug}: scoring_helper use_as should point to possible_grades`);
+  assert(summary.return_context, `${manifest.slug}: missing normalized return_context`);
+  assert(summary.return_context.source_basis === "full_local_research_package", `${manifest.slug}: return_context source_basis mismatch`);
+  assert(summary.return_context.source_fields.length > 0, `${manifest.slug}: return_context source_fields missing`);
+  assert(summary.return_context.notes.length >= 2, `${manifest.slug}: return_context notes missing`);
+  assert(summary.return_context.social_research_layer, `${manifest.slug}: return_context missing social/X research layer`);
   assert(summary.rubric.max_score === rubric.max_score, `${manifest.slug}: rubric max_score mismatch`);
   assert(summary.rubric.score_label === "asset_quality_evidence_score", `${manifest.slug}: rubric score_label mismatch`);
   assert(summary.rubric.score_status === "precomputed", `${manifest.slug}: rubric score_status mismatch`);
@@ -316,6 +425,12 @@ for (const entry of entries) {
   );
   const isPrincipalToken = summary.asset_type === "pendle_pt";
   if (isPrincipalToken) {
+    assert(summary.return_context.kind === "fixed_maturity_pt_return", `${manifest.slug}: PT return_context kind mismatch`);
+    assert(summary.return_context.pt_return_profile, `${manifest.slug}: PT return_context missing return profile`);
+    assert(
+      JSON.stringify(summary.return_context.pt_return_profile) === JSON.stringify(summary.return_profile),
+      `${manifest.slug}: PT return_context must mirror return_profile`,
+    );
     assert(
       summary.summary_schema_version === "asset_summary_v1.3",
       `${manifest.slug}: PT summaries must use fixed-return schema v1.3`,
@@ -340,6 +455,12 @@ for (const entry of entries) {
     const forbidden = forbiddenPtPointAssumptionPhrases.find((phrase) => ptText.includes(phrase));
     assert(!forbidden, `${manifest.slug}: PT summary still contains point-assumption phrase ${forbidden}`);
   } else {
+    assert(summary.return_context.kind === "direct_or_variable_token_return", `${manifest.slug}: token return_context kind mismatch`);
+    assert(summary.return_context.token_return_estimate, `${manifest.slug}: token return_context missing token estimate`);
+    assert(
+      JSON.stringify(summary.return_context.token_return_estimate) === JSON.stringify(summary.simple_token_return_estimate),
+      `${manifest.slug}: token return_context must mirror simple_token_return_estimate`,
+    );
     assert(summary.agent_display.score_sort === summary.rubric.score, `${manifest.slug}: score_sort must match rubric score`);
     assert(
       summary.agent_display.score_display.includes(`${summary.rubric.score}/100`),
@@ -375,6 +496,37 @@ for (const entry of entries) {
 
     const selectedOption = rubricDimension.options.find((option) => option.id === dimension.selected_option);
     assert(selectedOption, `${manifest.slug}: dimension ${dimension.id} selected unknown option ${dimension.selected_option}`);
+    assert(
+      Array.isArray(dimension.possible_grades),
+      `${manifest.slug}: dimension ${dimension.id} missing possible_grades scoring-helper options`,
+    );
+    assert(
+      dimension.possible_grades.length === rubricDimension.options.length,
+      `${manifest.slug}: dimension ${dimension.id} possible_grades length mismatch`,
+    );
+    for (const option of rubricDimension.options) {
+      const possibleGrade = dimension.possible_grades.find((grade) => grade.id === option.id);
+      assert(possibleGrade, `${manifest.slug}: dimension ${dimension.id} possible_grades missing ${option.id}`);
+      assert(possibleGrade.condition === option.condition, `${manifest.slug}: dimension ${dimension.id} ${option.id} condition mismatch`);
+      assert(
+        JSON.stringify(possibleGrade.score_range) === JSON.stringify(option.score_range),
+        `${manifest.slug}: dimension ${dimension.id} ${option.id} score_range mismatch`,
+      );
+      assert(possibleGrade.score_band === option.score_band, `${manifest.slug}: dimension ${dimension.id} ${option.id} score_band mismatch`);
+      assert(possibleGrade.default_status === option.default_status, `${manifest.slug}: dimension ${dimension.id} ${option.id} default_status mismatch`);
+      assert(
+        possibleGrade.default_evidence_state === option.default_evidence_state,
+        `${manifest.slug}: dimension ${dimension.id} ${option.id} default_evidence_state mismatch`,
+      );
+      assert(
+        possibleGrade.is_selected === (option.id === dimension.selected_option),
+        `${manifest.slug}: dimension ${dimension.id} ${option.id} is_selected mismatch`,
+      );
+      assert(
+        possibleGrade.relation_to_selected === expectedRelationToSelected(option, dimension),
+        `${manifest.slug}: dimension ${dimension.id} ${option.id} relation_to_selected mismatch`,
+      );
+    }
     const [minScore, maxScore] = selectedOption.score_range;
     assert(
       dimension.score >= minScore && dimension.score <= maxScore,
@@ -416,6 +568,11 @@ for (const entry of entries) {
     assert(!summary.agent_display.simple_token_return_estimate, `${manifest.slug}: PT agent_display must not include simple token return estimate`);
     assert(!research.simple_token_return_estimate, `${manifest.slug}: PT research result must not include simple token return estimate`);
     assert(!research.simple_token_return_display, `${manifest.slug}: PT research result must not include simple token return display`);
+    assert(research.return_context?.kind === "fixed_maturity_pt_return", `${manifest.slug}: PT research must include fixed-maturity return_context`);
+    assert(
+      JSON.stringify(research.return_context) === JSON.stringify(summary.return_context),
+      `${manifest.slug}: PT research return_context must mirror summary return_context`,
+    );
     assert(
       summary.agent_display.score_source === "pt_fixed_return_trade_score",
       `${manifest.slug}: PT score_source must be pt_fixed_return_trade_score`,
@@ -435,6 +592,11 @@ for (const entry of entries) {
     assert(
       JSON.stringify(research.simple_token_return_estimate) === JSON.stringify(summary.simple_token_return_estimate),
       `${manifest.slug}: research result must mirror simple token estimate`,
+    );
+    assert(research.return_context?.kind === "direct_or_variable_token_return", `${manifest.slug}: token research must include direct/variable return_context`);
+    assert(
+      JSON.stringify(research.return_context) === JSON.stringify(summary.return_context),
+      `${manifest.slug}: token research return_context must mirror summary return_context`,
     );
   }
 }
