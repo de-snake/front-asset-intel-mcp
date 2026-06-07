@@ -1,0 +1,32 @@
+{
+  "name": "front-asset-intel-mcp",
+  "version": "0.1.0",
+  "description": "Lightweight local MCP server exposing precomputed asset research and rubric summaries for analyst agents.",
+  "type": "module",
+  "bin": {
+    "front-asset-intel-mcp": "dist/server.js"
+  },
+  "files": [
+    "dist",
+    "data",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "validate:data": "node dist/validate-data.js",
+    "smoke": "node dist/smoke.js",
+    "smoke:mcp": "node dist/mcp-smoke.js",
+    "test": "npm run build && npm run validate:data && npm run smoke && npm run smoke:mcp"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.2",
+    "zod": "^3.25.64"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

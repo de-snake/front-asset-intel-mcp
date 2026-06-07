@@ -1,0 +1,169 @@
+{
+  "asset_id": "pendle:ethereum:market:0xaf0349fb9b1ba07d34381870c59b560b31412660",
+  "asset_type": "pendle_pt",
+  "symbol": "PT-apxUSD-2026-11-05",
+  "display_name": "Pendle PT apxUSD — 05 Nov 2026",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "market_address": "0xaf0349fb9b1ba07d34381870c59b560b31412660",
+  "pt_address": "0xaf687b5ecb525ccea96115088999b4ed80c388b6",
+  "sy_address": "0x4f116ee5bcd227d1a1c4f57918d694a4abe7b3fc",
+  "yt_address": "0x7fbc01c63b0ac372ec75907f3a1d8adc8cf28e1f",
+  "underlying_asset_id": "ethereum:0x98a878b1cd98131b271883b390f68d2c90674665",
+  "underlying_symbol": "apxUSD",
+  "rubric": {
+    "version": "asset_risk_v1",
+    "score": 52,
+    "max_score": 100,
+    "decision_class": "review_required",
+    "score_source": "inherited_underlying_asset_risk",
+    "decision_rationale": "The PT changes timing and return profile, not the core issuer/backing/control risk. It inherits apxUSD's 52/100 asset-risk score and adds PT-specific return, maturity, AMM-exit, and oracle/feed checks."
+  },
+  "dimensions": [
+    {
+      "id": "backing_nav_evidence",
+      "question": "Is backing/NAV evidence current, transparent, and independently reconcilable?",
+      "score": 9,
+      "max_score": 18,
+      "selected_option": "partial_attestations_or_issuer_dashboards",
+      "answer": "Inherited from apxUSD: preferred-share backing and attestations exist, but live reserve/custody reconciliation and collateral valuation remain incomplete.",
+      "evidence": [
+        {
+          "source": "research.md#3-how-underlying-token-risk-carries-into-the-pt",
+          "quote": "The PT inherits apxUSD exposure to the Apyx synthetic-dollar model backed by off-chain preferred-share collateral."
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "redemption_holder_eligibility",
+      "question": "Can the intended holder redeem or exit through a known route?",
+      "score": 5,
+      "max_score": 18,
+      "selected_option": "holder_specific_unknown_or_blocking",
+      "answer": "Inherited from apxUSD and compounded by PT maturity/output checks: holder eligibility and restriction state for apxUSD must be refreshed before live use.",
+      "evidence": [
+        {
+          "source": "research.md#7-scenario-behavior-and-live-use-checks",
+          "quote": "holder eligibility and restriction state for `apxUSD` / `apxUSD`"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "market_liquidity_peg_behavior",
+      "question": "Is market exit liquid, near accounting value, and robust for the intended size?",
+      "score": 10,
+      "max_score": 18,
+      "selected_option": "observable_but_not_size_checked",
+      "answer": "The PT has a Pendle API liquidity snapshot of USD 1,171,288, but this is not a size-specific executable quote and pre-maturity exit depends on AMM liquidity.",
+      "evidence": [
+        {
+          "source": "research.md#5-liquidity-and-exit-risk",
+          "quote": "The current API liquidity snapshot was $1,171,288. This is a market-data field, not a guaranteed executable exit size."
+        },
+        {
+          "source": "research.md#5-liquidity-and-exit-risk",
+          "quote": "Before maturity, the holder exits through Pendle market liquidity unless another route is available."
+        }
+      ],
+      "confidence": "medium_high"
+    },
+    {
+      "id": "issuer_controls_governance",
+      "question": "Are issuer/admin controls limited, transparent, and slow enough for analyst-agent use?",
+      "score": 5,
+      "max_score": 14,
+      "selected_option": "strong_or_poorly_mapped_controls",
+      "answer": "Inherited from apxUSD: the PT wrapper does not remove pause, deny-list, upgrade, redemption-eligibility, or issuer-control risks in the accounting asset.",
+      "evidence": [
+        {
+          "source": "research.md#3-how-underlying-token-risk-carries-into-the-pt",
+          "quote": "The Pendle wrapper changes the timing and market mechanics, but it does not remove the underlying issuer-control, backing, restriction, or redemption issues."
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "oracle_accounting_alignment",
+      "question": "Does the valuation method track executable value for this use case?",
+      "score": 5,
+      "max_score": 10,
+      "selected_option": "accounting_model_known_but_not_use_verified",
+      "answer": "Pendle API pricing is known, but a Gearbox-compatible PT oracle/valuation feed was not verified; automation is blocked until valuation support is confirmed.",
+      "evidence": [
+        {
+          "source": "research.md#6-pricing-oraclevaluation-risk",
+          "quote": "it did not verify a Gearbox-compatible PT oracle or a production valuation feed for this PT"
+        },
+        {
+          "source": "research.md#6-pricing-oraclevaluation-risk",
+          "quote": "the PT should be treated as requiring human review for valuation and blocking for automated live use"
+        }
+      ],
+      "confidence": "medium_high"
+    },
+    {
+      "id": "audits_security_review",
+      "question": "Does the project have credible audits or formal verification covering the live risk surface?",
+      "score": 10,
+      "max_score": 12,
+      "selected_option": "top_tier_many_live_scope",
+      "answer": "Inherited from apxUSD security review evidence: Quantstamp, Certora, and Zellic are listed, but exact live-deployment scope remains a cap. This PT report did not fully audit Pendle contract roles/upgrades.",
+      "evidence": [
+        {
+          "source": "research.md#8-evidence-quality",
+          "quote": "Evidence quality is weaker for live size-specific exit depth, Pendle contract role and upgrade state, and any Gearbox-specific oracle or support status."
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "incidents_social_stress",
+      "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
+      "score": 8,
+      "max_score": 10,
+      "selected_option": "clean_recent_stress_history",
+      "answer": "No PT-specific blocking incident is identified in the report, but underlying apxUSD stress/depeg/restriction history must remain part of live review.",
+      "evidence": [
+        {
+          "source": "research.md#7-scenario-behavior-and-live-use-checks",
+          "quote": "If the underlying or accounting asset depegs, the PT discount and implied APY can stop representing clean fixed-yield economics."
+        }
+      ],
+      "confidence": "low_medium"
+    }
+  ],
+  "return_profile": {
+    "profile_type": "fixed_maturity_principal_token",
+    "protocol": "Pendle",
+    "maturity": "2026-11-05T00:00:00.000Z",
+    "user_supplied_days_to_maturity": 153,
+    "accounting_asset": {
+      "symbol": "apxUSD",
+      "address": "0x98a878b1cd98131b271883b390f68d2c90674665"
+    },
+    "price_snapshot_date": "2026-06-04",
+    "pt_price_usd": 0.897297,
+    "accounting_asset_price_usd": 0.974237,
+    "gross_roi_to_accounting_asset": 0.085746,
+    "simple_gross_apr": 0.2046,
+    "compound_gross_apy": 0.2168,
+    "break_even_accounting_asset_drawdown": 0.078975,
+    "liquidity_snapshot_usd": 1171288,
+    "interpretation": "The PT discount is the return buffer against apxUSD impairment, exit cost, maturity/output issues, and stale valuation. It is not a separate improvement to apxUSD asset quality."
+  },
+  "blocking_unknowns": [
+    "Fresh PT price, implied APY, liquidity, and size-specific route quote",
+    "Maturity output asset and Pendle redemption mechanics for holder route",
+    "Holder eligibility and restriction state for apxUSD output/accounting asset",
+    "Gearbox-compatible PT oracle or production valuation feed",
+    "Pendle market/PT/SY/YT role and upgrade-state audit",
+    "Inherited apxUSD reserve, redemption, issuer-control, and live-liquidity unknowns"
+  ],
+  "source_report": "data/assets/ethereum-pendle-pt-apxusd-2026-11-05/research.md",
+  "source_front_kb_report": "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
+  "evidence_date": "2026-06-04",
+  "summary_generated_at": "2026-06-07",
+  "summary_mode": "precomputed_from_front_kb_report"
+}

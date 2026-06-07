@@ -1,0 +1,31 @@
+{
+  "asset_id": "pendle:ethereum:market:0xaf0349fb9b1ba07d34381870c59b560b31412660",
+  "slug": "ethereum-pendle-pt-apxusd-2026-11-05",
+  "asset_type": "pendle_pt",
+  "symbol": "PT-apxUSD-2026-11-05",
+  "display_name": "Pendle PT apxUSD — 05 Nov 2026",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "market_address": "0xaf0349fb9b1ba07d34381870c59b560b31412660",
+  "pt_address": "0xaf687b5ecb525ccea96115088999b4ed80c388b6",
+  "sy_address": "0x4f116ee5bcd227d1a1c4f57918d694a4abe7b3fc",
+  "yt_address": "0x7fbc01c63b0ac372ec75907f3a1d8adc8cf28e1f",
+  "underlying_asset_id": "ethereum:0x98a878b1cd98131b271883b390f68d2c90674665",
+  "aliases": [
+    "PT-apxUSD",
+    "pt apxUSD",
+    "PT apxUSD 2026-11-05",
+    "pendle-pt-eth-mainnet-apxusd-2026-11-05",
+    "ethereum-pendle-pt-apxusd-2026-11-05",
+    "0xaf0349fb9b1ba07d34381870c59b560b31412660",
+    "0xaf687b5ecb525ccea96115088999b4ed80c388b6"
+  ],
+  "rubric_version": "asset_risk_v1",
+  "summary_path": "summary.asset_risk_v1.json",
+  "research_path": "research.md",
+  "source_front_kb_paths": [
+    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
+    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/technical-reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
+    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/verification/pendle-pt-eth-mainnet-apxusd-2026-11-05.md"
+  ]
+}

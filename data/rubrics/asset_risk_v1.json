@@ -1,0 +1,175 @@
+{
+  "version": "asset_risk_v1",
+  "max_score": 100,
+  "purpose": "Normalize long-form asset research into comparable analyst-agent decision inputs. The rubric scores asset-quality evidence. PT markets reuse the underlying asset rubric and add a separate return_profile block.",
+  "decision_classes": [
+    {
+      "id": "usable_with_live_preview",
+      "condition": "Score >= 75 and no blocking unknowns remain for the intended holder/route."
+    },
+    {
+      "id": "review_required",
+      "condition": "Score 40-74, or required route/holder/live inputs are stale or missing."
+    },
+    {
+      "id": "blocked_or_cannot_underwrite",
+      "condition": "Score < 40, or a material issuer/control/redemption/oracle unknown blocks decision use."
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "backing_nav_evidence",
+      "question": "Is backing/NAV evidence current, transparent, and independently reconcilable?",
+      "max_score": 18,
+      "options": [
+        {
+          "id": "current_reconciled_reserves",
+          "condition": "Current reserve reconciliation, transparent custody, and live supply/backing match.",
+          "score_range": [15, 18]
+        },
+        {
+          "id": "partial_attestations_or_issuer_dashboards",
+          "condition": "Issuer docs, dashboards, or attestations exist but are not fully reconciled to live supply and custody.",
+          "score_range": [7, 14]
+        },
+        {
+          "id": "weak_or_unknown_backing",
+          "condition": "Backing/NAV model is missing, stale, opaque, or not independently verifiable.",
+          "score_range": [0, 6]
+        }
+      ]
+    },
+    {
+      "id": "redemption_holder_eligibility",
+      "question": "Can the intended holder redeem or exit through a known route?",
+      "max_score": 18,
+      "options": [
+        {
+          "id": "open_tested_holder_accessible",
+          "condition": "Open, tested, holder-accessible redemption or exit path with current process evidence.",
+          "score_range": [15, 18]
+        },
+        {
+          "id": "restricted_but_understood",
+          "condition": "Whitelisted, jurisdiction-limited, queued, receipt-based, or otherwise restricted route with enough details to model.",
+          "score_range": [7, 14]
+        },
+        {
+          "id": "holder_specific_unknown_or_blocking",
+          "condition": "Holder eligibility, redemption access, or settlement output is unknown for the intended use.",
+          "score_range": [0, 6]
+        }
+      ]
+    },
+    {
+      "id": "market_liquidity_peg_behavior",
+      "question": "Is market exit liquid, near accounting value, and robust for the intended size?",
+      "max_score": 18,
+      "options": [
+        {
+          "id": "deep_tight_size_checked",
+          "condition": "Deep venues, tight spreads, clean peg history, and size-specific executable quotes.",
+          "score_range": [15, 18]
+        },
+        {
+          "id": "observable_but_not_size_checked",
+          "condition": "Observable liquidity and pricing exist, but executable size/slippage or stress behavior is not fully checked.",
+          "score_range": [7, 14]
+        },
+        {
+          "id": "thin_discounted_or_unknown",
+          "condition": "Thin liquidity, material discount/depeg, fragmented route, or no live route evidence.",
+          "score_range": [0, 6]
+        }
+      ]
+    },
+    {
+      "id": "issuer_controls_governance",
+      "question": "Are issuer/admin controls limited, transparent, and slow enough for analyst-agent use?",
+      "max_score": 14,
+      "options": [
+        {
+          "id": "limited_timelocked_transparent",
+          "condition": "Limited emergency controls, transparent governance, timelocked changes, and no surprise pending actions.",
+          "score_range": [11, 14]
+        },
+        {
+          "id": "controls_present_but_mapped",
+          "condition": "Admin controls exist but roles, delays, and pending changes are mapped well enough for review.",
+          "score_range": [6, 10]
+        },
+        {
+          "id": "strong_or_poorly_mapped_controls",
+          "condition": "Immediate pause/freeze/blacklist/forced-transfer/upgrade controls, unclear admins, or undecoded pending payloads.",
+          "score_range": [0, 5]
+        }
+      ]
+    },
+    {
+      "id": "oracle_accounting_alignment",
+      "question": "Does the valuation method track executable value for this use case?",
+      "max_score": 10,
+      "options": [
+        {
+          "id": "oracle_tracks_executable_value",
+          "condition": "Oracle/feed/NAV method is current and aligned with executable market or redemption value.",
+          "score_range": [8, 10]
+        },
+        {
+          "id": "accounting_model_known_but_not_use_verified",
+          "condition": "Accounting or peg method is known, but production feed/support or executable-value alignment is not verified.",
+          "score_range": [4, 7]
+        },
+        {
+          "id": "valuation_unknown_or_divergent",
+          "condition": "Valuation source is missing, stale, or can diverge materially from exit/redemption value.",
+          "score_range": [0, 3]
+        }
+      ]
+    },
+    {
+      "id": "audits_security_review",
+      "question": "Does the project have credible audits or formal verification covering the live risk surface?",
+      "max_score": 12,
+      "options": [
+        {
+          "id": "top_tier_many_live_scope",
+          "condition": ">=3 credible/top-tier audits or formal reviews with clear live-deployment scope and issue remediation.",
+          "score_range": [10, 12]
+        },
+        {
+          "id": "some_audits_scope_uncertain",
+          "condition": ">=1 credible audit/review, but live deployment scope, completeness, or remediation evidence is partly uncertain.",
+          "score_range": [5, 9]
+        },
+        {
+          "id": "weak_missing_or_unknown_security_review",
+          "condition": "No credible audits, weak review coverage, <=1 weak audit, or audit status unknown.",
+          "score_range": [0, 4]
+        }
+      ]
+    },
+    {
+      "id": "incidents_social_stress",
+      "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
+      "max_score": 10,
+      "options": [
+        {
+          "id": "clean_recent_stress_history",
+          "condition": "No material recent incident/stress evidence after targeted search and source review.",
+          "score_range": [8, 10]
+        },
+        {
+          "id": "some_stress_or_incomplete_history",
+          "condition": "Some stress narratives exist or incident history is incomplete, but no confirmed blocking incident in the evidence set.",
+          "score_range": [4, 7]
+        },
+        {
+          "id": "material_recent_stress",
+          "condition": "Recent depeg, collateral, queue, freeze, exploit, or unwind evidence materially affects underwriting.",
+          "score_range": [0, 3]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "asset_id": "ethereum:0x98a878b1cd98131b271883b390f68d2c90674665",
+  "asset_type": "token",
+  "symbol": "apxUSD",
+  "display_name": "Apyx apxUSD",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "address": "0x98A878b1Cd98131B271883B390f68D2c90674665",
+  "rubric": {
+    "version": "asset_risk_v1",
+    "score": 52,
+    "max_score": 100,
+    "decision_class": "review_required",
+    "decision_rationale": "apxUSD has observable technical and issuer evidence, listed audits, and secondary-market liquidity, but reserve reconciliation, holder-specific redemption eligibility, issuer controls, live route depth, and Gearbox oracle/support remain unresolved for automated analyst-agent use."
+  },
+  "dimensions": [
+    {
+      "id": "backing_nav_evidence",
+      "question": "Is backing/NAV evidence current, transparent, and independently reconcilable?",
+      "score": 9,
+      "max_score": 18,
+      "selected_option": "partial_attestations_or_issuer_dashboards",
+      "answer": "Apyx docs describe preferred-share backing, dashboards, and third-party attestations, but the saved report marks current reserve/custody reconciliation and preferred-share concentration/valuation as incomplete.",
+      "evidence": [
+        {
+          "source": "research.md#1-executive-view",
+          "quote": "Apyx materials describe it as backed by a diversified basket of preferred shares issued by Digital Asset Treasuries."
+        },
+        {
+          "source": "research.md#9-evidence-quality-and-missing-behavior",
+          "quote": "current reserve / custody / attestation reconciliation; preferred-share issuer concentration and valuation methodology"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "redemption_holder_eligibility",
+      "question": "Can the intended holder redeem or exit through a known route?",
+      "score": 5,
+      "max_score": 18,
+      "selected_option": "holder_specific_unknown_or_blocking",
+      "answer": "Primary mint/redeem access is limited to eligible whitelisted participants; general users depend on external liquidity, and user-specific jurisdiction/whitelist eligibility is unknown.",
+      "evidence": [
+        {
+          "source": "research.md#1-executive-view",
+          "quote": "redemptions settling in USDC for eligible whitelisted participants"
+        },
+        {
+          "source": "research.md#9-evidence-quality-and-missing-behavior",
+          "quote": "user-specific jurisdiction, whitelist, and redemption eligibility"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "market_liquidity_peg_behavior",
+      "question": "Is market exit liquid, near accounting value, and robust for the intended size?",
+      "score": 10,
+      "max_score": 18,
+      "selected_option": "observable_but_not_size_checked",
+      "answer": "DEXScreener snapshots and venues exist, but live executable size-specific route depth is missing and secondary pricing/route divergence requires review before live use.",
+      "evidence": [
+        {
+          "source": "research.md#10-source-map",
+          "quote": "Point-in-time venues, prices, liquidity, volume, and route divergence."
+        },
+        {
+          "source": "research.md#9-evidence-quality-and-missing-behavior",
+          "quote": "live executable liquidity for a concrete size"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "issuer_controls_governance",
+      "question": "Are issuer/admin controls limited, transparent, and slow enough for analyst-agent use?",
+      "score": 5,
+      "max_score": 14,
+      "selected_option": "strong_or_poorly_mapped_controls",
+      "answer": "On-chain evidence maps AccessManager roles, UUPS upgradeability, pause and deny-list controls, but those controls are strong and pending Safe payloads were not fully decoded.",
+      "evidence": [
+        {
+          "source": "research.md#9-evidence-quality-and-missing-behavior",
+          "quote": "exact token identity, decimals, supply cap, total supply, proxy slot, implementation, AccessManager, pause state, deny-list address, role assignments, and Safe-like threshold/owner reads"
+        },
+        {
+          "source": "research.md#9-evidence-quality-and-missing-behavior",
+          "quote": "full pending Safe payload decoding; deny-list administration and current denied-account inventory"
+        }
+      ],
+      "confidence": "medium_high"
+    },
+    {
+      "id": "oracle_accounting_alignment",
+      "question": "Does the valuation method track executable value for this use case?",
+      "score": 5,
+      "max_score": 10,
+      "selected_option": "accounting_model_known_but_not_use_verified",
+      "answer": "The peg/accounting model is described, but Gearbox-specific oracle/support state and executable-value alignment were not verified.",
+      "evidence": [
+        {
+          "source": "research.md#9-evidence-quality-and-missing-behavior",
+          "quote": "Gearbox-specific oracle and support state"
+        },
+        {
+          "source": "research.md#10-source-map",
+          "quote": "Apyx docs, apxUSD overview ... apxUSD mechanism, preferred-share backing, collateral allocation, peg model"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "audits_security_review",
+      "question": "Does the project have credible audits or formal verification covering the live risk surface?",
+      "score": 10,
+      "max_score": 12,
+      "selected_option": "top_tier_many_live_scope",
+      "answer": "Issuer docs list Quantstamp, Certora, and Zellic reports, and Certora has a public issue/remediation summary. Full credit is capped by uncertainty around exact live-deployment scope.",
+      "evidence": [
+        {
+          "source": "research.md#10-source-map",
+          "quote": "Listed Quantstamp, Certora, and Zellic audit reports."
+        },
+        {
+          "source": "research.md#10-source-map",
+          "quote": "Certora March 2026 issue count and high-severity fixed/confirmed statement."
+        },
+        {
+          "source": "research.md#9-evidence-quality-and-missing-behavior",
+          "quote": "exact audit and formal-verification scope against live deployments"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "incidents_social_stress",
+      "question": "Is recent incident, depeg, queue, freeze, or social-stress evidence clean?",
+      "score": 8,
+      "max_score": 10,
+      "selected_option": "clean_recent_stress_history",
+      "answer": "The local report does not identify a confirmed blocking incident, but comprehensive incident/depeg/redemption-delay history is explicitly incomplete.",
+      "evidence": [
+        {
+          "source": "research.md#9-evidence-quality-and-missing-behavior",
+          "quote": "comprehensive incident / depeg / redemption-delay history"
+        }
+      ],
+      "confidence": "low_medium"
+    }
+  ],
+  "blocking_unknowns": [
+    "Current reserve/custody/attestation reconciliation",
+    "Preferred-share issuer concentration and valuation methodology",
+    "User-specific jurisdiction, whitelist, and redemption eligibility",
+    "Live executable liquidity for concrete size",
+    "Gearbox-specific oracle and support state",
+    "Pending Safe payload decoding and deny-list inventory"
+  ],
+  "source_report": "data/assets/ethereum-apxusd/research.md",
+  "source_front_kb_report": "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/eth-mainnet-apxusd.md",
+  "evidence_date": "2026-06-04",
+  "summary_generated_at": "2026-06-07",
+  "summary_mode": "precomputed_from_front_kb_report"
+}

@@ -1,0 +1,24 @@
+{
+  "asset_id": "ethereum:0x98a878b1cd98131b271883b390f68d2c90674665",
+  "slug": "ethereum-apxusd",
+  "asset_type": "token",
+  "symbol": "apxUSD",
+  "display_name": "Apyx apxUSD",
+  "chain": "ethereum",
+  "chain_id": 1,
+  "address": "0x98A878b1Cd98131B271883B390f68D2c90674665",
+  "aliases": [
+    "apxUSD",
+    "apxusd",
+    "Apyx apxUSD",
+    "ethereum-apxusd"
+  ],
+  "rubric_version": "asset_risk_v1",
+  "summary_path": "summary.asset_risk_v1.json",
+  "research_path": "research.md",
+  "source_front_kb_paths": [
+    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/reports/eth-mainnet-apxusd.md",
+    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/technical-reports/eth-mainnet-apxusd.md",
+    "projects/front-knowledge-base/dev/implementation/asset-risk-reports-mvp/verification/eth-mainnet-apxusd.md"
+  ]
+}
