@@ -8,7 +8,7 @@ This repo is intentionally runtime-small: the MCP server does not call an LLM, c
 
 Long Markdown research reports are useful for diligence, but they are not a stable decision interface for an analyst agent. The server exposes two layers:
 
-- `get_asset_summary` — compact rubric JSON with uniform questions, fixed scoring buckets, per-rubric score/status/evidence-state fields, evidence snippets, blocking unknowns, and optional social/quantitative decision overlays.
+- `get_asset_summary` — compact rubric JSON with uniform questions, fixed scoring buckets, table-facing `agent_display` fields, per-rubric score/status/evidence-state fields, evidence snippets, blocking unknowns, and optional social/quantitative decision overlays.
 - `get_asset_research` — full Markdown report for source review when the summary needs expansion.
 
 ## Tools
@@ -22,6 +22,15 @@ Input accepts any one of:
 - slug / alias / token address / PT market address
 
 Returns precomputed JSON.
+
+For table/ranking UIs, use the `agent_display` block first:
+
+- `agent_display.score_display` — explains whether the numeric score is direct asset-quality evidence or inherited underlying risk for a PT.
+- `agent_display.decision_label` — human-usable action label such as "Block Preview/Execute", "Conditional PT candidate", or "Do not underwrite" instead of the legacy coarse `review_required` bucket.
+- `agent_display.underwriting_status` and `agent_display.execution_automation_status` — separate research/underwriting readiness from automation safety.
+- `agent_display.primary_blockers` and `agent_display.next_action` — the concrete reason the row is not executable and what input is needed next.
+
+`rubric.score` / `rubric.decision_class` remain for backward compatibility and deterministic score validation. Do not use those two fields alone as the table decision: PT rows intentionally inherit underlying asset-quality scores, and `review_required` is only a legacy score-bucket class.
 
 Example asset lookups:
 

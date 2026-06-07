@@ -173,5 +173,29 @@
     "erc4626_exchange_rate_usdat_per_susdat": 0.953119,
     "feed_answer_timestamp_utc": "2026-06-06 08:00:47 UTC"
   },
-  "summary_schema_version": "asset_summary_v1.1"
+  "summary_schema_version": "asset_summary_v1.2",
+  "agent_display": {
+    "recommended_table_fields": [
+      "agent_display.score_display",
+      "agent_display.decision_label",
+      "agent_display.underwriting_status",
+      "agent_display.execution_automation_status",
+      "agent_display.primary_blockers",
+      "agent_display.next_action"
+    ],
+    "score_display": "40/100 asset-quality evidence",
+    "score_sort": 40,
+    "score_source": "direct_asset_quality_score",
+    "score_explanation": "This score is an asset-quality/readiness score from the curated rubric; it is not report quality, a live-market route score, or an investment recommendation.",
+    "recommended_table_decision": "block_preview_execute_until_inputs",
+    "decision_label": "Block Preview/Execute until holder, control, and live-route inputs clear",
+    "underwriting_status": "manual_underwriting_only",
+    "execution_automation_status": "blocked_until_live_inputs_resolved",
+    "primary_blockers": [
+      "Holder/redemption route: Realization can depend on queue processing, issuer controls, blacklist/pause state, and inherited USDat eligibility",
+      "Issuer/admin controls: sUSDat exposes blacklist and pause surfaces and inherits USDat permissioning concerns"
+    ],
+    "next_action": "Resolve named live inputs before any Preview/Execute automation.",
+    "table_note": "sUSDat remains more conditional than USDat."
+  }
 }

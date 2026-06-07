@@ -237,5 +237,29 @@
     "source_ref": "docs/rich-token-reports",
     "source_commit": "b954049"
   },
-  "summary_schema_version": "asset_summary_v1.1"
+  "summary_schema_version": "asset_summary_v1.2",
+  "agent_display": {
+    "recommended_table_fields": [
+      "agent_display.score_display",
+      "agent_display.decision_label",
+      "agent_display.underwriting_status",
+      "agent_display.execution_automation_status",
+      "agent_display.primary_blockers",
+      "agent_display.next_action"
+    ],
+    "score_display": "49/100 asset-quality evidence",
+    "score_sort": 49,
+    "score_source": "direct_asset_quality_score",
+    "score_explanation": "This score is an asset-quality/readiness score from the curated rubric; it is not report quality, a live-market route score, or an investment recommendation.",
+    "recommended_table_decision": "block_preview_execute_until_inputs",
+    "decision_label": "Block Preview/Execute until holder, control, and live-route inputs clear",
+    "underwriting_status": "manual_underwriting_only",
+    "execution_automation_status": "blocked_until_live_inputs_resolved",
+    "primary_blockers": [
+      "Holder/redemption route: Primary mint/redeem access is limited to eligible whitelisted participants; general users depend on external liquidity, and user-specific jurisdiction/whitelist eligibility is unknown",
+      "Issuer/admin controls: On-chain evidence maps AccessManager roles, UUPS upgradeability, pause and deny-list controls, but those controls are strong and pending Safe payloads were not fully decoded"
+    ],
+    "next_action": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, and no pending admin event. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
+    "table_note": "apxUSD has observable technical and issuer evidence, listed audits, and secondary-market liquidity, but reserve reconciliation, holder-specific redemption eligibility, issuer controls, live route depth, Gearbox oracle/support, and newly integrated social collateral-stress/redemption-arbitrage concerns remain unresolved for automated analyst-agent use."
+  }
 }

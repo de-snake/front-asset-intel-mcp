@@ -20,10 +20,20 @@ type SummaryDimension = {
   evidence_state: string;
 };
 
+type AgentDisplay = {
+  score_display: string;
+  recommended_table_decision: string;
+  decision_label: string;
+  underwriting_status: string;
+  execution_automation_status: string;
+  primary_blockers: string[];
+};
+
 type Summary = {
   summary_schema_version: string;
   symbol: string;
   rubric: { score: number; score_label: string; score_status: string; decision_class: string };
+  agent_display: AgentDisplay;
   dimensions: SummaryDimension[];
   return_profile?: { gross_roi?: number; compound_gross_apy?: number };
   quantitative_risk_return_layer?: {
@@ -205,10 +215,19 @@ for (const lookup of summaryLookups) {
   const summary = parseSummary(lookup.id, lookup.label);
   parsedSummaries[lookup.label] = summary;
   assert(summary.symbol === lookup.expectedSymbol, `${lookup.label} summary lookup returned wrong symbol`);
-  assert(summary.summary_schema_version === "asset_summary_v1.1", `${lookup.label} summary schema version missing`);
+  assert(summary.summary_schema_version === "asset_summary_v1.2", `${lookup.label} summary schema version missing`);
   assert(summary.rubric.score === lookup.expectedScore, `${lookup.label} summary score changed`);
   assert(summary.rubric.score_label === "asset_quality_evidence_score", `${lookup.label} score label missing`);
   assert(summary.rubric.score_status === "precomputed", `${lookup.label} score status missing`);
+  assert(summary.agent_display.score_display.includes(`${lookup.expectedScore}/100`), `${lookup.label} score display missing`);
+  assert(summary.agent_display.recommended_table_decision, `${lookup.label} recommended table decision missing`);
+  assert(
+    summary.agent_display.recommended_table_decision !== summary.rubric.decision_class,
+    `${lookup.label} table decision should not be the legacy rubric decision_class`,
+  );
+  assert(summary.agent_display.decision_label.length > 20, `${lookup.label} decision label missing`);
+  assert(summary.agent_display.execution_automation_status.startsWith("blocked"), `${lookup.label} automation status should block`);
+  assert(summary.agent_display.primary_blockers.length > 0, `${lookup.label} primary blockers missing`);
   assert(summary.dimensions.length === 7, `${lookup.label} expected seven rubric dimensions`);
   for (const dimension of summary.dimensions) {
     assert(typeof dimension.score === "number", `${lookup.label} dimension ${dimension.id} missing score`);
@@ -263,9 +282,14 @@ console.log(
           label,
           {
             symbol: summary.symbol,
-            score: summary.rubric.score,
-            score_label: summary.rubric.score_label,
-            decision_class: summary.rubric.decision_class,
+            legacy_score: summary.rubric.score,
+            legacy_decision_class: summary.rubric.decision_class,
+            score_display: summary.agent_display.score_display,
+            recommended_table_decision: summary.agent_display.recommended_table_decision,
+            decision_label: summary.agent_display.decision_label,
+            underwriting_status: summary.agent_display.underwriting_status,
+            execution_automation_status: summary.agent_display.execution_automation_status,
+            primary_blockers: summary.agent_display.primary_blockers.slice(0, 2),
             dimensions_with_status: summary.dimensions.length,
             blocking_dimensions: summary.dimensions
               .filter((dimension) => dimension.status === "block_automation" || dimension.status === "cannot_underwrite")

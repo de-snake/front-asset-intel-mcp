@@ -2,8 +2,19 @@ import { getAssetResearch, getAssetSummary } from "./registry.js";
 
 type SummaryDimension = { id: string; score: number; max_score: number; score_band: string; status: string };
 
+type AgentDisplay = {
+  score_display?: string;
+  recommended_table_decision?: string;
+  decision_label?: string;
+  underwriting_status?: string;
+  execution_automation_status?: string;
+  primary_blockers?: string[];
+  next_action?: string;
+};
+
 type Summary = {
   rubric?: { score?: number; score_label?: string; decision_class?: string };
+  agent_display?: AgentDisplay;
   dimensions?: SummaryDimension[];
   return_profile?: {
     gross_roi?: number;
@@ -18,9 +29,16 @@ type Summary = {
 
 function pickSummary(summary: Summary): Record<string, unknown> {
   const selected: Record<string, unknown> = {
-    score: summary.rubric?.score,
-    score_label: summary.rubric?.score_label,
-    decision_class: summary.rubric?.decision_class,
+    legacy_score: summary.rubric?.score,
+    legacy_score_label: summary.rubric?.score_label,
+    legacy_decision_class: summary.rubric?.decision_class,
+    score_display: summary.agent_display?.score_display,
+    recommended_table_decision: summary.agent_display?.recommended_table_decision,
+    decision_label: summary.agent_display?.decision_label,
+    underwriting_status: summary.agent_display?.underwriting_status,
+    execution_automation_status: summary.agent_display?.execution_automation_status,
+    primary_blockers: summary.agent_display?.primary_blockers?.slice(0, 2),
+    next_action: summary.agent_display?.next_action,
     dimension_statuses: summary.dimensions?.map((dimension) => ({
       id: dimension.id,
       score: `${dimension.score}/${dimension.max_score}`,
