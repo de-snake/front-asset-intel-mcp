@@ -25,12 +25,12 @@ Returns precomputed JSON.
 
 For table/ranking UIs, use the `agent_display` block first:
 
-- `agent_display.score_display` — explains whether the numeric score is direct asset-quality evidence or inherited underlying risk for a PT.
+- `agent_display.score_display` — explains whether the table score is direct asset-quality evidence or fixed-return PT economics with inherited underlying risk shown separately.
 - `agent_display.decision_label` — human-usable action label such as "Block Preview/Execute", "Conditional PT candidate", or "Do not underwrite" instead of the legacy coarse `review_required` bucket.
 - `agent_display.underwriting_status` and `agent_display.execution_automation_status` — separate research/underwriting readiness from automation safety.
 - `agent_display.primary_blockers` and `agent_display.next_action` — the concrete reason the row is not executable and what input is needed next.
 
-`rubric.score` / `rubric.decision_class` remain for backward compatibility and deterministic score validation. Do not use those two fields alone as the table decision: PT rows intentionally inherit underlying asset-quality scores, and `review_required` is only a legacy score-bucket class.
+`rubric.score` / `rubric.decision_class` remain for backward compatibility and deterministic score validation. Do not use those two fields alone as the table decision: PT rows expose a separate fixed-return table score, and `review_required` is only a legacy score-bucket class.
 
 Example asset lookups:
 
@@ -57,17 +57,17 @@ Same lookup input. Returns the full Markdown research report.
 ## Seed assets
 
 - `ethereum-apxusd` — Apyx apxUSD token-level research and `asset_risk_v1` summary, refreshed from the public rich report package.
-- `ethereum-pendle-pt-apxusd-2026-11-05` — Pendle PT apxUSD 05 Nov 2026 research and summary with risk-adjusted hurdle/points overlay.
+- `ethereum-pendle-pt-apxusd-2026-11-05` — Pendle PT apxUSD 05 Nov 2026 research and summary with fixed-return risk-adjusted APY / hurdle overlay.
 - `ethereum-apyusd` — Apyx apyUSD public RESULT.md report, including X/social and quantitative risk/return layers.
-- `ethereum-pendle-pt-apyusd-2026-08-27` — Pendle PT apyUSD 27 Aug 2026 report and summary, including the 83-day PT-apyUSD points/recovery trade overlay.
+- `ethereum-pendle-pt-apyusd-2026-08-27` — Pendle PT apyUSD 27 Aug 2026 report and summary, including the 83-day fixed-return recovery trade overlay.
 - `ethereum-prime` — Hastra PRIME rich public report package normalized into the asset-quality rubric.
 - `base-despxa` — Centrifuge deSPXA rich public report package normalized into the asset-quality rubric.
 - `ethereum-usdat` — Saturn USDat collateral package with Gearbox feed/oracle context, X/social layer, and public asset reports.
 - `ethereum-susdat` — Saturn sUSDat collateral package with ERC-4626/feed context, X/social layer, and public asset reports.
-- `ethereum-pendle-pt-usdat-2026-08-27` — Pendle PT USDat 27 Aug 2026 PT market dossier plus quantitative fixed-yield/points hurdle overlay.
-- `ethereum-pendle-pt-susdat-2026-08-27` — Pendle PT sUSDat 27 Aug 2026 PT market dossier plus quantitative fixed-yield/points hurdle overlay.
+- `ethereum-pendle-pt-usdat-2026-08-27` — Pendle PT USDat 27 Aug 2026 PT market dossier plus quantitative fixed-return hurdle overlay.
+- `ethereum-pendle-pt-susdat-2026-08-27` — Pendle PT sUSDat 27 Aug 2026 PT market dossier plus quantitative fixed-return hurdle overlay.
 
-PT markets reuse the underlying asset-risk rubric. The PT only adds a `return_profile` block plus optional `social_research_layer` and `quantitative_risk_return_layer` blocks: maturity, PT price, accounting-asset price, gross ROI, annualized return, expected-loss prior, risk-adjusted return, points hurdle, break-even drawdown, and liquidity snapshot. This keeps issuer/backing/control risk comparable and avoids pretending that a PT wrapper improves underlying asset quality.
+PT markets reuse the underlying asset-risk rubric for inherited issuer/backing/control context, but table ranking uses PT-specific fixed-return economics. The PT adds a `return_profile` block plus optional `social_research_layer` and `quantitative_risk_return_layer` blocks: maturity, PT price, accounting-asset price, gross ROI, annualized return, expected-loss prior, risk-adjusted return after expected loss/exit cost, break-even drawdown, and liquidity snapshot. PT holders underwrite the fixed discount-to-maturity; variable yield is separated into YT and not part of the PT-holder return.
 
 ## Data layout
 
@@ -99,7 +99,7 @@ src/
 - Audits and security review: 12
 - Incidents and social stress: 10
 
-Each dimension has fixed answer buckets and score ranges. Summaries store the selected bucket, score, `score_band`, dimension-level action `status`, `evidence_state`, evidence, confidence, blocking unknowns, and — where available — `social_research_layer` / `quantitative_risk_return_layer` overlays that expose points, hurdle, expected-loss, and risk-adjusted-return information without folding those economics into the 100-point asset-quality score.
+Each dimension has fixed answer buckets and score ranges. Summaries store the selected bucket, score, `score_band`, dimension-level action `status`, `evidence_state`, evidence, confidence, blocking unknowns, and — where available — `social_research_layer` / `quantitative_risk_return_layer` overlays that expose fixed-return APY, hurdle, expected-loss, and risk-adjusted-return information without folding those economics into the 100-point asset-quality score.
 
 Dimension `status` values are action-oriented:
 
@@ -126,8 +126,8 @@ npm test
    - initializes the MCP server;
    - checks `tools/list` exposes `get_asset_summary` and `get_asset_research`;
    - calls `get_asset_summary` for APYx, Saturn, PRIME, and deSPXA assets;
-   - verifies PT overlay values for `PT-apxUSD`, `PT-apyUSD`, `PT-USDat`, and `PT-sUSDat`;
-   - calls `get_asset_research` for PT reports and verifies the points/recovery-trade conclusions are present.
+   - verifies PT fixed-return table scores and risk-adjusted APY values for `PT-apxUSD`, `PT-apyUSD`, `PT-USDat`, and `PT-sUSDat`;
+   - calls `get_asset_research` for PT reports and verifies the fixed-return risk-adjusted conclusions are present.
 
 For only the MCP protocol smoke after a build:
 

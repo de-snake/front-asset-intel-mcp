@@ -166,42 +166,42 @@ Highest-impact unknowns:
 
 ## X / social research layer
 
-The old-run X research adds the missing points/PT market narrative behind the USDat / sUSDat collateral demo. The support files are `run/x-research/x-research-usdat-points-stac-pt-2026-08-27.md` and `run/x-research/x-research-susdat-points-stac-pt-2026-08-27.md`.
+The old-run X research adds fixed-rate PT market context behind the USDat / sUSDat collateral demo. Broader incentive commentary from those runs is excluded from PT-holder underwriting because PTs do not earn incentive-point economics.
 
 USDat social layer:
 
 - USDat is framed as Saturn's stable / risk-off leg, while sUSDat carries the STRC / digital-credit yield exposure.
 - PT-USDat 27 Aug 2026 was quoted around `8.95%` to `10.65%` fixed / implied APY in early-June X results, with the local Pendle API snapshot at `8.96%` implied APY.
-- Gravity Points are the points upside, but plain PT-USDat reads more like a fixed-yield route than the highest-points-density route.
+- Plain PT-USDat is underwritten as a fixed-yield discount-to-maturity route; incentive-point upside is excluded from PT-holder return assumptions.
 - Main diligence gap: whitelist/freeze/issuer controls, holder eligibility, reserve evidence, and live route depth still need review.
 
 sUSDat social layer:
 
 - sUSDat is framed as the yield-bearing STRC/NAV/queue-exposed Saturn leg.
-- Social return narratives combine STRC dividend / digital-credit yield, PT fixed discount, and Saturn Gravity Points.
+- Social return narratives combine STRC dividend / digital-credit yield in the underlying exposure with the PT fixed discount; incentive points are not part of PT-holder return underwriting.
 - The risk narrative is materially different from USDat: the key issue is whether accounting/NAV value can be realized through queues, issuer controls, and secondary liquidity during stress.
 
 ## Quantitative risk / return layer
 
-The old quantitative report makes the collateral distinction sharper than the shorter demo result. The support files are `run/investment-analysis/investment-analyst-report-points-pt-risk-return.md` and `run/investment-analysis/quantitative-underwriting-methodology.md`.
+The old quantitative report makes the collateral distinction sharper than the shorter demo result. The relevant fixed-return support files are the investment analyst report and `run/investment-analysis/quantitative-underwriting-methodology.md`; point-scenario fields from that old report are excluded from PT-holder base-case underwriting because PTs do not earn points.
 
 PT-USDat underwriting snapshot:
 
 - Horizon: `83` days to 2026-08-27 maturity.
 - Gross fixed ROI: `1.9746%`; simple gross APR: `8.68%`; compound gross APY: `8.98%`.
 - Expected-loss prior: `0.70%`; exit-cost assumption: `0.50%`.
-- Risk-adjusted ROI before points: `0.7746%`; risk-adjusted annualized return before points: `3.41%`.
-- Points ROI needed to clear a `10.00%` net annualized hurdle: `1.4993%` over 83 days.
+- Risk-adjusted ROI after expected-loss prior and exit cost: `0.7746%`; risk-adjusted annualized return after expected-loss prior and exit cost: `3.41%`.
+- The fixed-return base case is positive but below the `10.00%` net annualized hurdle in the current snapshot.
 
 PT-sUSDat underwriting snapshot:
 
 - Horizon: `83` days to 2026-08-27 maturity.
 - Gross fixed ROI: `6.8165%`; simple gross APR: `29.98%`; compound gross APY: `33.64%`.
 - Expected-loss prior: `8.10%`; exit-cost assumption: `0.75%`.
-- Risk-adjusted ROI before points: `-2.0335%`; risk-adjusted annualized return before points: `-8.94%`.
-- Points ROI needed to clear a `10.00%` net annualized hurdle: `4.3075%` over 83 days.
+- Risk-adjusted ROI after expected-loss prior and exit cost: `-2.0335%`; risk-adjusted annualized return after expected-loss prior and exit cost: `-8.94%`.
+- The fixed-return base case is negative after expected loss and exit cost, so it cannot clear the `10.00%` net annualized hurdle in the current snapshot.
 
-Quantitative conclusion: PT-USDat is the stable-price / low-return candidate and needs credible Saturn points or a lower hurdle to justify the route. PT-sUSDat has higher gross PT yield, but STRC/NAV/queue expected loss consumes the fixed-yield spread under the old priors.
+Quantitative conclusion: PT-USDat is the stable-price / low-return fixed-return candidate, but current risk-adjusted APY is below the mandate hurdle. PT-sUSDat has higher gross PT yield, but STRC/NAV/queue expected loss consumes the fixed-yield spread under the old priors.
 
 ## PT market dossiers
 

@@ -2,7 +2,7 @@
 
 - Date: 2026-06-07
 - State: implemented and verified
-- Summary: TypeScript MCP server scaffolded with two read-only tools, static rubric/data layout, APX/APY/PRIME/deSPXA/Saturn seed assets, PT market overlays, table-facing `agent_display` decisions, and a first-class MCP stdio smoke test (`npm run smoke:mcp`). The latest public rich token report branch (`front-knowledge-base` commit `b954049`) is normalized into returned summaries and reports.
+- Summary: TypeScript MCP server scaffolded with two read-only tools, static rubric/data layout, APX/APY/PRIME/deSPXA/Saturn seed assets, PT fixed-return overlays, table-facing `agent_display` decisions, and a first-class MCP stdio smoke test (`npm run smoke:mcp`). The latest public rich token report branch (`front-knowledge-base` commit `b954049`) is normalized into returned summaries and reports.
 
 ## Current artifact
 
@@ -24,7 +24,8 @@
 - Rubric:
   - `data/rubrics/asset_risk_v1.json`
 - Summary contract:
-  - `summary_schema_version: asset_summary_v1.2`
+  - Token summaries use `summary_schema_version: asset_summary_v1.2` with direct asset-quality table scores.
+  - PT summaries use `summary_schema_version: asset_summary_v1.3` with `agent_display.score_source: pt_fixed_return_trade_score`; inherited asset-quality risk remains in `agent_display.inherited_asset_quality_score` / legacy `rubric.score`.
   - `agent_display.score_display`, `decision_label`, `underwriting_status`, `execution_automation_status`, `primary_blockers`, and `next_action` are the preferred table/ranking fields.
   - Legacy `rubric.score` / `rubric.decision_class` remain for backward compatibility and deterministic validation only.
 
@@ -49,9 +50,9 @@ MCP stdio smoke verified:
 
 - `tools/list` exposes `get_asset_summary` and `get_asset_research`.
 - `tools/call get_asset_summary` resolves all 10 seed assets: apxUSD, apyUSD, PRIME, deSPXA, USDat, sUSDat, PT-apxUSD, PT-apyUSD, PT-USDat, and PT-sUSDat.
-- PT overlays return the expected points hurdle values:
-  - PT-apxUSD: `0.4671%`
-  - PT-apyUSD: `5.6168%`
-  - PT-USDat: `1.4993%`
-  - PT-sUSDat: `4.3075%`
-- `tools/call get_asset_research` resolves PT-apyUSD, PT-USDat, and PT-sUSDat and verifies their points / risk-adjusted-return conclusions are present.
+- PT overlays return fixed-return table scores and risk-adjusted APY after expected loss / exit cost:
+  - PT-apxUSD: `62/100`, `8.89%` risk-adjusted APY.
+  - PT-apyUSD: `11/100`, `-14.70%` risk-adjusted APY.
+  - PT-USDat: `27/100`, `3.41%` risk-adjusted APY.
+  - PT-sUSDat: `31/100`, `-8.94%` risk-adjusted APY.
+- `tools/call get_asset_research` resolves PT-apyUSD, PT-USDat, and PT-sUSDat and verifies their fixed-return risk-adjusted conclusions are present.

@@ -17,7 +17,7 @@
     "max_score": 100,
     "decision_class": "review_required",
     "score_source": "inherited_underlying_asset_risk",
-    "decision_rationale": "The PT changes timing and return profile, not the core issuer/backing/control risk. It inherits apxUSD asset-risk after the social-stress update (49/100) and adds PT-specific return, maturity, AMM-exit, oracle/feed, and points/hurdle checks.",
+    "decision_rationale": "The PT changes timing and return profile, not the core issuer/backing/control risk. It inherits apxUSD asset-quality risk and adds PT-specific fixed-return, maturity, AMM-exit, oracle/feed, and expected-loss checks; PT holder upside is the discount-to-maturity, fixed-return-only economics.",
     "score_label": "asset_quality_evidence_score",
     "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
     "score_status": "precomputed"
@@ -151,7 +151,7 @@
       "score": 5,
       "max_score": 10,
       "selected_option": "some_stress_or_incomplete_history",
-      "answer": "No PT-specific exploit is identified, but APYx social/quant evidence includes secondary-market discount, collateral-buffer stress, redemption/arbitrage concerns, and points uncertainty that materially affects PT underwriting.",
+      "answer": "No PT-specific exploit is identified, but secondary-market discount, collateral-buffer stress, redemption/arbitrage concerns, PT liquidity/maturity risk, and below-hurdle fixed-return economics materially affect underwriting.",
       "evidence": [
         {
           "source": "research.md#8-quantitative-and-social-return-overlay",
@@ -159,7 +159,7 @@
         },
         {
           "source": "research.md#8-quantitative-and-social-return-overlay",
-          "quote": "PT-apxUSD is the only scoped PT that comes close to the 10.00% net annualized hurdle before points."
+          "quote": "PT-apxUSD risk-adjusted annualized return is 8.89% after expected-loss prior and exit cost, below the 10.00% hurdle."
         }
       ],
       "confidence": "medium",
@@ -186,15 +186,12 @@
     "compound_gross_apy": 0.2168,
     "break_even_accounting_asset_drawdown": 0.078975,
     "liquidity_snapshot_usd": 1171288,
-    "interpretation": "The PT discount is the return buffer against apxUSD impairment, exit cost, maturity/output issues, and stale valuation. It is not a separate improvement to apxUSD asset quality.",
-    "risk_adjusted_annualized_return_before_points": 0.0889,
-    "risk_adjusted_roi_before_points": 0.037246,
+    "interpretation": "The PT discount is the fixed return buffer against accounting-asset impairment, exit cost, maturity/output issues, and stale valuation. PT holders do not receive the variable yield or incentive-point economics separated into YT.",
     "expected_loss_prior": 0.0385,
     "exit_cost_assumption": 0.01,
-    "points_roi_required_to_clear_10pct_hurdle": 0.004671,
-    "apyx_base_points_roi_prior": 0.0027,
-    "apyx_high_points_roi_prior": 0.0252,
-    "quantitative_conclusion": "Closest scoped APYx PT to the 10% net hurdle before points; still needs points eligibility or lower expected-loss evidence to clear the hurdle."
+    "quantitative_conclusion": "Closest scoped APYx PT to the 10.00% net hurdle on fixed-return economics; current risk-adjusted APY is 8.89%, still below hurdle after expected loss and exit cost.",
+    "risk_adjusted_roi_after_expected_loss_and_exit": 0.037246,
+    "risk_adjusted_annualized_return_after_expected_loss_and_exit": 0.0889
   },
   "blocking_unknowns": [
     "Fresh PT price, implied APY, liquidity, and size-specific route quote",
@@ -203,8 +200,8 @@
     "Gearbox-compatible PT oracle or production valuation feed",
     "Pendle market/PT/SY/YT role and upgrade-state audit",
     "Inherited apxUSD reserve, redemption, issuer-control, and live-liquidity unknowns",
-    "Wallet-specific APYx Pips accrual for PT-apxUSD route",
-    "Fresh expected-loss recalibration against live reserve, redemption, and market-discount evidence"
+    "Fresh expected-loss recalibration against live reserve, redemption, and market-discount evidence",
+    "Fresh fixed-return expected-loss and exit-cost recalibration against live reserve, redemption, maturity, and market-discount evidence"
   ],
   "source_report": "dev/implementation/reproducible-runs/apxusd-investment-research-20260604/run/technical-reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
   "source_front_kb_report": "dev/implementation/asset-risk-reports-mvp/reports/pendle-pt-eth-mainnet-apxusd-2026-11-05.md",
@@ -214,28 +211,28 @@
   "social_research_layer": {
     "evidence_date": "2026-06-04",
     "source_refs": [
-      "front-kb RESULT.md#8-x--social-research-layer",
-      "investment-analysis/investment-analyst-report-points-pt-risk-return.md#7-token-by-token-investment-view"
+      "front-kb RESULT.md#8-x--social-research-layer"
     ],
     "return_models": [
       {
-        "id": "apyx_pips_points",
-        "summary": "APYx Pips/points may be part of the upside case, but final APYX token economics, wallet eligibility, dilution, vesting, and route-specific accrual are not fixed enough for base-case ROI."
+        "id": "pt_apxusd_fixed_discount",
+        "summary": "PT-apxUSD holder return is the fixed discount-to-maturity relative to apxUSD accounting value."
       },
       {
-        "id": "pt_apxusd_discount_plus_points",
-        "summary": "PT-apxUSD is conditionally underwriteable only if points eligibility is strong or live reserve/redemption review lowers expected loss."
+        "id": "expected_loss_and_exit_cost_buffer",
+        "summary": "Current expected-loss plus exit-cost assumptions leave risk-adjusted APY below the 10.00% net hurdle."
       }
     ],
     "risk_narratives": [
       "STRC / preferred-share collateral stress can compress the collateral buffer and transmit into depeg or unwind pressure.",
-      "Restricted primary redemption and secondary-market discount can impair arbitrage back to accounting value."
+      "Restricted primary redemption and secondary-market discount can impair arbitrage back to accounting value.",
+      "PT exit/maturity value depends on live route depth, Pendle redemption mechanics, and output-asset eligibility."
     ],
-    "decision_effect": "Lowered incident/social-stress score from clean to some-stress; live reserve, redemption, route, and points eligibility review remain required.",
+    "decision_effect": "Live reserve, redemption, route, expected-loss, and exit-cost review remain required; variable incentives are outside the PT base case.",
     "confidence": "medium"
   },
   "quantitative_risk_return_layer": {
-    "scope": "PT-apxUSD 05 Nov 2026",
+    "scope": "fixed_return_principal_token_underwriting",
     "horizon_days": 153,
     "underwriting_hurdle_net_annualized": 0.1,
     "opportunistic_hurdle_net_annualized": 0.2,
@@ -244,22 +241,19 @@
     "accounting_asset_drawdown_capacity_before_costs": 0.078975,
     "expected_loss_prior": 0.0385,
     "exit_cost_assumption": 0.01,
-    "risk_adjusted_roi_before_points": 0.037246,
-    "risk_adjusted_annualized_return_before_points": 0.0889,
-    "points_roi_required_to_clear_hurdle": 0.004671,
-    "apyx_base_points_roi_prior": 0.0027,
-    "apyx_high_points_roi_prior": 0.0252,
     "expected_loss_plus_exit_break_even_to_clear_hurdle": 0.043825,
     "current_expected_loss_plus_exit": 0.0485,
-    "decision_trigger": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, no pending admin event, and route-specific APYx points eligibility. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
-    "conclusion": "Conditionally underwriteable review candidate, not clean carry before points."
+    "decision_trigger": "Use only if the mandate accepts the below-hurdle fixed return or live price, expected-loss prior, exit cost, eligibility, and route depth improve enough to clear the hurdle.",
+    "conclusion": "The PT is a fixed-return discount-to-maturity trade; current risk-adjusted APY is positive but below the mandate hurdle.",
+    "risk_adjusted_roi_after_expected_loss_and_exit": 0.037246,
+    "risk_adjusted_annualized_return_after_expected_loss_and_exit": 0.0889
   },
   "generated_from": {
     "source_repo": "de-snake/front-knowledge-base",
     "source_ref": "docs/rich-token-reports",
     "source_commit": "b954049"
   },
-  "summary_schema_version": "asset_summary_v1.2",
+  "summary_schema_version": "asset_summary_v1.3",
   "agent_display": {
     "recommended_table_fields": [
       "agent_display.score_display",
@@ -269,19 +263,31 @@
       "agent_display.primary_blockers",
       "agent_display.next_action"
     ],
-    "score_display": "49/100 inherited asset-quality + PT economics overlay",
-    "score_sort": 49,
-    "score_source": "inherited_underlying_asset_quality_score",
-    "score_explanation": "The numeric score intentionally inherits underlying asset-quality risk. Use this row’s PT economics, points hurdle, and blockers to rank the PT; do not read the inherited score as a standalone PT return score.",
-    "recommended_table_decision": "conditional_pt_needs_points_or_lower_loss",
-    "decision_label": "Conditional PT candidate — needs 0.47% points ROI or lower loss/hurdle",
-    "underwriting_status": "conditional_candidate_requires_points_or_lower_expected_loss",
+    "score_display": "62/100 fixed-return PT score: 21.68% gross APY / 8.89% risk-adjusted APY; underlying asset risk 49/100",
+    "score_sort": 62,
+    "score_source": "pt_fixed_return_trade_score",
+    "score_explanation": "For PTs, the table score is based on fixed discount-to-maturity economics: gross APY, risk-adjusted APY after expected loss and exit cost, liquidity, maturity/route checks, and inherited underlying asset quality. PT-holder return is fixed discount-to-maturity only; legacy rubric.score is inherited underlying asset-quality context only.",
+    "inherited_asset_quality_score": 49,
+    "recommended_table_decision": "fixed_return_below_hurdle_needs_live_improvement",
+    "decision_label": "Fixed-return PT below hurdle: 21.68% gross APY / 8.89% risk-adjusted APY vs 10.00% hurdle",
+    "underwriting_status": "conditional_fixed_return_review",
     "execution_automation_status": "blocked_until_live_inputs_resolved",
     "primary_blockers": [
+      "Fixed-return economics: 21.68% gross APY and 8.89% risk-adjusted APY after expected loss/exit; PT-holder return is fixed discount-to-maturity only",
       "Holder/redemption route: Inherited from apxUSD and compounded by PT maturity/output checks: holder eligibility and restriction state for apxUSD must be refreshed before live use",
       "Issuer/admin controls: Inherited from apxUSD: the PT wrapper does not remove pause, deny-list, upgrade, redemption-eligibility, or issuer-control risks in the accounting asset"
     ],
-    "next_action": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, no pending admin event, and route-specific APYx points eligibility. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
-    "table_note": "Conditionally underwriteable review candidate, not clean carry before points."
+    "next_action": "Use only if the mandate accepts the below-hurdle fixed return or live price, expected-loss prior, exit cost, eligibility, and route depth improve enough to clear the hurdle.",
+    "table_note": "The PT is a fixed-return discount-to-maturity trade; current risk-adjusted APY is positive but below the mandate hurdle.",
+    "fixed_return_metrics": {
+      "gross_roi": 0.085746,
+      "compound_gross_apy": 0.2168,
+      "risk_adjusted_roi_after_expected_loss_and_exit": 0.037246,
+      "risk_adjusted_annualized_return_after_expected_loss_and_exit": 0.0889,
+      "underwriting_hurdle_net_annualized": 0.1,
+      "expected_loss_prior": 0.0385,
+      "exit_cost_assumption": 0.01,
+      "liquidity_snapshot_usd": 1171288
+    }
   }
 }

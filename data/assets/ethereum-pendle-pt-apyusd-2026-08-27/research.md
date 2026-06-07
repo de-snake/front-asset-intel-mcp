@@ -84,12 +84,12 @@ Before any live use, refresh:
 
 ## 8. X / social research layer
 
-The expanded APYx research pass covered apyUSD, APYx Pips / points, STRC-linked yield narratives, and Pendle PT-apyUSD 27 Aug 2026 rate discussion through 2026-06-04. It is useful as a return-thesis and risk-narrative map, not as primary proof of reserves, eligibility, or live route quality.
+The expanded APYx research pass covered apyUSD, STRC-linked yield narratives, and Pendle PT-apyUSD 27 Aug 2026 fixed-rate discussion through 2026-06-04. It is useful as a return-thesis and risk-narrative map, not as primary proof of reserves, eligibility, or live route quality. Incentive-point commentary from the broader APYx run is excluded from PT-holder underwriting because PTs do not earn that economics.
 
 Main social return models:
 
 - **apyUSD dividend / exchange-rate yield:** social and issuer-facing discussion framed apyUSD as the yield-bearing wrapper over apxUSD, with target yield around 13% APY from realized STRC / preferred-share dividends.
-- **APYx Pips / token allocation:** posts described Season 2 as roughly 6% of token supply, with Season 1 plus Season 2 around 11% early-user allocation. Final point value, eligibility, dilution, and vesting/liquidity terms were not fixed in the captured evidence.
+- **Incentive economics excluded from PT base case:** broader APYx incentive commentary belongs to YT or underlying strategy analysis, not PT-holder fixed-return underwriting.
 - **Pendle PT-apyUSD fixed-discount return:** social rate sheets cited PT-apyUSD 27 Aug 2026 around 17.94%–18.00% implied APY. The local Pendle snapshot showed 17.60% implied APY, PT price `0.938959`, accounting asset price `0.974237`, and a 3.6211% discount to accounting asset.
 - **Leveraged loop narrative:** PT plus borrowing/vault loops appeared in social discussion, but remain lower-confidence strategy context until borrow rates, liquidation path, route depth, and unwind sizing are refreshed.
 
@@ -98,9 +98,9 @@ Main social risk narratives:
 - **STRC / preferred-share collateral stress:** critical threads argued that STRC trading below par compresses the apxUSD / apyUSD collateral buffer and can transmit into depeg, redemption, and leveraged unwind pressure.
 - **Redemption and arbitrage impairment:** social critique focused on whether below-par collateral and restricted primary access weaken the normal arbitrage path that would pull apxUSD / apyUSD back toward accounting value.
 - **PT liquidity / maturity risk:** PT yield is only attractive if maturity redemption, accounting-asset value, and exit liquidity remain functional under stress.
-- **Points dilution / value uncertainty:** points may be part of the upside case, but the old run could not turn points into reliable base-case ROI without final APYX token economics and wallet-specific eligibility.
+- **Fixed-return realization uncertainty:** the PT holder return is the fixed discount-to-maturity; it only works if maturity redemption, accounting-asset value, and exit liquidity remain functional under stress.
 
-Analyst implication: the social layer strengthens the case that PT-apyUSD was marketed around yield, PT discount, and points, but it also surfaces collateral-stress and redemption-arbitrage concerns that block treating the accounting yield as clean USD return.
+Analyst implication: the social layer strengthens the case that PT-apyUSD was marketed around headline yield and PT discount, but it also surfaces collateral-stress and redemption-arbitrage concerns that block treating the accounting yield as clean USD return. PT holder return is fixed discount-to-maturity, not points accrual.
 
 ## 9. Quantitative risk / return layer
 
@@ -111,21 +111,20 @@ Base assumptions relevant to PT-apyUSD:
 - PT horizon: 83 days.
 - Exit-cost assumption for PT-apyUSD: 1.00%.
 - apyUSD expected-loss prior: 6.10%, driven by apxUSD stress, apyUSD wrapper receipt mechanics, exit fees / duration, and market discount.
-- APYx Pips scenarios are priors, not issuer-confirmed facts; they model token value, wallet share, eligibility probability, and vesting/liquidity haircut.
+- PT holder upside is modeled as fixed discount-to-maturity; incentive economics belong outside the PT base case because PTs do not receive the variable-yield economics separated into YT.
 
 PT-apyUSD base-case stack:
 
 - Gross fixed ROI to accounting asset: 3.7571%.
 - Gross APR to accounting asset: 16.52%.
 - Accounting-asset drawdown capacity before costs: only 3.6211%.
-- Risk-adjusted ROI before points: -3.3429% after expected-loss prior and exit cost.
-- Risk-adjusted annualized return before points: -14.70%.
-- Points ROI required over 83 days to clear the 10.00% net annualized hurdle: 5.6168% of capital.
-- High-case APYx points scenario adds 2.5200% ROI on USD 1,000,000 capital, still below the 5.6168% points ROI required to clear the hurdle.
+- Risk-adjusted ROI after expected-loss prior and exit cost: -3.3429%.
+- Risk-adjusted annualized return after expected-loss prior and exit cost: -14.70%.
+- The fixed-return base case is below zero after expected loss and exit cost, so it cannot clear the 10.00% net annualized hurdle in the current snapshot.
 
-Decision trigger from the old quant report: upgrade only if apxUSD collateral stress resolves, apyUSD market discount closes, receipt / claim state is confirmed, and wallet-specific APYx points EV exceeds 5.6168% of capital over 83 days. Downgrade if apxUSD trades below accounting value or receipt / claim exits become less predictable.
+Decision trigger from the old quant report, corrected for PT mechanics: upgrade only if apxUSD collateral stress resolves, apyUSD market discount closes, receipt / claim state is confirmed, route depth is executable at target size, and fixed-return risk-adjusted APY turns positive enough to clear the mandate hurdle. Downgrade if apxUSD trades below accounting value or receipt / claim exits become less predictable.
 
-Analyst implication: PT-apyUSD had visible gross yield and points optionality, but the risk-adjusted base case was negative before points. The position was a points / recovery trade, not a clean fixed-income-like carry trade.
+Analyst implication: PT-apyUSD had visible gross fixed yield, but the risk-adjusted base case was negative after expected loss and exit cost. The position is a fixed-return recovery-risk trade, not a clean fixed-income-like carry trade.
 
 ## 10. Evidence quality
 

@@ -22,11 +22,21 @@ type SummaryDimension = {
 
 type AgentDisplay = {
   score_display: string;
+  score_sort: number;
+  score_source: string;
+  inherited_asset_quality_score?: number;
   recommended_table_decision: string;
   decision_label: string;
   underwriting_status: string;
   execution_automation_status: string;
   primary_blockers: string[];
+  fixed_return_metrics?: {
+    gross_roi?: number;
+    compound_gross_apy?: number;
+    risk_adjusted_roi_after_expected_loss_and_exit?: number;
+    risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
+    underwriting_hurdle_net_annualized?: number;
+  };
 };
 
 type Summary = {
@@ -35,9 +45,15 @@ type Summary = {
   rubric: { score: number; score_label: string; score_status: string; decision_class: string };
   agent_display: AgentDisplay;
   dimensions: SummaryDimension[];
-  return_profile?: { gross_roi?: number; compound_gross_apy?: number };
+  return_profile?: {
+    gross_roi?: number;
+    compound_gross_apy?: number;
+    risk_adjusted_roi_after_expected_loss_and_exit?: number;
+    risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
+  };
   quantitative_risk_return_layer?: {
-    points_roi_required_to_clear_hurdle?: number;
+    risk_adjusted_roi_after_expected_loss_and_exit?: number;
+    risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
     conclusion?: string;
   };
 };
@@ -121,8 +137,9 @@ const summaryLookups = [
     symbol: "PT-apxUSD",
     expectedSymbol: "PT-apxUSD-2026-11-05",
     expectedScore: 49,
+    expectedTableScore: 62,
     expectedCompoundGrossApy: 0.2168,
-    expectedPointsHurdle: 0.004671,
+    expectedRiskAdjustedApy: 0.0889,
   },
   {
     id: 10,
@@ -130,8 +147,9 @@ const summaryLookups = [
     symbol: "PT-apyUSD",
     expectedSymbol: "PT-apyUSD-2026-08-27",
     expectedScore: 35,
+    expectedTableScore: 11,
     expectedCompoundGrossApy: 0.176,
-    expectedPointsHurdle: 0.056168,
+    expectedRiskAdjustedApy: -0.147,
   },
   {
     id: 11,
@@ -139,8 +157,9 @@ const summaryLookups = [
     symbol: "PT-USDat",
     expectedSymbol: "PT-USDat-2026-08-27",
     expectedScore: 52,
+    expectedTableScore: 27,
     expectedCompoundGrossApy: 0.0898,
-    expectedPointsHurdle: 0.014993,
+    expectedRiskAdjustedApy: 0.0341,
   },
   {
     id: 12,
@@ -148,8 +167,9 @@ const summaryLookups = [
     symbol: "PT-sUSDat",
     expectedSymbol: "PT-sUSDat-2026-08-27",
     expectedScore: 40,
+    expectedTableScore: 31,
     expectedCompoundGrossApy: 0.3364,
-    expectedPointsHurdle: 0.043075,
+    expectedRiskAdjustedApy: -0.0894,
   },
 ];
 
@@ -215,7 +235,8 @@ for (const lookup of summaryLookups) {
   const summary = parseSummary(lookup.id, lookup.label);
   parsedSummaries[lookup.label] = summary;
   assert(summary.symbol === lookup.expectedSymbol, `${lookup.label} summary lookup returned wrong symbol`);
-  assert(summary.summary_schema_version === "asset_summary_v1.2", `${lookup.label} summary schema version missing`);
+  const expectedSchemaVersion = lookup.expectedTableScore !== undefined ? "asset_summary_v1.3" : "asset_summary_v1.2";
+  assert(summary.summary_schema_version === expectedSchemaVersion, `${lookup.label} summary schema version mismatch`);
   assert(summary.rubric.score === lookup.expectedScore, `${lookup.label} summary score changed`);
   assert(summary.rubric.score_label === "asset_quality_evidence_score", `${lookup.label} score label missing`);
   assert(summary.rubric.score_status === "precomputed", `${lookup.label} score status missing`);
@@ -252,25 +273,48 @@ for (const lookup of summaryLookups) {
       `${lookup.label} return_profile missing expected APY`,
     );
   }
-  if (lookup.expectedPointsHurdle !== undefined) {
+  if (lookup.expectedTableScore !== undefined) {
+    assert(summary.agent_display.score_sort === lookup.expectedTableScore, `${lookup.label} table score mismatch`);
+    assert(summary.agent_display.score_source === "pt_fixed_return_trade_score", `${lookup.label} table score should be fixed-return PT score`);
     assert(
-      summary.quantitative_risk_return_layer?.points_roi_required_to_clear_hurdle === lookup.expectedPointsHurdle,
-      `${lookup.label} quantitative overlay missing points hurdle`,
+      summary.agent_display.inherited_asset_quality_score === lookup.expectedScore,
+      `${lookup.label} inherited asset-quality score mismatch`,
+    );
+    assert(
+      summary.agent_display.score_display.includes(`${lookup.expectedTableScore}/100 fixed-return PT score`),
+      `${lookup.label} score_display missing fixed-return table score`,
+    );
+  }
+  if (lookup.expectedRiskAdjustedApy !== undefined) {
+    assert(
+      summary.quantitative_risk_return_layer?.risk_adjusted_annualized_return_after_expected_loss_and_exit ===
+        lookup.expectedRiskAdjustedApy,
+      `${lookup.label} quantitative overlay missing risk-adjusted fixed-return APY`,
+    );
+    assert(
+      !JSON.stringify(summary).toLowerCase().includes("points roi"),
+      `${lookup.label} summary should not contain points ROI assumptions`,
     );
   }
 }
 
 const ptApyResearchText = parseResearch(13, "PT-apyUSD");
-assert(ptApyResearchText.includes("5.6168%"), "PT-apyUSD research markdown missing points hurdle text");
-assert(ptApyResearchText.includes("points / recovery trade"), "PT-apyUSD research markdown missing decision conclusion");
+assert(
+  ptApyResearchText.includes("risk-adjusted base case was negative after expected loss and exit cost"),
+  "PT-apyUSD research markdown missing fixed-return risk-adjusted conclusion",
+);
+assert(
+  !ptApyResearchText.toLowerCase().includes("points roi"),
+  "PT-apyUSD research markdown should not contain points ROI hurdle text",
+);
 
 const ptUsdatResearchText = parseResearch(14, "PT-USDat");
-assert(ptUsdatResearchText.includes("1.4993%"), "PT-USDat research markdown missing points hurdle text");
-assert(ptUsdatResearchText.includes("stable-price / low-return candidate"), "PT-USDat research markdown missing decision conclusion");
+assert(ptUsdatResearchText.includes("fixed-return base case is positive but below"), "PT-USDat research markdown missing fixed-return hurdle conclusion");
+assert(!ptUsdatResearchText.toLowerCase().includes("points roi"), "PT-USDat research markdown should not contain points ROI hurdle text");
 
 const ptSusdatResearchText = parseResearch(15, "PT-sUSDat");
-assert(ptSusdatResearchText.includes("4.3075%"), "PT-sUSDat research markdown missing points hurdle text");
-assert(ptSusdatResearchText.includes("STRC/NAV/queue expected loss"), "PT-sUSDat research markdown missing decision conclusion");
+assert(ptSusdatResearchText.includes("fixed-return base case is negative after expected loss and exit cost"), "PT-sUSDat research markdown missing fixed-return loss conclusion");
+assert(ptSusdatResearchText.includes("STRC/NAV/queue expected loss"), "PT-sUSDat research markdown missing expected-loss conclusion");
 
 console.log(
   JSON.stringify(
@@ -295,8 +339,11 @@ console.log(
               .filter((dimension) => dimension.status === "block_automation" || dimension.status === "cannot_underwrite")
               .map((dimension) => `${dimension.id}:${dimension.score}/${dimension.max_score}:${dimension.status}`),
             compound_gross_apy: summary.return_profile?.compound_gross_apy,
-            points_roi_required_to_clear_hurdle:
-              summary.quantitative_risk_return_layer?.points_roi_required_to_clear_hurdle,
+            table_score: summary.agent_display.score_sort,
+            score_source: summary.agent_display.score_source,
+            inherited_asset_quality_score: summary.agent_display.inherited_asset_quality_score,
+            risk_adjusted_annualized_return_after_expected_loss_and_exit:
+              summary.quantitative_risk_return_layer?.risk_adjusted_annualized_return_after_expected_loss_and_exit,
           },
         ]),
       ),

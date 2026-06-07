@@ -4,12 +4,22 @@ type SummaryDimension = { id: string; score: number; max_score: number; score_ba
 
 type AgentDisplay = {
   score_display?: string;
+  score_sort?: number;
+  score_source?: string;
+  inherited_asset_quality_score?: number;
   recommended_table_decision?: string;
   decision_label?: string;
   underwriting_status?: string;
   execution_automation_status?: string;
   primary_blockers?: string[];
   next_action?: string;
+  fixed_return_metrics?: {
+    gross_roi?: number;
+    compound_gross_apy?: number;
+    risk_adjusted_roi_after_expected_loss_and_exit?: number;
+    risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
+    underwriting_hurdle_net_annualized?: number;
+  };
 };
 
 type Summary = {
@@ -19,10 +29,12 @@ type Summary = {
   return_profile?: {
     gross_roi?: number;
     compound_gross_apy?: number;
-    points_roi_required_to_clear_10pct_hurdle?: number;
+    risk_adjusted_roi_after_expected_loss_and_exit?: number;
+    risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
   };
   quantitative_risk_return_layer?: {
-    points_roi_required_to_clear_hurdle?: number;
+    risk_adjusted_roi_after_expected_loss_and_exit?: number;
+    risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
     conclusion?: string;
   };
 };
@@ -33,6 +45,9 @@ function pickSummary(summary: Summary): Record<string, unknown> {
     legacy_score_label: summary.rubric?.score_label,
     legacy_decision_class: summary.rubric?.decision_class,
     score_display: summary.agent_display?.score_display,
+    score_sort: summary.agent_display?.score_sort,
+    score_source: summary.agent_display?.score_source,
+    inherited_asset_quality_score: summary.agent_display?.inherited_asset_quality_score,
     recommended_table_decision: summary.agent_display?.recommended_table_decision,
     decision_label: summary.agent_display?.decision_label,
     underwriting_status: summary.agent_display?.underwriting_status,
@@ -53,8 +68,10 @@ function pickSummary(summary: Summary): Record<string, unknown> {
   }
 
   if (summary.quantitative_risk_return_layer) {
-    selected.points_roi_required_to_clear_hurdle =
-      summary.quantitative_risk_return_layer.points_roi_required_to_clear_hurdle;
+    selected.risk_adjusted_roi_after_expected_loss_and_exit =
+      summary.quantitative_risk_return_layer.risk_adjusted_roi_after_expected_loss_and_exit;
+    selected.risk_adjusted_annualized_return_after_expected_loss_and_exit =
+      summary.quantitative_risk_return_layer.risk_adjusted_annualized_return_after_expected_loss_and_exit;
     selected.conclusion = summary.quantitative_risk_return_layer.conclusion;
   }
 

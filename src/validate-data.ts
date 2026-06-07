@@ -33,6 +33,7 @@ type AgentDisplay = {
   score_sort: number;
   score_source: string;
   score_explanation: string;
+  inherited_asset_quality_score?: number;
   recommended_table_decision: string;
   decision_label: string;
   underwriting_status: string;
@@ -91,17 +92,16 @@ const validRecommendedTableDecisions = new Set([
   "analysis_candidate_live_preview_possible",
   "block_preview_execute_until_inputs",
   "cannot_underwrite_current_snapshot",
-  "conditional_pt_needs_points_or_lower_loss",
-  "points_recovery_trade_only",
+  "fixed_return_below_hurdle_needs_live_improvement",
+  "fixed_return_negative_after_expected_loss",
   "research_only_fresh_quant_needed",
 ]);
 const validUnderwritingStatuses = new Set([
   "analysis_candidate",
-  "conditional_candidate_requires_points_or_lower_expected_loss",
+  "conditional_fixed_return_review",
   "do_not_underwrite_current_snapshot",
   "manual_underwriting_only",
   "needs_fresh_quant_and_live_inputs",
-  "not_clean_carry_points_trade_only",
 ]);
 const validExecutionAutomationStatuses = new Set([
   "blocked_current_snapshot",
@@ -109,6 +109,20 @@ const validExecutionAutomationStatuses = new Set([
   "requires_live_preview_before_execute",
 ]);
 const validEvidenceStates = new Set(["verified", "partially_supported", "source_inconclusive", "missing_or_unknown", "negative_evidence"]);
+const validSummarySchemaVersions = new Set(["asset_summary_v1.2", "asset_summary_v1.3"]);
+const forbiddenPtPointAssumptionPhrases = [
+  "points",
+  "needs points",
+  "points roi",
+  "before points",
+  "points/recovery",
+  "points / recovery",
+  "points optionality",
+  "wallet-specific",
+  "pips",
+  "gravity points",
+  "credible saturn points",
+];
 
 for (const dimension of rubric.dimensions) {
   assert(dimension.options.length > 0, `Rubric dimension ${dimension.id} has no options`);
@@ -134,7 +148,7 @@ for (const entry of entries) {
   const summary = (await getAssetSummary({ asset_id: manifest.asset_id })) as Summary;
   const research = await getAssetResearch({ asset_id: manifest.asset_id });
 
-  assert(summary.summary_schema_version === "asset_summary_v1.2", `${manifest.slug}: unexpected summary_schema_version`);
+  assert(validSummarySchemaVersions.has(summary.summary_schema_version), `${manifest.slug}: unexpected summary_schema_version`);
   assert(summary.asset_id === manifest.asset_id, `${manifest.slug}: summary asset_id mismatch`);
   assert(summary.symbol === manifest.symbol, `${manifest.slug}: summary symbol mismatch`);
   assert(summary.rubric.version === manifest.rubric_version, `${manifest.slug}: rubric version mismatch`);
@@ -161,11 +175,38 @@ for (const entry of entries) {
     validExecutionAutomationStatuses.has(summary.agent_display.execution_automation_status),
     `${manifest.slug}: invalid execution_automation_status`,
   );
-  assert(summary.agent_display.score_sort === summary.rubric.score, `${manifest.slug}: score_sort must match rubric score`);
-  assert(
-    summary.agent_display.score_display.includes(`${summary.rubric.score}/100`),
-    `${manifest.slug}: score_display missing score`,
-  );
+  const isPrincipalToken = summary.asset_type === "pendle_pt";
+  if (isPrincipalToken) {
+    assert(
+      summary.summary_schema_version === "asset_summary_v1.3",
+      `${manifest.slug}: PT summaries must use fixed-return schema v1.3`,
+    );
+    assert(
+      summary.agent_display.score_source === "pt_fixed_return_trade_score",
+      `${manifest.slug}: PT table score must come from fixed-return economics`,
+    );
+    assert(
+      summary.agent_display.inherited_asset_quality_score === summary.rubric.score,
+      `${manifest.slug}: PT inherited_asset_quality_score must preserve legacy rubric score`,
+    );
+    assert(
+      summary.agent_display.score_sort >= 0 && summary.agent_display.score_sort <= summary.rubric.max_score,
+      `${manifest.slug}: PT score_sort outside 0-${summary.rubric.max_score}`,
+    );
+    assert(
+      summary.agent_display.score_display.includes(`${summary.agent_display.score_sort}/100`),
+      `${manifest.slug}: PT score_display missing fixed-return table score`,
+    );
+    const ptText = JSON.stringify(summary).toLowerCase();
+    const forbidden = forbiddenPtPointAssumptionPhrases.find((phrase) => ptText.includes(phrase));
+    assert(!forbidden, `${manifest.slug}: PT summary still contains point-assumption phrase ${forbidden}`);
+  } else {
+    assert(summary.agent_display.score_sort === summary.rubric.score, `${manifest.slug}: score_sort must match rubric score`);
+    assert(
+      summary.agent_display.score_display.includes(`${summary.rubric.score}/100`),
+      `${manifest.slug}: score_display missing score`,
+    );
+  }
   assert(summary.agent_display.score_explanation.length > 80, `${manifest.slug}: score_explanation too short`);
   assert(
     summary.agent_display.recommended_table_fields.includes("agent_display.decision_label"),
@@ -233,12 +274,12 @@ for (const entry of entries) {
   if (manifest.asset_type === "pendle_pt") {
     assert(summary.return_profile, `${manifest.slug}: PT summary must include return_profile`);
     assert(
-      summary.agent_display.score_source === "inherited_underlying_asset_quality_score",
-      `${manifest.slug}: PT score_source must disclose inherited asset-quality score`,
+      summary.agent_display.score_source === "pt_fixed_return_trade_score",
+      `${manifest.slug}: PT score_source must be pt_fixed_return_trade_score`,
     );
     assert(
-      summary.agent_display.score_display.includes("PT economics overlay"),
-      `${manifest.slug}: PT score_display must mention economics overlay`,
+      summary.agent_display.score_display.includes("fixed-return PT score"),
+      `${manifest.slug}: PT score_display must mention fixed-return PT score`,
     );
   } else {
     assert(

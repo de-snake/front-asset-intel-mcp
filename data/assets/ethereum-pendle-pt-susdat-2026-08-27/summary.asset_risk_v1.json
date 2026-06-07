@@ -10,7 +10,7 @@
     "score": 40,
     "max_score": 100,
     "decision_class": "review_required",
-    "decision_rationale": "The PT wrapper adds fixed-maturity discount, Pendle AMM exit, and points optionality while inheriting sUSDat STRC/NAV/queue and permissioning risk. The old priors make PT-sUSDat a points/recovery trade: gross yield is high, but expected loss consumes the fixed-yield spread before points.",
+    "decision_rationale": "The PT wrapper adds fixed-maturity discount and Pendle AMM exit while inheriting sUSDat STRC/NAV/queue and permissioning risk. Gross yield is high, but expected loss and exit cost consume the fixed-yield spread under the current priors.",
     "score_label": "asset_quality_evidence_score",
     "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
     "score_status": "precomputed"
@@ -142,7 +142,7 @@
     "user risk policy: HF floor, max drawdown, automation policy",
     "fresh PT market quote, slippage, liquidity, and maturity redemption path",
     "Pendle PT/SY/YT support and Gearbox PT oracle/feed design",
-    "route-specific Saturn Gravity Points eligibility"
+    "Fresh fixed-return expected-loss and exit-cost recalibration against live reserve, redemption, maturity, and market-discount evidence"
   ],
   "source_report": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/pt-markets/pendle-pt-eth-mainnet-susdat-2026-08-27/technical-report.md",
   "generated_from": {
@@ -173,14 +173,17 @@
     "gross_roi": 0.068165,
     "simple_gross_apr": 0.2998,
     "compound_gross_apy": 0.3364,
-    "snapshot_timestamp_utc": "2026-06-04T19:33:45Z"
+    "snapshot_timestamp_utc": "2026-06-04T19:33:45Z",
+    "risk_adjusted_roi_after_expected_loss_and_exit": -0.020335,
+    "risk_adjusted_annualized_return_after_expected_loss_and_exit": -0.0894,
+    "interpretation": "The PT discount is the fixed return buffer against accounting-asset impairment, exit cost, maturity/output issues, and stale valuation. PT holders do not receive the variable yield or incentive-point economics separated into YT."
   },
   "social_research_layer": {
     "evidence_date": "2026-06-04",
     "return_models": [
-      "STRC dividend / digital-credit yield",
-      "PT fixed discount",
-      "Saturn Gravity Points"
+      "STRC dividend / digital-credit yield in the underlying sUSDat economics",
+      "PT fixed discount-to-maturity",
+      "Risk-adjusted fixed PT return depends on queue/NAV realization and exit cost, not variable-incentive accrual"
     ],
     "risk_narratives": [
       "queue and NAV realization risk",
@@ -199,12 +202,13 @@
     "compound_gross_apy": 0.3364,
     "expected_loss_prior": 0.081,
     "exit_cost_assumption": 0.0075,
-    "risk_adjusted_roi_before_points": -0.020335,
-    "risk_adjusted_annualized_return_before_points": -0.0894,
-    "points_roi_required_to_clear_hurdle": 0.043075,
-    "conclusion": "PT-sUSDat has higher gross PT yield, but STRC/NAV/queue expected loss consumes the fixed-yield spread under the old priors."
+    "conclusion": "Gross fixed yield is visible, but expected loss and exit cost consume the PT discount in the current snapshot.",
+    "scope": "fixed_return_principal_token_underwriting",
+    "decision_trigger": "Do not underwrite unless live price, redemption/claim state, route depth, expected-loss prior, and exit cost improve enough for fixed-return risk-adjusted APY to turn positive and clear the mandate hurdle.",
+    "risk_adjusted_roi_after_expected_loss_and_exit": -0.020335,
+    "risk_adjusted_annualized_return_after_expected_loss_and_exit": -0.0894
   },
-  "summary_schema_version": "asset_summary_v1.2",
+  "summary_schema_version": "asset_summary_v1.3",
   "agent_display": {
     "recommended_table_fields": [
       "agent_display.score_display",
@@ -214,19 +218,31 @@
       "agent_display.primary_blockers",
       "agent_display.next_action"
     ],
-    "score_display": "40/100 inherited asset-quality + PT economics overlay",
-    "score_sort": 40,
-    "score_source": "inherited_underlying_asset_quality_score",
-    "score_explanation": "The numeric score intentionally inherits underlying asset-quality risk. Use this row’s PT economics, points hurdle, and blockers to rank the PT; do not read the inherited score as a standalone PT return score.",
-    "recommended_table_decision": "points_recovery_trade_only",
-    "decision_label": "Points/recovery trade only — not clean carry (needs 4.31% points ROI)",
-    "underwriting_status": "not_clean_carry_points_trade_only",
-    "execution_automation_status": "blocked_until_live_inputs_resolved",
+    "score_display": "31/100 fixed-return PT score: 33.64% gross APY / -8.94% risk-adjusted APY; underlying asset risk 40/100",
+    "score_sort": 31,
+    "score_source": "pt_fixed_return_trade_score",
+    "score_explanation": "For PTs, the table score is based on fixed discount-to-maturity economics: gross APY, risk-adjusted APY after expected loss and exit cost, liquidity, maturity/route checks, and inherited underlying asset quality. PT-holder return is fixed discount-to-maturity only; legacy rubric.score is inherited underlying asset-quality context only.",
+    "inherited_asset_quality_score": 40,
+    "recommended_table_decision": "fixed_return_negative_after_expected_loss",
+    "decision_label": "Reject current snapshot: 33.64% gross APY turns -8.94% risk-adjusted APY after expected loss/exit",
+    "underwriting_status": "do_not_underwrite_current_snapshot",
+    "execution_automation_status": "blocked_current_snapshot",
     "primary_blockers": [
+      "Fixed-return economics: 33.64% gross APY and -8.94% risk-adjusted APY after expected loss/exit; PT-holder return is fixed discount-to-maturity only",
       "Holder/redemption route: Realization can depend on queue processing, issuer controls, blacklist/pause state, and inherited USDat eligibility",
       "Issuer/admin controls: sUSDat exposes blacklist and pause surfaces and inherits USDat permissioning concerns"
     ],
-    "next_action": "Treat as opportunistic points/recovery trade only; require fresh expected-loss, exit-cost, maturity, route, and wallet-specific points evidence before any underwriting.",
-    "table_note": "PT-sUSDat has higher gross PT yield, but STRC/NAV/queue expected loss consumes the fixed-yield spread under the old priors."
+    "next_action": "Do not underwrite unless live price, redemption/claim state, route depth, expected-loss prior, and exit cost improve enough for fixed-return risk-adjusted APY to turn positive and clear the mandate hurdle.",
+    "table_note": "Gross fixed yield is visible, but expected loss and exit cost consume the PT discount in the current snapshot.",
+    "fixed_return_metrics": {
+      "gross_roi": 0.068165,
+      "compound_gross_apy": 0.3364,
+      "risk_adjusted_roi_after_expected_loss_and_exit": -0.020335,
+      "risk_adjusted_annualized_return_after_expected_loss_and_exit": -0.0894,
+      "underwriting_hurdle_net_annualized": 0.1,
+      "expected_loss_prior": 0.081,
+      "exit_cost_assumption": 0.0075,
+      "liquidity_snapshot_usd": null
+    }
   }
 }

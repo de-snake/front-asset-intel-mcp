@@ -10,7 +10,7 @@
     "score": 52,
     "max_score": 100,
     "decision_class": "review_required",
-    "decision_rationale": "The PT wrapper changes maturity, exit path, and points economics while inheriting USDat issuer/eligibility/control risk. PT-USDat is a stable-price / low-return candidate whose fixed return does not clear a 10% net hurdle without credible Saturn points or a lower hurdle.",
+    "decision_rationale": "The PT wrapper changes maturity and exit path while inheriting USDat issuer/eligibility/control risk. PT-USDat is a stable-price / low-return fixed-return candidate whose risk-adjusted APY does not clear a 10% net hurdle under the current expected-loss and exit-cost priors.",
     "score_label": "asset_quality_evidence_score",
     "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
     "score_status": "precomputed"
@@ -142,7 +142,7 @@
     "user risk policy: HF floor, max drawdown, automation policy",
     "fresh PT market quote, slippage, liquidity, and maturity redemption path",
     "Pendle PT/SY/YT support and Gearbox PT oracle/feed design",
-    "route-specific Saturn Gravity Points eligibility"
+    "Fresh fixed-return expected-loss and exit-cost recalibration against live reserve, redemption, maturity, and market-discount evidence"
   ],
   "source_report": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/pt-markets/pendle-pt-eth-mainnet-usdat-2026-08-27/technical-report.md",
   "generated_from": {
@@ -173,14 +173,17 @@
     "gross_roi": 0.019746,
     "simple_gross_apr": 0.0868,
     "compound_gross_apy": 0.0898,
-    "snapshot_timestamp_utc": "2026-06-04T19:33:45Z"
+    "snapshot_timestamp_utc": "2026-06-04T19:33:45Z",
+    "risk_adjusted_roi_after_expected_loss_and_exit": 0.007746,
+    "risk_adjusted_annualized_return_after_expected_loss_and_exit": 0.0341,
+    "interpretation": "The PT discount is the fixed return buffer against accounting-asset impairment, exit cost, maturity/output issues, and stale valuation. PT holders do not receive the variable yield or incentive-point economics separated into YT."
   },
   "social_research_layer": {
     "evidence_date": "2026-06-04",
     "return_models": [
       "Saturn stable/risk-off leg",
       "PT-USDat fixed/implied APY around 8.95%-10.65% in early-June X results; local Pendle snapshot 8.96% implied APY",
-      "Gravity Points upside exists but plain PT-USDat reads more like fixed-yield than highest-points-density route"
+      "Plain PT-USDat is a fixed-yield discount-to-maturity route; variable incentives are not part of PT-holder return underwriting"
     ],
     "risk_narratives": [
       "whitelist/freeze/issuer controls",
@@ -199,12 +202,13 @@
     "compound_gross_apy": 0.0898,
     "expected_loss_prior": 0.007,
     "exit_cost_assumption": 0.005,
-    "risk_adjusted_roi_before_points": 0.007746,
-    "risk_adjusted_annualized_return_before_points": 0.0341,
-    "points_roi_required_to_clear_hurdle": 0.014993,
-    "conclusion": "PT-USDat is the stable-price / low-return candidate and needs credible Saturn points or a lower hurdle to justify the route."
+    "conclusion": "The PT is a fixed-return discount-to-maturity trade; current risk-adjusted APY is positive but below the mandate hurdle.",
+    "scope": "fixed_return_principal_token_underwriting",
+    "decision_trigger": "Use only if the mandate accepts the below-hurdle fixed return or live price, expected-loss prior, exit cost, eligibility, and route depth improve enough to clear the hurdle.",
+    "risk_adjusted_roi_after_expected_loss_and_exit": 0.007746,
+    "risk_adjusted_annualized_return_after_expected_loss_and_exit": 0.0341
   },
-  "summary_schema_version": "asset_summary_v1.2",
+  "summary_schema_version": "asset_summary_v1.3",
   "agent_display": {
     "recommended_table_fields": [
       "agent_display.score_display",
@@ -214,19 +218,31 @@
       "agent_display.primary_blockers",
       "agent_display.next_action"
     ],
-    "score_display": "52/100 inherited asset-quality + PT economics overlay",
-    "score_sort": 52,
-    "score_source": "inherited_underlying_asset_quality_score",
-    "score_explanation": "The numeric score intentionally inherits underlying asset-quality risk. Use this row’s PT economics, points hurdle, and blockers to rank the PT; do not read the inherited score as a standalone PT return score.",
-    "recommended_table_decision": "conditional_pt_needs_points_or_lower_loss",
-    "decision_label": "Conditional PT candidate — needs 1.50% points ROI or lower loss/hurdle",
-    "underwriting_status": "conditional_candidate_requires_points_or_lower_expected_loss",
+    "score_display": "27/100 fixed-return PT score: 8.98% gross APY / 3.41% risk-adjusted APY; underlying asset risk 52/100",
+    "score_sort": 27,
+    "score_source": "pt_fixed_return_trade_score",
+    "score_explanation": "For PTs, the table score is based on fixed discount-to-maturity economics: gross APY, risk-adjusted APY after expected loss and exit cost, liquidity, maturity/route checks, and inherited underlying asset quality. PT-holder return is fixed discount-to-maturity only; legacy rubric.score is inherited underlying asset-quality context only.",
+    "inherited_asset_quality_score": 52,
+    "recommended_table_decision": "fixed_return_below_hurdle_needs_live_improvement",
+    "decision_label": "Fixed-return PT below hurdle: 8.98% gross APY / 3.41% risk-adjusted APY vs 10.00% hurdle",
+    "underwriting_status": "conditional_fixed_return_review",
     "execution_automation_status": "blocked_until_live_inputs_resolved",
     "primary_blockers": [
+      "Fixed-return economics: 8.98% gross APY and 3.41% risk-adjusted APY after expected loss/exit; PT-holder return is fixed discount-to-maturity only",
       "Holder/redemption route: Saturn onboarding, freeze/pause surfaces, and Credit Account/liquidator/recipient eligibility must be proven before automation",
       "Issuer/admin controls: USDat exposes issuer-controlled freeze and pause surfaces; wallet, Credit Account, liquidator, and recipient state must be checked"
     ],
-    "next_action": "Resolve named live inputs before any Preview/Execute automation.",
-    "table_note": "PT-USDat is the stable-price / low-return candidate and needs credible Saturn points or a lower hurdle to justify the route."
+    "next_action": "Use only if the mandate accepts the below-hurdle fixed return or live price, expected-loss prior, exit cost, eligibility, and route depth improve enough to clear the hurdle.",
+    "table_note": "The PT is a fixed-return discount-to-maturity trade; current risk-adjusted APY is positive but below the mandate hurdle.",
+    "fixed_return_metrics": {
+      "gross_roi": 0.019746,
+      "compound_gross_apy": 0.0898,
+      "risk_adjusted_roi_after_expected_loss_and_exit": 0.007746,
+      "risk_adjusted_annualized_return_after_expected_loss_and_exit": 0.0341,
+      "underwriting_hurdle_net_annualized": 0.1,
+      "expected_loss_prior": 0.007,
+      "exit_cost_assumption": 0.005,
+      "liquidity_snapshot_usd": null
+    }
   }
 }
