@@ -13,7 +13,10 @@
     "score": 35,
     "max_score": 100,
     "decision_class": "blocked_or_cannot_underwrite",
-    "decision_rationale": "apyUSD adds vault-share, receipt/unlock, market-discount, and accounting-value divergence on top of apxUSD issuer/backing/redemption risk. The new social and quantitative layer makes the base case negative before points and blocks automated live use until reserve, receipt, route, restriction, oracle, and points eligibility are refreshed."
+    "decision_rationale": "apyUSD adds vault-share, receipt/unlock, market-discount, and accounting-value divergence on top of apxUSD issuer/backing/redemption risk. The new social and quantitative layer makes the base case negative before points and blocks automated live use until reserve, receipt, route, restriction, oracle, and points eligibility are refreshed.",
+    "score_label": "asset_quality_evidence_score",
+    "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
+    "score_status": "precomputed"
   },
   "dimensions": [
     {
@@ -33,7 +36,11 @@
           "quote": "STRC / preferred-share collateral stress"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "redemption_holder_eligibility",
@@ -52,7 +59,11 @@
           "quote": "apxUSD primary mint/redeem SLA and eligible-participant process"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "missing_or_unknown",
+      "missing_behavior": "block_automation"
     },
     {
       "id": "market_liquidity_peg_behavior",
@@ -71,7 +82,11 @@
           "quote": "Direct apyUSD yield-token exposure also fails the old base-case risk adjustment"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "review_required",
+      "evidence_state": "missing_or_unknown",
+      "missing_behavior": "review_required"
     },
     {
       "id": "issuer_controls_governance",
@@ -90,7 +105,11 @@
           "quote": "Safe owners, threshold, modules, guard, and pending transactions"
         }
       ],
-      "confidence": "medium_high"
+      "confidence": "medium_high",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "source_inconclusive",
+      "missing_behavior": "block_automation"
     },
     {
       "id": "oracle_accounting_alignment",
@@ -109,7 +128,11 @@
           "quote": "Gearbox-specific oracle/support state"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "cannot_underwrite",
+      "evidence_state": "missing_or_unknown",
+      "missing_behavior": "cannot_underwrite"
     },
     {
       "id": "audits_security_review",
@@ -128,7 +151,11 @@
           "quote": "exact deployed-scope audit mapping"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "incidents_social_stress",
@@ -151,7 +178,11 @@
           "quote": "risk-adjusted base case was negative before points"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "cannot_underwrite",
+      "evidence_state": "negative_evidence",
+      "missing_behavior": "cannot_underwrite"
     }
   ],
   "social_research_layer": {
@@ -208,5 +239,6 @@
   "source_front_kb_report": "dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md",
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
-  "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay"
+  "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay",
+  "summary_schema_version": "asset_summary_v1.1"
 }

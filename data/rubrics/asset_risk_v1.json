@@ -28,7 +28,10 @@
           "score_range": [
             15,
             18
-          ]
+          ],
+          "score_band": "strong",
+          "default_status": "usable_for_review",
+          "default_evidence_state": "verified"
         },
         {
           "id": "partial_attestations_or_issuer_dashboards",
@@ -36,7 +39,10 @@
           "score_range": [
             7,
             14
-          ]
+          ],
+          "score_band": "partial",
+          "default_status": "review_required",
+          "default_evidence_state": "partially_supported"
         },
         {
           "id": "weak_or_unknown_backing",
@@ -44,7 +50,10 @@
           "score_range": [
             0,
             6
-          ]
+          ],
+          "score_band": "weak",
+          "default_status": "cannot_underwrite",
+          "default_evidence_state": "missing_or_unknown"
         }
       ]
     },
@@ -59,7 +68,10 @@
           "score_range": [
             15,
             18
-          ]
+          ],
+          "score_band": "strong",
+          "default_status": "usable_for_review",
+          "default_evidence_state": "verified"
         },
         {
           "id": "restricted_but_understood",
@@ -67,7 +79,10 @@
           "score_range": [
             7,
             14
-          ]
+          ],
+          "score_band": "partial",
+          "default_status": "review_required",
+          "default_evidence_state": "partially_supported"
         },
         {
           "id": "holder_specific_unknown_or_blocking",
@@ -75,7 +90,10 @@
           "score_range": [
             0,
             6
-          ]
+          ],
+          "score_band": "weak",
+          "default_status": "block_automation",
+          "default_evidence_state": "missing_or_unknown"
         }
       ]
     },
@@ -90,7 +108,10 @@
           "score_range": [
             15,
             18
-          ]
+          ],
+          "score_band": "strong",
+          "default_status": "usable_for_review",
+          "default_evidence_state": "verified"
         },
         {
           "id": "observable_but_not_size_checked",
@@ -98,7 +119,10 @@
           "score_range": [
             7,
             14
-          ]
+          ],
+          "score_band": "partial",
+          "default_status": "review_required",
+          "default_evidence_state": "partially_supported"
         },
         {
           "id": "thin_discounted_or_unknown",
@@ -106,7 +130,10 @@
           "score_range": [
             0,
             6
-          ]
+          ],
+          "score_band": "weak",
+          "default_status": "review_required",
+          "default_evidence_state": "missing_or_unknown"
         }
       ]
     },
@@ -121,7 +148,10 @@
           "score_range": [
             11,
             14
-          ]
+          ],
+          "score_band": "strong",
+          "default_status": "usable_for_review",
+          "default_evidence_state": "verified"
         },
         {
           "id": "controls_present_but_mapped",
@@ -129,7 +159,10 @@
           "score_range": [
             6,
             10
-          ]
+          ],
+          "score_band": "partial",
+          "default_status": "review_required",
+          "default_evidence_state": "partially_supported"
         },
         {
           "id": "strong_or_poorly_mapped_controls",
@@ -137,7 +170,10 @@
           "score_range": [
             0,
             5
-          ]
+          ],
+          "score_band": "weak",
+          "default_status": "block_automation",
+          "default_evidence_state": "source_inconclusive"
         }
       ]
     },
@@ -152,7 +188,10 @@
           "score_range": [
             8,
             10
-          ]
+          ],
+          "score_band": "strong",
+          "default_status": "usable_for_review",
+          "default_evidence_state": "verified"
         },
         {
           "id": "accounting_model_known_but_not_use_verified",
@@ -160,7 +199,10 @@
           "score_range": [
             4,
             7
-          ]
+          ],
+          "score_band": "partial",
+          "default_status": "review_required",
+          "default_evidence_state": "partially_supported"
         },
         {
           "id": "valuation_unknown_or_divergent",
@@ -168,7 +210,10 @@
           "score_range": [
             0,
             3
-          ]
+          ],
+          "score_band": "weak",
+          "default_status": "cannot_underwrite",
+          "default_evidence_state": "missing_or_unknown"
         }
       ]
     },
@@ -183,7 +228,10 @@
           "score_range": [
             10,
             12
-          ]
+          ],
+          "score_band": "strong",
+          "default_status": "usable_for_review",
+          "default_evidence_state": "verified"
         },
         {
           "id": "some_audits_scope_uncertain",
@@ -191,7 +239,10 @@
           "score_range": [
             5,
             9
-          ]
+          ],
+          "score_band": "partial",
+          "default_status": "review_required",
+          "default_evidence_state": "partially_supported"
         },
         {
           "id": "weak_missing_or_unknown_security_review",
@@ -199,7 +250,10 @@
           "score_range": [
             0,
             4
-          ]
+          ],
+          "score_band": "weak",
+          "default_status": "review_required",
+          "default_evidence_state": "missing_or_unknown"
         }
       ]
     },
@@ -214,7 +268,10 @@
           "score_range": [
             8,
             10
-          ]
+          ],
+          "score_band": "strong",
+          "default_status": "usable_for_review",
+          "default_evidence_state": "verified"
         },
         {
           "id": "some_stress_or_incomplete_history",
@@ -222,7 +279,10 @@
           "score_range": [
             4,
             7
-          ]
+          ],
+          "score_band": "partial",
+          "default_status": "review_required",
+          "default_evidence_state": "partially_supported"
         },
         {
           "id": "material_recent_stress",
@@ -230,7 +290,10 @@
           "score_range": [
             0,
             3
-          ]
+          ],
+          "score_band": "weak",
+          "default_status": "cannot_underwrite",
+          "default_evidence_state": "negative_evidence"
         }
       ]
     }

@@ -10,7 +10,10 @@
     "score": 52,
     "max_score": 100,
     "decision_class": "review_required",
-    "decision_rationale": "The PT wrapper changes maturity, exit path, and points economics while inheriting USDat issuer/eligibility/control risk. PT-USDat is a stable-price / low-return candidate whose fixed return does not clear a 10% net hurdle without credible Saturn points or a lower hurdle."
+    "decision_rationale": "The PT wrapper changes maturity, exit path, and points economics while inheriting USDat issuer/eligibility/control risk. PT-USDat is a stable-price / low-return candidate whose fixed return does not clear a 10% net hurdle without credible Saturn points or a lower hurdle.",
+    "score_label": "asset_quality_evidence_score",
+    "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
+    "score_status": "precomputed"
   },
   "dimensions": [
     {
@@ -25,7 +28,10 @@
         "USDat analyst report §Backing and NAV quality"
       ],
       "confidence": "medium",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported"
     },
     {
       "id": "redemption_holder_eligibility",
@@ -39,7 +45,10 @@
         "RESULT.md §Missing before decision-grade proposal"
       ],
       "confidence": "medium/high",
-      "missing_behavior": "block_automation"
+      "missing_behavior": "block_automation",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "missing_or_unknown"
     },
     {
       "id": "market_liquidity_peg_behavior",
@@ -52,7 +61,10 @@
         "RESULT.md §USDat review"
       ],
       "confidence": "medium/high",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported"
     },
     {
       "id": "issuer_controls_governance",
@@ -66,7 +78,10 @@
         "USDat analyst report §Controls, governance, and legal restrictions"
       ],
       "confidence": "medium",
-      "missing_behavior": "block_automation"
+      "missing_behavior": "block_automation",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "source_inconclusive"
     },
     {
       "id": "oracle_accounting_alignment",
@@ -79,7 +94,10 @@
         "RESULT.md §USDat review"
       ],
       "confidence": "high for run snapshot",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "strong",
+      "status": "review_required",
+      "evidence_state": "verified"
     },
     {
       "id": "audits_security_review",
@@ -93,7 +111,10 @@
         "USDat analyst report §Evidence quality"
       ],
       "confidence": "medium",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "weak",
+      "status": "review_required",
+      "evidence_state": "missing_or_unknown"
     },
     {
       "id": "incidents_social_stress",
@@ -106,7 +127,10 @@
         "RESULT.md §X / social research layer"
       ],
       "confidence": "medium",
-      "missing_behavior": "review_required"
+      "missing_behavior": "review_required",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported"
     }
   ],
   "blocking_unknowns": [
@@ -179,5 +203,6 @@
     "risk_adjusted_annualized_return_before_points": 0.0341,
     "points_roi_required_to_clear_hurdle": 0.014993,
     "conclusion": "PT-USDat is the stable-price / low-return candidate and needs credible Saturn points or a lower hurdle to justify the route."
-  }
+  },
+  "summary_schema_version": "asset_summary_v1.1"
 }

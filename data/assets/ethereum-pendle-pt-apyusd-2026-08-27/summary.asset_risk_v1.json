@@ -21,7 +21,10 @@
     "max_score": 100,
     "decision_class": "blocked_or_cannot_underwrite",
     "score_source": "inherited_underlying_asset_risk_plus_pt_social_quant_overlay",
-    "decision_rationale": "The PT changes return/maturity profile but inherits apyUSD/apxUSD asset risk. The added social and quantitative layer shows negative risk-adjusted return before points and only a thin accounting-asset drawdown buffer, so this is a points/recovery trade rather than clean fixed-income-like carry."
+    "decision_rationale": "The PT changes return/maturity profile but inherits apyUSD/apxUSD asset risk. The added social and quantitative layer shows negative risk-adjusted return before points and only a thin accounting-asset drawdown buffer, so this is a points/recovery trade rather than clean fixed-income-like carry.",
+    "score_label": "asset_quality_evidence_score",
+    "score_meaning": "Curated asset-quality evidence/readiness score from the precomputed MCP summary JSON; not a report-quality score, live-market score, or investment recommendation.",
+    "score_status": "precomputed"
   },
   "dimensions": [
     {
@@ -41,7 +44,11 @@
           "quote": "STRC / preferred-share collateral stress"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "redemption_holder_eligibility",
@@ -60,7 +67,11 @@
           "quote": "receipt / claim state is confirmed"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "missing_or_unknown",
+      "missing_behavior": "block_automation"
     },
     {
       "id": "market_liquidity_peg_behavior",
@@ -79,7 +90,11 @@
           "quote": "Accounting-asset drawdown capacity before costs: only 3.6211%"
         }
       ],
-      "confidence": "medium_high"
+      "confidence": "medium_high",
+      "score_band": "weak",
+      "status": "review_required",
+      "evidence_state": "missing_or_unknown",
+      "missing_behavior": "review_required"
     },
     {
       "id": "issuer_controls_governance",
@@ -98,7 +113,11 @@
           "quote": "If transfer restrictions, freeze controls, holder eligibility, or redemption access become binding"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "block_automation",
+      "evidence_state": "source_inconclusive",
+      "missing_behavior": "block_automation"
     },
     {
       "id": "oracle_accounting_alignment",
@@ -117,7 +136,11 @@
           "quote": "Redemption and arbitrage impairment"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "cannot_underwrite",
+      "evidence_state": "missing_or_unknown",
+      "missing_behavior": "cannot_underwrite"
     },
     {
       "id": "audits_security_review",
@@ -136,7 +159,11 @@
           "quote": "Underlying technical report"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "partial",
+      "status": "review_required",
+      "evidence_state": "partially_supported",
+      "missing_behavior": "review_required"
     },
     {
       "id": "incidents_social_stress",
@@ -155,7 +182,11 @@
           "quote": "risk-adjusted base case was negative before points"
         }
       ],
-      "confidence": "medium"
+      "confidence": "medium",
+      "score_band": "weak",
+      "status": "cannot_underwrite",
+      "evidence_state": "negative_evidence",
+      "missing_behavior": "cannot_underwrite"
     }
   ],
   "return_profile": {
@@ -247,5 +278,6 @@
   "source_front_kb_report": "dev/implementation/reproducible-runs/apyusd-investment-research-20260604/RESULT.md",
   "evidence_date": "2026-06-04",
   "summary_generated_at": "2026-06-07",
-  "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay"
+  "summary_mode": "precomputed_from_front_kb_public_result_plus_social_quant_overlay",
+  "summary_schema_version": "asset_summary_v1.1"
 }
