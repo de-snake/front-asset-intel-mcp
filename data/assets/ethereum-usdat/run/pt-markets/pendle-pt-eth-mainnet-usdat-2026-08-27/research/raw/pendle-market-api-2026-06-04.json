@@ -1,0 +1,368 @@
+{
+  "source": "https://api-v2.pendle.finance/core/v1/1/markets/0x9afe7a057a09cf5da748d952078c9c99938b4329",
+  "accessed": "2026-06-04",
+  "market": {
+    "id": "1-0x9afe7a057a09cf5da748d952078c9c99938b4329",
+    "chainId": 1,
+    "address": "0x9afe7a057a09cf5da748d952078c9c99938b4329",
+    "symbol": "PENDLE-LPT",
+    "expiry": "2026-08-27T00:00:00.000Z",
+    "pt": {
+      "id": "1-0x1d69402390657308c91179aa184bf992908c1e08",
+      "chainId": 1,
+      "address": "0x1d69402390657308c91179aa184bf992908c1e08",
+      "symbol": "PT-USDat-27AUG2026",
+      "decimals": 6,
+      "expiry": "2026-08-27T00:00:00.000Z",
+      "price": {
+        "usd": 0.9802824460118074
+      },
+      "priceUpdatedAt": "2026-06-04T19:33:45.000Z",
+      "name": "PT-USDat-27AUG2026",
+      "baseType": "PT",
+      "types": [
+        "PT"
+      ],
+      "underlyingPool": "",
+      "proSymbol": "PT USDat (USDat)",
+      "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/7bf2172c-182d-45e0-a754-44dfd5f165d6.svg",
+      "zappable": false,
+      "simpleName": "PT USDat (USDat)",
+      "simpleSymbol": "PT USDat (USDat)",
+      "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/7bf2172c-182d-45e0-a754-44dfd5f165d6.svg",
+      "proName": "PT USDat (USDat)"
+    },
+    "yt": {
+      "id": "1-0x076a3ea71e83ca09319b161e40f5fb3bb943d3c6",
+      "chainId": 1,
+      "address": "0x076a3ea71e83ca09319b161e40f5fb3bb943d3c6",
+      "symbol": "YT-USDat-27AUG2026",
+      "decimals": 6,
+      "expiry": "2026-08-27T00:00:00.000Z",
+      "price": {
+        "usd": 0.019356175886992653
+      },
+      "priceUpdatedAt": "2026-06-04T19:33:45.000Z",
+      "name": "YT-USDat-27AUG2026",
+      "baseType": "YT",
+      "types": [
+        "YT"
+      ],
+      "underlyingPool": "",
+      "proSymbol": "YT USDat (USDat)",
+      "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/cb671ef9-756c-4bfb-8d5f-e76676335bf0.svg",
+      "zappable": false,
+      "simpleName": "YT USDat (USDat)",
+      "simpleSymbol": "YT USDat (USDat)",
+      "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/cb671ef9-756c-4bfb-8d5f-e76676335bf0.svg",
+      "proName": "YT USDat (USDat)"
+    },
+    "sy": {
+      "id": "1-0x7a7de491e1be5287874904e2b7c8488249a4d0a9",
+      "chainId": 1,
+      "address": "0x7a7de491e1be5287874904e2b7c8488249a4d0a9",
+      "symbol": "SY-USDat",
+      "decimals": 6,
+      "expiry": null,
+      "price": {
+        "usd": 0.9996386218988
+      },
+      "priceUpdatedAt": "2026-06-04T19:33:45.000Z",
+      "name": "SY-USDat",
+      "baseType": "SY",
+      "types": [
+        "SY"
+      ],
+      "underlyingPool": "",
+      "proSymbol": "USDat",
+      "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/a027ebdd-4993-481c-b234-1de43c7a160c.svg",
+      "zappable": false,
+      "simpleName": "USDat",
+      "simpleSymbol": "USDat",
+      "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/a027ebdd-4993-481c-b234-1de43c7a160c.svg",
+      "proName": "USDat"
+    },
+    "lp": {
+      "id": "1-0x9afe7a057a09cf5da748d952078c9c99938b4329",
+      "chainId": 1,
+      "address": "0x9afe7a057a09cf5da748d952078c9c99938b4329",
+      "symbol": "PLP-USDat-27AUG2026",
+      "decimals": 18,
+      "expiry": "2026-08-27T00:00:00.000Z",
+      "price": {
+        "usd": 2108963236332.9385
+      },
+      "priceUpdatedAt": "2026-06-04T19:33:45.000Z",
+      "name": "PLP-USDat-27AUG2026",
+      "baseType": "PENDLE_LP",
+      "types": [
+        "PENDLE_LP"
+      ],
+      "underlyingPool": "",
+      "proSymbol": "LP USDat (USDat)",
+      "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/eacad3ef-fe5a-4283-93aa-81d85ac27e0e.svg",
+      "zappable": false,
+      "simpleName": "LP USDat (USDat)",
+      "simpleSymbol": "LP USDat (USDat)",
+      "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/eacad3ef-fe5a-4283-93aa-81d85ac27e0e.svg",
+      "proName": "LP USDat (USDat)"
+    },
+    "accountingAsset": {
+      "id": "1-0x23238f20b894f29041f48d88ee91131c395aaa71",
+      "chainId": 1,
+      "address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+      "symbol": "USDat",
+      "decimals": 6,
+      "expiry": null,
+      "accentColor": "",
+      "price": {
+        "usd": 0.9996386218988
+      },
+      "priceUpdatedAt": "2026-06-04T19:33:45.041Z",
+      "name": "USDat",
+      "baseType": "IB",
+      "types": [
+        "IB"
+      ],
+      "proSymbol": "USDat",
+      "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+      "zappable": true,
+      "simpleName": "USDat",
+      "simpleSymbol": "USDat",
+      "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+      "proName": "USDat"
+    },
+    "underlyingAsset": {
+      "id": "1-0x23238f20b894f29041f48d88ee91131c395aaa71",
+      "chainId": 1,
+      "address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+      "symbol": "USDat",
+      "decimals": 6,
+      "expiry": null,
+      "accentColor": "",
+      "price": {
+        "usd": 0.9996386218988
+      },
+      "priceUpdatedAt": "2026-06-04T19:33:45.041Z",
+      "name": "USDat",
+      "baseType": "IB",
+      "types": [
+        "IB"
+      ],
+      "proSymbol": "USDat",
+      "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+      "zappable": true,
+      "simpleName": "USDat",
+      "simpleSymbol": "USDat",
+      "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+      "proName": "USDat"
+    },
+    "basePricingAsset": {
+      "id": "1-0x23238f20b894f29041f48d88ee91131c395aaa71",
+      "chainId": 1,
+      "address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+      "symbol": "USDat",
+      "decimals": 6,
+      "expiry": null,
+      "accentColor": "",
+      "price": {
+        "usd": 0.9996386218988
+      },
+      "priceUpdatedAt": "2026-06-04T19:33:45.041Z",
+      "name": "USDat",
+      "baseType": "IB",
+      "types": [
+        "IB"
+      ],
+      "proSymbol": "USDat",
+      "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+      "zappable": true,
+      "simpleName": "USDat",
+      "simpleSymbol": "USDat",
+      "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+      "proName": "USDat"
+    },
+    "rewardTokens": [
+      {
+        "id": "1-0x808507121b80c02388fad14726482e061b8da827",
+        "chainId": 1,
+        "address": "0x808507121b80c02388fad14726482e061b8da827",
+        "symbol": "PENDLE",
+        "decimals": 18,
+        "accentColor": null,
+        "price": {
+          "usd": 1.3348008124125152
+        },
+        "priceUpdatedAt": "2026-06-04T19:33:45.041Z",
+        "name": "PENDLE",
+        "baseType": "GENERIC",
+        "types": [
+          "GENERIC"
+        ],
+        "protocol": "Pendle",
+        "proSymbol": "PENDLE",
+        "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/assets/pro/ea33e392-1876-46a5-b7ce-c8434b5a7e71.svg",
+        "zappable": true,
+        "simpleName": "PENDLE",
+        "simpleSymbol": "PENDLE",
+        "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/assets/pro/ea33e392-1876-46a5-b7ce-c8434b5a7e71.svg",
+        "proName": "PENDLE"
+      }
+    ],
+    "inputTokens": [
+      {
+        "id": "1-0x23238f20b894f29041f48d88ee91131c395aaa71",
+        "chainId": 1,
+        "address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+        "symbol": "USDat",
+        "decimals": 6,
+        "expiry": null,
+        "accentColor": "",
+        "price": {
+          "usd": 0.9996386218988
+        },
+        "priceUpdatedAt": "2026-06-04T19:33:45.041Z",
+        "name": "USDat",
+        "baseType": "IB",
+        "types": [
+          "IB"
+        ],
+        "proSymbol": "USDat",
+        "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+        "zappable": true,
+        "simpleName": "USDat",
+        "simpleSymbol": "USDat",
+        "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+        "proName": "USDat"
+      }
+    ],
+    "outputTokens": [
+      {
+        "id": "1-0x23238f20b894f29041f48d88ee91131c395aaa71",
+        "chainId": 1,
+        "address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+        "symbol": "USDat",
+        "decimals": 6,
+        "expiry": null,
+        "accentColor": "",
+        "price": {
+          "usd": 0.9996386218988
+        },
+        "priceUpdatedAt": "2026-06-04T19:33:45.041Z",
+        "name": "USDat",
+        "baseType": "IB",
+        "types": [
+          "IB"
+        ],
+        "proSymbol": "USDat",
+        "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+        "zappable": true,
+        "simpleName": "USDat",
+        "simpleSymbol": "USDat",
+        "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/968212e9-fec2-472c-b011-024c836fa155.svg",
+        "proName": "USDat"
+      }
+    ],
+    "protocol": "Saturn",
+    "underlyingPool": "",
+    "proSymbol": "USDat",
+    "proIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/722bac0c-40de-469f-8400-ba27fae05a7c.svg",
+    "assetRepresentation": "USDat",
+    "isWhitelistedPro": true,
+    "isWhitelistedSimple": false,
+    "votable": false,
+    "isActive": true,
+    "isWhitelistedLimitOrder": true,
+    "accentColor": "#ff5100",
+    "totalPt": 5104607.433375,
+    "totalSy": 7677431.254993,
+    "totalLp": 6.01177566387e-06,
+    "totalActiveSupply": 6.01177566387e-06,
+    "liquidity": {
+      "usd": 12678613.206734212,
+      "acc": 12683196.636251766
+    },
+    "tradingVolume": {
+      "usd": 4004370.662264405
+    },
+    "underlyingInterestApy": 0,
+    "underlyingRewardApy": 0,
+    "underlyingRewardApyBreakdown": [],
+    "underlyingApy": 0,
+    "impliedApy": 0.08958335500097503,
+    "ytFloatingApy": -1,
+    "ptDiscount": 0.01936330137161646,
+    "swapFeeApy": 0.006496816898400093,
+    "pendleApy": 0.012223018937235626,
+    "aggregatedApy": 0.054076324070348056,
+    "maxBoostedApy": 0.07241085247620149,
+    "lpRewardApy": 0,
+    "voterApy": 0,
+    "ytRoi": -1,
+    "ptRoi": 0.01974550902726202,
+    "estimatedDailyPoolRewards": [
+      {
+        "asset": {
+          "id": "1-0x808507121b80c02388fad14726482e061b8da827",
+          "chainId": 1,
+          "address": "0x808507121b80c02388fad14726482e061b8da827",
+          "symbol": "PENDLE",
+          "decimals": 18,
+          "accentColor": null,
+          "price": {
+            "usd": 1.3348008124125152
+          },
+          "priceUpdatedAt": "2026-06-04T19:33:45.041Z",
+          "name": "PENDLE"
+        },
+        "amount": 317.91388562854064
+      }
+    ],
+    "dataUpdatedAt": "2026-06-04T19:33:00.000Z",
+    "liquidityChange24h": -0.0583234848989114,
+    "tradingVolumeChange24h": -0.3971468664018314,
+    "impliedApyChange24h": -0.041970471559895035,
+    "ytFloatingApyChange24h": 0,
+    "ptDiscountChange24h": -0.0509253948977284,
+    "swapFeeApyChange24h": 0.4849071538729196,
+    "pendleApyChange24h": 0.10231496535112722,
+    "aggregatedApyChange24h": -0.015465394861326672,
+    "categoryIds": [
+      "stables",
+      "points",
+      "rwa",
+      "strc"
+    ],
+    "timestamp": "2026-04-10T16:32:59.000Z",
+    "scalarRoot": 31.146392907150013,
+    "initialAnchor": 1.0379955937088157,
+    "extendedInfo": {
+      "floatingPt": 54775632.156831,
+      "floatingSy": 6500.332064010203,
+      "pyUnit": "USDat",
+      "ptEqualsPyUnit": true,
+      "feeRate": 0.0017726191713667294,
+      "yieldRange": {
+        "min": 0.030000000000000002,
+        "max": 0.17999999999999997
+      }
+    },
+    "isPopular": true,
+    "tvlThresholdTimestamp": "2026-04-12T15:42:00.000Z",
+    "whitelistedProAt": "2026-04-12T08:00:53.760Z",
+    "isNew": false,
+    "name": "PENDLE-LPT",
+    "simpleName": "USDat",
+    "simpleSymbol": "USDat",
+    "simpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/722bac0c-40de-469f-8400-ba27fae05a7c.svg",
+    "proName": "USDat",
+    "farmName": "USDat",
+    "farmSymbol": "USDat",
+    "farmSimpleName": "USDat",
+    "farmSimpleSymbol": "USDat",
+    "farmSimpleIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/722bac0c-40de-469f-8400-ba27fae05a7c.svg",
+    "farmProName": "USDat",
+    "farmProSymbol": "USDat",
+    "farmProIcon": "https://storage.googleapis.com/prod-pendle-bucket-a/images/uploads/722bac0c-40de-469f-8400-ba27fae05a7c.svg"
+  }
+}

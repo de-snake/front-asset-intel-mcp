@@ -1,0 +1,28 @@
+{
+  "accepted_methodologies": [
+    "recursive feed graph",
+    "source primitive audit",
+    "side-specific stress tradeoff analysis"
+  ],
+  "analysis_questions": [
+    "Does the live Gearbox feed support USDat collateral safely for borrower-side Credit Account analysis?",
+    "Which side bears loss under temporary versus persistent USDat price divergence?",
+    "What unresolved oracle, liquidity, transferability, eligibility, freeze, redemption, issuer-control, or route gates block Preview or Execute?"
+  ],
+  "artifact_dir": "tokens/eth-mainnet-usdat-gearbox-oracle",
+  "asset_symbol": "USDat",
+  "chain": "Ethereum mainnet",
+  "chain_id": 1,
+  "feed_address": "0x54DF8bAa0F35B767fFd2124c1D4F13788251E312",
+  "feed_discovery_paths": [],
+  "market_or_credit_manager": "not_available",
+  "position_side": "Credit Account borrower / leverage farmer",
+  "position_size": "not_available",
+  "protocol": "Gearbox",
+  "related_asset_scope_id": "eth-mainnet-usdat",
+  "scope_id": "eth-mainnet-usdat-gearbox-oracle",
+  "scope_slug": "eth-mainnet-usdat-gearbox-oracle",
+  "status": "review_required",
+  "token_address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+  "token_role": "collateral"
+}

@@ -1,0 +1,35 @@
+{
+  "source": "https://api-v2.pendle.finance/core/v1/1/markets/active",
+  "accessed": "2026-06-04",
+  "matched_count": 1,
+  "market": {
+    "name": "USDat",
+    "address": "0x9afe7a057a09cf5da748d952078c9c99938b4329",
+    "expiry": "2026-08-27T00:00:00.000Z",
+    "pt": "1-0x1d69402390657308c91179aa184bf992908c1e08",
+    "yt": "1-0x076a3ea71e83ca09319b161e40f5fb3bb943d3c6",
+    "sy": "1-0x7a7de491e1be5287874904e2b7c8488249a4d0a9",
+    "underlyingAsset": "1-0x23238f20b894f29041f48d88ee91131c395aaa71",
+    "details": {
+      "liquidity": 12678447.931717334,
+      "pendleApy": 0.012232330371112295,
+      "impliedApy": 0.08958335499771808,
+      "feeRate": 0.0017726191713667294,
+      "yieldRange": {
+        "min": 0.030000000000000002,
+        "max": 0.17999999999999997
+      },
+      "aggregatedApy": 0.05410311795030563,
+      "maxBoostedApy": 0.07245161350697407
+    },
+    "isNew": false,
+    "isPrime": false,
+    "timestamp": "2026-04-10T16:32:59.000Z",
+    "categoryIds": [
+      "stables",
+      "points",
+      "rwa",
+      "strc"
+    ]
+  }
+}

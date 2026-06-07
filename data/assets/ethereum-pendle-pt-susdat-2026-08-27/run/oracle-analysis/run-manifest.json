@@ -1,0 +1,68 @@
+{
+  "final_index": "index.md",
+  "final_verification": "verification/final-oracle-analysis-verification.md",
+  "parent_run_root": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run",
+  "run_artifact_root": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/oracle-analysis",
+  "run_id": "oracle-analysis-2026-06-06-usdat-susdat",
+  "run_root": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/oracle-analysis",
+  "schema_version": "oracle-analysis-run-v1",
+  "scopes": [
+    {
+      "artifact_dir": "tokens/eth-mainnet-usdat-gearbox-oracle",
+      "asset_symbol": "USDat",
+      "scope_slug": "eth-mainnet-usdat-gearbox-oracle",
+      "asset_address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+      "chain": "Ethereum mainnet",
+      "position_sides": [
+        "credit_account_borrower",
+        "pool_lp",
+        "liquidator",
+        "curator_operator"
+      ],
+      "protocol": "Gearbox",
+      "scope_id": "eth-mainnet-usdat-gearbox-oracle",
+      "scope_type": "token",
+      "status": "review_required",
+      "token_roles": [
+        "collateral"
+      ]
+    },
+    {
+      "artifact_dir": "tokens/eth-mainnet-susdat-gearbox-oracle",
+      "asset_symbol": "sUSDat",
+      "scope_slug": "eth-mainnet-susdat-gearbox-oracle",
+      "asset_address": "0xd166337499e176bbc38a1fbd113ab144e5bd2df7",
+      "chain": "Ethereum mainnet",
+      "position_sides": [
+        "credit_account_borrower",
+        "pool_lp",
+        "liquidator",
+        "curator_operator"
+      ],
+      "protocol": "Gearbox",
+      "scope_id": "eth-mainnet-susdat-gearbox-oracle",
+      "scope_type": "token",
+      "status": "review_required",
+      "token_roles": [
+        "collateral"
+      ]
+    }
+  ],
+  "status": "review_required",
+  "tokens": [
+    {
+      "artifact_dir": "tokens/eth-mainnet-usdat-gearbox-oracle",
+      "asset_symbol": "USDat",
+      "scope_slug": "eth-mainnet-usdat-gearbox-oracle",
+      "status": "review_required"
+    },
+    {
+      "artifact_dir": "tokens/eth-mainnet-susdat-gearbox-oracle",
+      "asset_symbol": "sUSDat",
+      "scope_slug": "eth-mainnet-susdat-gearbox-oracle",
+      "status": "review_required"
+    }
+  ],
+  "workflow": "oracle-analysis-v1",
+  "workflow_id": "oracle-analysis-v1"
+}

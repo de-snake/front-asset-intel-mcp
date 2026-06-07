@@ -1,0 +1,47 @@
+{
+  "final_index": "index.md",
+  "final_verification": "verification/final-investment-analysis-verification.md",
+  "parent_run_root": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run",
+  "run_artifact_root": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/asset-investment-diligence",
+  "run_id": "asset-diligence-2026-06-06-usdat-susdat",
+  "pt_markets": [],
+  "run_root": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/asset-investment-diligence",
+  "schema_version": "asset-investment-diligence-run-v1",
+  "skipped_stages": [
+    {
+      "reason": "pt_markets is empty in input",
+      "stage_id": "S3_pt_market_economics",
+      "workflow": "asset"
+    },
+    {
+      "reason": "social_scopes is empty in input",
+      "stage_id": "S4_x_social_mining",
+      "workflow": "asset"
+    },
+    {
+      "reason": "social_scopes is empty in input",
+      "stage_id": "S5_x_social_synthesis",
+      "workflow": "asset"
+    }
+  ],
+  "status": "review_required",
+  "tokens": [
+    {
+      "address": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+      "artifact_dir": "tokens/eth-mainnet-usdat",
+      "status": "review_required",
+      "symbol": "USDat",
+      "token_slug": "eth-mainnet-usdat"
+    },
+    {
+      "address": "0xd166337499e176bbc38a1fbd113ab144e5bd2df7",
+      "artifact_dir": "tokens/eth-mainnet-susdat",
+      "status": "review_required",
+      "symbol": "sUSDat",
+      "token_slug": "eth-mainnet-susdat"
+    }
+  ],
+  "workflow": "asset-investment-diligence-v1",
+  "workflow_id": "asset-investment-diligence-v1",
+  "x_research_scopes": []
+}

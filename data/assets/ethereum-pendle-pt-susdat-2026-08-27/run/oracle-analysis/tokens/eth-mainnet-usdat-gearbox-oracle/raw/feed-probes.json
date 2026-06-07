@@ -1,0 +1,66 @@
+{
+  "status": "review_required",
+  "run_date": "2026-06-06",
+  "rpc": "https://ethereum-rpc.publicnode.com",
+  "scope_id": "eth-mainnet-usdat-gearbox-oracle",
+  "token": "0x23238f20b894f29041f48d88ee91131c395aaa71",
+  "feed": {
+    "address": "0x54DF8bAa0F35B767fFd2124c1D4F13788251E312",
+    "contractType": "PRICE_FEED::CURVE_TWAP",
+    "version": 311,
+    "decimals": 8,
+    "description": "USDat Curve TWAP price feed",
+    "stalenessPeriod": 0,
+    "latestRoundData": {
+      "roundId": 0,
+      "answer": 99965317,
+      "startedAt": 0,
+      "updatedAt": 1780732847,
+      "updatedAtUtc": "2026-06-06 08:00:47 UTC",
+      "answeredInRound": 0
+    },
+    "child_priceFeed": "0x8Ad48f5269A9e8C21F677bc81CCE503E55196949",
+    "pool": "0xF4d0CF32908b2C7f1021339c43Df0F77f06896d7",
+    "token": "0x23238f20b894f29041f48D88eE91131C395Aaa71",
+    "lowerBound": 0,
+    "upperBound": "1000000000000000000",
+    "skipCheck": true
+  },
+  "child_bounded_usdc_feed": {
+    "address": "0x8Ad48f5269A9e8C21F677bc81CCE503E55196949",
+    "contractType": "PRICE_FEED::BOUNDED",
+    "version": 311,
+    "decimals": 8,
+    "description": "USDC bounded price feed",
+    "stalenessPeriod": 87300,
+    "latestRoundData": {
+      "answer": 99965695,
+      "updatedAt": 1780732847,
+      "updatedAtUtc": "2026-06-06 08:00:47 UTC"
+    },
+    "priceFeed": "0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6",
+    "upperBound": 104000000,
+    "skipCheck": false
+  },
+  "chainlink_usdc_usd": {
+    "address": "0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6",
+    "decimals": 8,
+    "description": "USDC / USD",
+    "version": 6,
+    "latestRoundData": {
+      "answer": 99965695,
+      "updatedAt": 1780732847,
+      "updatedAtUtc": "2026-06-06 08:00:47 UTC"
+    }
+  },
+  "curve_pool": {
+    "address": "0xF4d0CF32908b2C7f1021339c43Df0F77f06896d7",
+    "coin0": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "balance0_raw": "7822418142613",
+    "balance0_units": "7822418.142613 USDC",
+    "coin1": "0x23238f20b894f29041f48D88eE91131C395Aaa71",
+    "balance1_raw": "7884155725500",
+    "balance1_units": "7884155.725500 USDat",
+    "virtual_price": "1001490689399622626"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "artifact_dir": "tokens/eth-mainnet-susdat",
+  "chain": "Ethereum mainnet",
+  "chain_id": 1,
+  "intended_use": "Candidate yield-bearing collateral exposure for Gearbox Credit Account opening analysis while borrowing USDC.",
+  "name": null,
+  "notes": [
+    "Borrow asset: USDC.",
+    "Borrow rate assumption: 9%.",
+    "Supplied Gearbox parameter context: LTV/LT 0.86.",
+    "Token role: collateral.",
+    "No position size, target leverage, hold horizon, wallet eligibility, or user HF floor supplied. Treat these as unresolved gates for execution."
+  ],
+  "scope_id": "eth-mainnet-susdat",
+  "scope_slug": "eth-mainnet-susdat",
+  "symbol": "sUSDat",
+  "token_address": "0xd166337499e176bbc38a1fbd113ab144e5bd2df7"
+}

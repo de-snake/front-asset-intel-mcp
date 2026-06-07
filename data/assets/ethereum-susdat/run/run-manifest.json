@@ -1,0 +1,29 @@
+{
+  "children": {
+    "asset": {
+      "run_root": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/asset-investment-diligence",
+      "workflow": "asset-investment-diligence",
+      "workflow_id": "asset-investment-diligence-v1"
+    },
+    "oracle": {
+      "run_root": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run/oracle-analysis",
+      "workflow": "oracle-analysis",
+      "workflow_id": "oracle-analysis-v1"
+    }
+  },
+  "execute_gate": {
+    "reason": "No state-changing action is in scope.",
+    "status": "blocked"
+  },
+  "input_sha256": "c7bbc03e59800311ca808043d085a1f0074a898914c4eb37c884db476c10776d",
+  "next_action": ".workflow/next-action.json",
+  "parent_return": "agentic-flow/analyze-and-propose.md",
+  "preview_gate": {
+    "reason": "Analyze artifacts are not complete.",
+    "status": "blocked"
+  },
+  "run_root": "dev/implementation/reproducible-runs/usdat-susdat-collateral-20260606/run",
+  "schema_version": "analyze-propose-run-manifest-v1",
+  "status": "scaffolded",
+  "workflow": "combined-analyze-propose"
+}

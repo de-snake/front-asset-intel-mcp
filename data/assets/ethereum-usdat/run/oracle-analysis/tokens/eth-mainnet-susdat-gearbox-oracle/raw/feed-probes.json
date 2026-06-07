@@ -1,0 +1,49 @@
+{
+  "status": "review_required",
+  "run_date": "2026-06-06",
+  "rpc": "https://ethereum-rpc.publicnode.com",
+  "scope_id": "eth-mainnet-susdat-gearbox-oracle",
+  "token": "0xd166337499e176bbc38a1fbd113ab144e5bd2df7",
+  "feed": {
+    "address": "0xe5d7ce380349f0380d8A216A75BCd1070C0ed5b1",
+    "contractType": "PRICE_FEED::ERC4626",
+    "version": 311,
+    "decimals": 8,
+    "description": "sUSDat / USD LP price feed",
+    "stalenessPeriod": 0,
+    "latestRoundData": {
+      "roundId": 0,
+      "answer": 95272729,
+      "startedAt": 0,
+      "updatedAt": 1780732847,
+      "updatedAtUtc": "2026-06-06 08:00:47 UTC",
+      "answeredInRound": 0
+    },
+    "child_priceFeed": "0x54DF8bAa0F35B767fFd2124c1D4F13788251E312",
+    "getLPExchangeRate": 953119,
+    "lowerBound": 934371,
+    "upperBound": 953058,
+    "skipCheck": true
+  },
+  "vault": {
+    "address": "0xd166337499e176bbc38a1fbd113ab144e5bd2df7",
+    "name": "Staked USDat",
+    "symbol": "sUSDat",
+    "decimals": 18,
+    "asset": "0x23238f20b894f29041f48D88eE91131C395Aaa71",
+    "totalSupply_raw": "100143196908619173009455062",
+    "totalAssets_raw": "95448414265218",
+    "convertToAssets_1e18_raw": "953119"
+  },
+  "child_usdat_feed": "0x54DF8bAa0F35B767fFd2124c1D4F13788251E312",
+  "secondary_curve_pool": {
+    "address": "0x6206cA315c2fCDd2A857b47EFB285AA12c529a7a",
+    "coin0": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "balance0_raw": "296560846211",
+    "balance0_units": "296560.846211 USDC",
+    "coin1": "0xD166337499E176bbC38a1FBd113Ab144e5bd2Df7",
+    "balance1_raw": "1619368656036887211267757",
+    "balance1_units": "1619368.656036887211267757 sUSDat",
+    "virtual_price": "971637522163633718"
+  }
+}

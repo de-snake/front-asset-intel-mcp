@@ -1,0 +1,28 @@
+{
+  "accepted_methodologies": [
+    "recursive feed graph",
+    "source primitive audit",
+    "side-specific stress tradeoff analysis"
+  ],
+  "analysis_questions": [
+    "Does the live Gearbox feed recursively account for sUSDat value and its USDat exposure instead of stopping at a top-level label?",
+    "Which source primitives drive borrower-friendly versus pool-LP-risky outcomes?",
+    "What unresolved oracle, liquidity, transferability, eligibility, freeze, redemption, issuer-control, or route gates block Preview or Execute?"
+  ],
+  "artifact_dir": "tokens/eth-mainnet-susdat-gearbox-oracle",
+  "asset_symbol": "sUSDat",
+  "chain": "Ethereum mainnet",
+  "chain_id": 1,
+  "feed_address": "0xe5d7ce380349f0380d8A216A75BCd1070C0ed5b1",
+  "feed_discovery_paths": [],
+  "market_or_credit_manager": "not_available",
+  "position_side": "Credit Account borrower / leverage farmer",
+  "position_size": "not_available",
+  "protocol": "Gearbox",
+  "related_asset_scope_id": "eth-mainnet-susdat",
+  "scope_id": "eth-mainnet-susdat-gearbox-oracle",
+  "scope_slug": "eth-mainnet-susdat-gearbox-oracle",
+  "status": "review_required",
+  "token_address": "0xd166337499e176bbc38a1fbd113ab144e5bd2df7",
+  "token_role": "collateral"
+}
