@@ -171,7 +171,9 @@
       "agent_display.underwriting_status",
       "agent_display.execution_automation_status",
       "agent_display.primary_blockers",
-      "agent_display.next_action"
+      "agent_display.next_action",
+      "agent_display.simple_token_return_display",
+      "agent_display.simple_token_return_estimate"
     ],
     "score_display": "44/100 asset-quality evidence",
     "score_sort": 44,
@@ -186,6 +188,89 @@
       "Liquidity/peg/size: Secondary DEX liquidity exists but can differ from manager/NAV price; live route quote at exact size is required"
     ],
     "next_action": "A fresh quantitative pass is required for S&P 500/fund NAV drawdown, primary-redemption eligibility, Base liquidity, oracle/liquidation behavior, issuer-control tail risk, and fund gates/fees/timing.",
-    "table_note": "A fresh quantitative pass is required for S&P 500/fund NAV drawdown, primary-redemption eligibility, Base liquidity, oracle/liquidation behavior, issuer-control tail risk, and fund gates/fees/timing."
+    "table_note": "A fresh quantitative pass is required for S&P 500/fund NAV drawdown, primary-redemption eligibility, Base liquidity, oracle/liquidation behavior, issuer-control tail risk, and fund gates/fees/timing.",
+    "simple_token_return_display": "Organic ROI 1.77% over 83d + points ROI 0.00% - expected loss 4.00% (band 1.50%-10.00%) - exit 1.50% = risk-adjusted ROI -3.73% (band -9.73% to -1.23%; -16.42% annualized base)",
+    "simple_token_return_estimate": {
+      "scope": "direct_token_hold_not_pendle_pt",
+      "horizon_days": 83,
+      "organic_yield_apy_estimate": 0.08,
+      "organic_yield_apy_range_estimate": [
+        0.0,
+        0.08
+      ],
+      "organic_roi_over_horizon": 0.017655,
+      "estimated_points_roi_over_horizon": 0.0,
+      "estimated_points_annualized_return": 0.0,
+      "points_program": "none modeled",
+      "points_roi_scenarios_over_horizon": {
+        "low": 0.0,
+        "base": 0.0,
+        "high": 0.0
+      },
+      "expected_loss_prior": 0.04,
+      "exit_cost_assumption": 0.015,
+      "risk_adjusted_roi_before_points": -0.037345,
+      "risk_adjusted_roi_after_base_points": -0.037345,
+      "risk_adjusted_annualized_return_after_base_points": -0.164228,
+      "underwriting_hurdle_net_annualized": 0.1,
+      "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+      "basis": "Low-confidence placeholder estimate: deSPXA is S&P 500/SPXA exposure, so organic ROI is modeled as an 8% annualized total-return prior, not token staking yield. The old run did not produce a fresh deSPXA quant layer and no points program is modeled. Expected loss is expressed as a band: base reflects liquidity/eligibility/NAV-oracle friction rather than assuming the full equity stress case, while the high case preserves the former conservative stress placeholder.",
+      "confidence": "low; fresh quant/live route pass required before use",
+      "evidence": [
+        "base-despxa/research.md lines 16, 20, 31, 41, 88",
+        "generic analyst prior for S&P 500 total-return exposure; not a source-quoted forecast"
+      ],
+      "expected_loss_prior_scenarios": {
+        "low": 0.015,
+        "base": 0.04,
+        "high": 0.1
+      },
+      "risk_adjusted_roi_scenarios_after_base_points": {
+        "low_loss": -0.012345,
+        "base": -0.037345,
+        "high_loss": -0.097345
+      }
+    }
+  },
+  "simple_token_return_estimate": {
+    "scope": "direct_token_hold_not_pendle_pt",
+    "horizon_days": 83,
+    "organic_yield_apy_estimate": 0.08,
+    "organic_yield_apy_range_estimate": [
+      0.0,
+      0.08
+    ],
+    "organic_roi_over_horizon": 0.017655,
+    "estimated_points_roi_over_horizon": 0.0,
+    "estimated_points_annualized_return": 0.0,
+    "points_program": "none modeled",
+    "points_roi_scenarios_over_horizon": {
+      "low": 0.0,
+      "base": 0.0,
+      "high": 0.0
+    },
+    "expected_loss_prior": 0.04,
+    "exit_cost_assumption": 0.015,
+    "risk_adjusted_roi_before_points": -0.037345,
+    "risk_adjusted_roi_after_base_points": -0.037345,
+    "risk_adjusted_annualized_return_after_base_points": -0.164228,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+    "basis": "Low-confidence placeholder estimate: deSPXA is S&P 500/SPXA exposure, so organic ROI is modeled as an 8% annualized total-return prior, not token staking yield. The old run did not produce a fresh deSPXA quant layer and no points program is modeled. Expected loss is expressed as a band: base reflects liquidity/eligibility/NAV-oracle friction rather than assuming the full equity stress case, while the high case preserves the former conservative stress placeholder.",
+    "confidence": "low; fresh quant/live route pass required before use",
+    "evidence": [
+      "base-despxa/research.md lines 16, 20, 31, 41, 88",
+      "generic analyst prior for S&P 500 total-return exposure; not a source-quoted forecast"
+    ],
+    "expected_loss_prior_scenarios": {
+      "low": 0.015,
+      "base": 0.04,
+      "high": 0.1
+    },
+    "risk_adjusted_roi_scenarios_after_base_points": {
+      "low_loss": -0.012345,
+      "base": -0.037345,
+      "high_loss": -0.097345
+    }
   }
 }

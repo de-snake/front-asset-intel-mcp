@@ -27,6 +27,30 @@ type SummaryDimension = {
   evidence: EvidencePointer[];
   confidence: string;
 };
+type SimpleTokenReturnEstimate = {
+  scope: string;
+  horizon_days: number;
+  organic_yield_apy_estimate: number;
+  organic_yield_apy_range_estimate: [number, number];
+  organic_roi_over_horizon: number;
+  estimated_points_roi_over_horizon: number;
+  estimated_points_annualized_return: number;
+  points_program: string;
+  points_roi_scenarios_over_horizon: { low: number; base: number; high: number };
+  expected_loss_prior: number;
+  expected_loss_prior_scenarios: { low: number; base: number; high: number };
+  exit_cost_assumption: number;
+  risk_adjusted_roi_before_points: number;
+  risk_adjusted_roi_after_base_points: number;
+  risk_adjusted_roi_scenarios_after_base_points: { low_loss: number; base: number; high_loss: number };
+  risk_adjusted_annualized_return_after_base_points: number;
+  underwriting_hurdle_net_annualized: number;
+  method: string;
+  basis: string;
+  confidence: string;
+  evidence: string[];
+};
+
 type AgentDisplay = {
   recommended_table_fields: string[];
   score_display: string;
@@ -41,6 +65,8 @@ type AgentDisplay = {
   primary_blockers: string[];
   next_action: string;
   table_note: string;
+  simple_token_return_display?: string;
+  simple_token_return_estimate?: SimpleTokenReturnEstimate;
 };
 type Summary = {
   summary_schema_version: string;
@@ -59,6 +85,7 @@ type Summary = {
   agent_display: AgentDisplay;
   dimensions: SummaryDimension[];
   return_profile?: unknown;
+  simple_token_return_estimate?: SimpleTokenReturnEstimate;
   blocking_unknowns: string[];
   source_report: string;
 };
@@ -110,6 +137,27 @@ const validExecutionAutomationStatuses = new Set([
 ]);
 const validEvidenceStates = new Set(["verified", "partially_supported", "source_inconclusive", "missing_or_unknown", "negative_evidence"]);
 const validSummarySchemaVersions = new Set(["asset_summary_v1.2", "asset_summary_v1.3"]);
+const simpleTokenReturnEstimateSlugs = new Set([
+  "base-despxa",
+  "ethereum-apxusd",
+  "ethereum-apyusd",
+  "ethereum-prime",
+  "ethereum-susdat",
+  "ethereum-usdat",
+]);
+const simpleTokenReturnEstimateNumericFields: Array<keyof SimpleTokenReturnEstimate> = [
+  "horizon_days",
+  "organic_yield_apy_estimate",
+  "organic_roi_over_horizon",
+  "estimated_points_roi_over_horizon",
+  "estimated_points_annualized_return",
+  "expected_loss_prior",
+  "exit_cost_assumption",
+  "risk_adjusted_roi_before_points",
+  "risk_adjusted_roi_after_base_points",
+  "risk_adjusted_annualized_return_after_base_points",
+  "underwriting_hurdle_net_annualized",
+];
 const forbiddenPtPointAssumptionPhrases = [
   "points",
   "needs points",
@@ -123,6 +171,97 @@ const forbiddenPtPointAssumptionPhrases = [
   "gravity points",
   "credible saturn points",
 ];
+
+function approxEqual(actual: number, expected: number, tolerance = 0.00001): boolean {
+  return Math.abs(actual - expected) <= tolerance;
+}
+
+function validateSimpleTokenReturnEstimate(slug: string, summary: Summary): void {
+  assert(summary.simple_token_return_estimate, `${slug}: simple token missing return estimate`);
+  assert(summary.agent_display.simple_token_return_estimate, `${slug}: agent_display missing simple token return estimate`);
+  assert(
+    JSON.stringify(summary.agent_display.simple_token_return_estimate) === JSON.stringify(summary.simple_token_return_estimate),
+    `${slug}: agent_display simple_token_return_estimate must mirror top-level estimate`,
+  );
+  assert(
+    summary.agent_display.recommended_table_fields.includes("agent_display.simple_token_return_display"),
+    `${slug}: table field hint missing simple token return display`,
+  );
+  assert(
+    summary.agent_display.simple_token_return_display && summary.agent_display.simple_token_return_display.includes("risk-adjusted ROI"),
+    `${slug}: simple token return display missing risk-adjusted ROI`,
+  );
+
+  const estimate = summary.simple_token_return_estimate;
+  assert(estimate.scope === "direct_token_hold_not_pendle_pt", `${slug}: invalid simple token estimate scope`);
+  for (const field of simpleTokenReturnEstimateNumericFields) {
+    const value = estimate[field];
+    assert(typeof value === "number" && Number.isFinite(value), `${slug}: ${field} must be finite number`);
+  }
+  assert(estimate.horizon_days > 0, `${slug}: horizon_days must be positive`);
+  assert(estimate.organic_yield_apy_range_estimate.length === 2, `${slug}: organic APY range must have two values`);
+  assert(
+    estimate.organic_yield_apy_range_estimate[0] <= estimate.organic_yield_apy_estimate &&
+      estimate.organic_yield_apy_estimate <= estimate.organic_yield_apy_range_estimate[1],
+    `${slug}: organic_yield_apy_estimate outside range`,
+  );
+  assert(
+    estimate.points_roi_scenarios_over_horizon.low <= estimate.points_roi_scenarios_over_horizon.base &&
+      estimate.points_roi_scenarios_over_horizon.base <= estimate.points_roi_scenarios_over_horizon.high,
+    `${slug}: points ROI scenarios not ordered low <= base <= high`,
+  );
+  assert(
+    approxEqual(estimate.estimated_points_roi_over_horizon, estimate.points_roi_scenarios_over_horizon.base),
+    `${slug}: estimated_points_roi_over_horizon must equal base points scenario`,
+  );
+  assert(
+    estimate.expected_loss_prior_scenarios.low <= estimate.expected_loss_prior_scenarios.base &&
+      estimate.expected_loss_prior_scenarios.base <= estimate.expected_loss_prior_scenarios.high,
+    `${slug}: expected-loss scenarios not ordered low <= base <= high`,
+  );
+  assert(
+    approxEqual(estimate.expected_loss_prior, estimate.expected_loss_prior_scenarios.base),
+    `${slug}: expected_loss_prior must equal base expected-loss scenario`,
+  );
+  const expectedRiskAdjusted =
+    estimate.organic_roi_over_horizon +
+    estimate.estimated_points_roi_over_horizon -
+    estimate.expected_loss_prior -
+    estimate.exit_cost_assumption;
+  assert(
+    approxEqual(estimate.risk_adjusted_roi_after_base_points, expectedRiskAdjusted),
+    `${slug}: risk_adjusted_roi_after_base_points formula mismatch`,
+  );
+  assert(
+    approxEqual(estimate.risk_adjusted_roi_scenarios_after_base_points.low_loss, estimate.organic_roi_over_horizon + estimate.estimated_points_roi_over_horizon - estimate.expected_loss_prior_scenarios.low - estimate.exit_cost_assumption) &&
+      approxEqual(estimate.risk_adjusted_roi_scenarios_after_base_points.base, estimate.risk_adjusted_roi_after_base_points) &&
+      approxEqual(estimate.risk_adjusted_roi_scenarios_after_base_points.high_loss, estimate.organic_roi_over_horizon + estimate.estimated_points_roi_over_horizon - estimate.expected_loss_prior_scenarios.high - estimate.exit_cost_assumption),
+    `${slug}: risk-adjusted ROI expected-loss scenario formulas mismatch`,
+  );
+  assert(
+    estimate.risk_adjusted_roi_scenarios_after_base_points.low_loss >= estimate.risk_adjusted_roi_scenarios_after_base_points.base &&
+      estimate.risk_adjusted_roi_scenarios_after_base_points.base >= estimate.risk_adjusted_roi_scenarios_after_base_points.high_loss,
+    `${slug}: risk-adjusted ROI scenarios not ordered low_loss >= base >= high_loss`,
+  );
+  assert(
+    approxEqual(
+      estimate.risk_adjusted_roi_before_points,
+      estimate.organic_roi_over_horizon - estimate.expected_loss_prior - estimate.exit_cost_assumption,
+    ),
+    `${slug}: risk_adjusted_roi_before_points formula mismatch`,
+  );
+  assert(
+    approxEqual(
+      estimate.risk_adjusted_annualized_return_after_base_points,
+      (estimate.risk_adjusted_roi_after_base_points * 365) / estimate.horizon_days,
+    ),
+    `${slug}: risk-adjusted annualized return formula mismatch`,
+  );
+  assert(estimate.method.includes("organic_roi_over_horizon"), `${slug}: method must name return formula`);
+  assert(estimate.basis.length > 80, `${slug}: estimate basis too short`);
+  assert(estimate.confidence.length > 0, `${slug}: estimate confidence missing`);
+  assert(Array.isArray(estimate.evidence) && estimate.evidence.length > 0, `${slug}: estimate evidence missing`);
+}
 
 for (const dimension of rubric.dimensions) {
   assert(dimension.options.length > 0, `Rubric dimension ${dimension.id} has no options`);
@@ -273,6 +412,8 @@ for (const entry of entries) {
 
   if (manifest.asset_type === "pendle_pt") {
     assert(summary.return_profile, `${manifest.slug}: PT summary must include return_profile`);
+    assert(!summary.simple_token_return_estimate, `${manifest.slug}: PT summary must not include simple token return estimate`);
+    assert(!summary.agent_display.simple_token_return_estimate, `${manifest.slug}: PT agent_display must not include simple token return estimate`);
     assert(
       summary.agent_display.score_source === "pt_fixed_return_trade_score",
       `${manifest.slug}: PT score_source must be pt_fixed_return_trade_score`,
@@ -286,6 +427,8 @@ for (const entry of entries) {
       summary.agent_display.score_source === "direct_asset_quality_score",
       `${manifest.slug}: token score_source must be direct_asset_quality_score`,
     );
+    assert(simpleTokenReturnEstimateSlugs.has(manifest.slug), `${manifest.slug}: unexpected token summary without simple estimate allowlist`);
+    validateSimpleTokenReturnEstimate(manifest.slug, summary);
   }
 }
 

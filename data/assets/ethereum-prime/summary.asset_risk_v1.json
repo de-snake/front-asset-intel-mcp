@@ -168,7 +168,9 @@
       "agent_display.underwriting_status",
       "agent_display.execution_automation_status",
       "agent_display.primary_blockers",
-      "agent_display.next_action"
+      "agent_display.next_action",
+      "agent_display.simple_token_return_display",
+      "agent_display.simple_token_return_estimate"
     ],
     "score_display": "41/100 asset-quality evidence",
     "score_sort": 41,
@@ -183,6 +185,89 @@
       "Liquidity/peg/size: Ethereum DEX liquidity exists and may support smaller exits, but the report says exit depth can cliff near visible inventory and requires a live size-specific quote"
     ],
     "next_action": "A fresh quantitative pass is required for NAV sensitivity, HELOC credit-cycle exposure, exit depth, issuer-control tail risk, and oracle/liquidation behavior.",
-    "table_note": "A fresh quantitative pass is required for NAV sensitivity, HELOC credit-cycle exposure, exit depth, issuer-control tail risk, and oracle/liquidation behavior."
+    "table_note": "A fresh quantitative pass is required for NAV sensitivity, HELOC credit-cycle exposure, exit depth, issuer-control tail risk, and oracle/liquidation behavior.",
+    "simple_token_return_display": "Organic ROI 1.98% over 83d + points ROI 0.00% - expected loss 4.50% (band 1.50%-9.00%) - exit 1.50% = risk-adjusted ROI -4.02% (band -8.52% to -1.02%; -17.68% annualized base)",
+    "simple_token_return_estimate": {
+      "scope": "direct_token_hold_not_pendle_pt",
+      "horizon_days": 83,
+      "organic_yield_apy_estimate": 0.09,
+      "organic_yield_apy_range_estimate": [
+        0.0,
+        0.09
+      ],
+      "organic_roi_over_horizon": 0.01979,
+      "estimated_points_roi_over_horizon": 0.0,
+      "estimated_points_annualized_return": 0.0,
+      "points_program": "none modeled",
+      "points_roi_scenarios_over_horizon": {
+        "low": 0.0,
+        "base": 0.0,
+        "high": 0.0
+      },
+      "expected_loss_prior": 0.045,
+      "exit_cost_assumption": 0.015,
+      "risk_adjusted_roi_before_points": -0.04021,
+      "risk_adjusted_roi_after_base_points": -0.04021,
+      "risk_adjusted_annualized_return_after_base_points": -0.176827,
+      "underwriting_hurdle_net_annualized": 0.1,
+      "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+      "basis": "Low-confidence placeholder estimate: PRIME is linked to Figure Democratized Prime / HELOC lending and external Figure materials advertise up to 9% yield, but the local old run did not produce a fresh PRIME quant layer. No points program is modeled. Expected loss is now expressed as a band: base reflects NAV/settlement/control/liquidity uncertainty for moderate size, while the high case preserves the former conservative stress placeholder.",
+      "confidence": "low; fresh quant/live route pass required before use",
+      "evidence": [
+        "ethereum-prime/research.md lines 16, 32-40, 87-98",
+        "web_search Figure Markets Democratized Prime up to 9% yield result"
+      ],
+      "expected_loss_prior_scenarios": {
+        "low": 0.015,
+        "base": 0.045,
+        "high": 0.09
+      },
+      "risk_adjusted_roi_scenarios_after_base_points": {
+        "low_loss": -0.01021,
+        "base": -0.04021,
+        "high_loss": -0.08521
+      }
+    }
+  },
+  "simple_token_return_estimate": {
+    "scope": "direct_token_hold_not_pendle_pt",
+    "horizon_days": 83,
+    "organic_yield_apy_estimate": 0.09,
+    "organic_yield_apy_range_estimate": [
+      0.0,
+      0.09
+    ],
+    "organic_roi_over_horizon": 0.01979,
+    "estimated_points_roi_over_horizon": 0.0,
+    "estimated_points_annualized_return": 0.0,
+    "points_program": "none modeled",
+    "points_roi_scenarios_over_horizon": {
+      "low": 0.0,
+      "base": 0.0,
+      "high": 0.0
+    },
+    "expected_loss_prior": 0.045,
+    "exit_cost_assumption": 0.015,
+    "risk_adjusted_roi_before_points": -0.04021,
+    "risk_adjusted_roi_after_base_points": -0.04021,
+    "risk_adjusted_annualized_return_after_base_points": -0.176827,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+    "basis": "Low-confidence placeholder estimate: PRIME is linked to Figure Democratized Prime / HELOC lending and external Figure materials advertise up to 9% yield, but the local old run did not produce a fresh PRIME quant layer. No points program is modeled. Expected loss is now expressed as a band: base reflects NAV/settlement/control/liquidity uncertainty for moderate size, while the high case preserves the former conservative stress placeholder.",
+    "confidence": "low; fresh quant/live route pass required before use",
+    "evidence": [
+      "ethereum-prime/research.md lines 16, 32-40, 87-98",
+      "web_search Figure Markets Democratized Prime up to 9% yield result"
+    ],
+    "expected_loss_prior_scenarios": {
+      "low": 0.015,
+      "base": 0.045,
+      "high": 0.09
+    },
+    "risk_adjusted_roi_scenarios_after_base_points": {
+      "low_loss": -0.01021,
+      "base": -0.04021,
+      "high_loss": -0.08521
+    }
   }
 }

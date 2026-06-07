@@ -181,7 +181,9 @@
       "agent_display.underwriting_status",
       "agent_display.execution_automation_status",
       "agent_display.primary_blockers",
-      "agent_display.next_action"
+      "agent_display.next_action",
+      "agent_display.simple_token_return_display",
+      "agent_display.simple_token_return_estimate"
     ],
     "score_display": "40/100 asset-quality evidence",
     "score_sort": 40,
@@ -196,6 +198,89 @@
       "Issuer/admin controls: sUSDat exposes blacklist and pause surfaces and inherits USDat permissioning concerns"
     ],
     "next_action": "Resolve named live inputs before any Preview/Execute automation.",
-    "table_note": "sUSDat remains more conditional than USDat."
+    "table_note": "sUSDat remains more conditional than USDat.",
+    "simple_token_return_display": "Organic ROI 2.71% over 83d + points ROI 0.21% - expected loss 5.50% (band 3.00%-8.10%) - exit 0.75% = risk-adjusted ROI -3.33% (band -5.93% to -0.83%; -14.64% annualized base)",
+    "simple_token_return_estimate": {
+      "scope": "direct_token_hold_not_pendle_pt",
+      "horizon_days": 83,
+      "organic_yield_apy_estimate": 0.125,
+      "organic_yield_apy_range_estimate": [
+        0.11,
+        0.14
+      ],
+      "organic_roi_over_horizon": 0.027145,
+      "estimated_points_roi_over_horizon": 0.002063,
+      "estimated_points_annualized_return": 0.009072,
+      "points_program": "Saturn Gravity Points",
+      "points_roi_scenarios_over_horizon": {
+        "low": 9e-05,
+        "base": 0.002063,
+        "high": 0.0195
+      },
+      "expected_loss_prior": 0.055,
+      "exit_cost_assumption": 0.0075,
+      "risk_adjusted_roi_before_points": -0.035355,
+      "risk_adjusted_roi_after_base_points": -0.033292,
+      "risk_adjusted_annualized_return_after_base_points": -0.146405,
+      "underwriting_hurdle_net_annualized": 0.1,
+      "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+      "basis": "sUSDat organic yield uses the midpoint of the old 11%-14% APY range for the STRC/digital-credit yield leg. Saturn Gravity Points use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old Saturn PT-sUSDat quant prior for STRC/NAV/queue realization stress; exit cost follows the Saturn PT-sUSDat route-cost prior.",
+      "confidence": "medium/low for organic APY range; low for realized NAV/queue exit value and points accrual",
+      "evidence": [
+        "investment-analyst-report-points-pt-risk-return.md lines 24, 59-63, 84-89, 276-277",
+        "ethereum-susdat/research.md lines 74-82"
+      ],
+      "expected_loss_prior_scenarios": {
+        "low": 0.03,
+        "base": 0.055,
+        "high": 0.081
+      },
+      "risk_adjusted_roi_scenarios_after_base_points": {
+        "low_loss": -0.008292,
+        "base": -0.033292,
+        "high_loss": -0.059292
+      }
+    }
+  },
+  "simple_token_return_estimate": {
+    "scope": "direct_token_hold_not_pendle_pt",
+    "horizon_days": 83,
+    "organic_yield_apy_estimate": 0.125,
+    "organic_yield_apy_range_estimate": [
+      0.11,
+      0.14
+    ],
+    "organic_roi_over_horizon": 0.027145,
+    "estimated_points_roi_over_horizon": 0.002063,
+    "estimated_points_annualized_return": 0.009072,
+    "points_program": "Saturn Gravity Points",
+    "points_roi_scenarios_over_horizon": {
+      "low": 9e-05,
+      "base": 0.002063,
+      "high": 0.0195
+    },
+    "expected_loss_prior": 0.055,
+    "exit_cost_assumption": 0.0075,
+    "risk_adjusted_roi_before_points": -0.035355,
+    "risk_adjusted_roi_after_base_points": -0.033292,
+    "risk_adjusted_annualized_return_after_base_points": -0.146405,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+    "basis": "sUSDat organic yield uses the midpoint of the old 11%-14% APY range for the STRC/digital-credit yield leg. Saturn Gravity Points use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old Saturn PT-sUSDat quant prior for STRC/NAV/queue realization stress; exit cost follows the Saturn PT-sUSDat route-cost prior.",
+    "confidence": "medium/low for organic APY range; low for realized NAV/queue exit value and points accrual",
+    "evidence": [
+      "investment-analyst-report-points-pt-risk-return.md lines 24, 59-63, 84-89, 276-277",
+      "ethereum-susdat/research.md lines 74-82"
+    ],
+    "expected_loss_prior_scenarios": {
+      "low": 0.03,
+      "base": 0.055,
+      "high": 0.081
+    },
+    "risk_adjusted_roi_scenarios_after_base_points": {
+      "low_loss": -0.008292,
+      "base": -0.033292,
+      "high_loss": -0.059292
+    }
   }
 }

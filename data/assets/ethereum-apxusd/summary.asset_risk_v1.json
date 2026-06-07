@@ -245,7 +245,9 @@
       "agent_display.underwriting_status",
       "agent_display.execution_automation_status",
       "agent_display.primary_blockers",
-      "agent_display.next_action"
+      "agent_display.next_action",
+      "agent_display.simple_token_return_display",
+      "agent_display.simple_token_return_estimate"
     ],
     "score_display": "49/100 asset-quality evidence",
     "score_sort": 49,
@@ -260,6 +262,89 @@
       "Issuer/admin controls: On-chain evidence maps AccessManager roles, UUPS upgradeability, pause and deny-list controls, but those controls are strong and pending Safe payloads were not fully decoded"
     ],
     "next_action": "Upgrade if live evidence shows reconciled reserves, current market price near accounting value, holder-eligible redemption path, and no pending admin event. Downgrade if apxUSD trades materially below accounting value, redemption remains constrained, or APYx points eligibility cannot be tied to the PT route.",
-    "table_note": "apxUSD has observable technical and issuer evidence, listed audits, and secondary-market liquidity, but reserve reconciliation, holder-specific redemption eligibility, issuer controls, live route depth, Gearbox oracle/support, and newly integrated social collateral-stress/redemption-arbitrage concerns remain unresolved for automated analyst-agent use."
+    "table_note": "apxUSD has observable technical and issuer evidence, listed audits, and secondary-market liquidity, but reserve reconciliation, holder-specific redemption eligibility, issuer controls, live route depth, Gearbox oracle/support, and newly integrated social collateral-stress/redemption-arbitrage concerns remain unresolved for automated analyst-agent use.",
+    "simple_token_return_display": "Organic ROI 0.00% over 153d + points ROI 0.27% - expected loss 2.50% (band 1.50%-3.85%) - exit 1.00% = risk-adjusted ROI -3.23% (band -4.58% to -2.23%; -7.71% annualized base)",
+    "simple_token_return_estimate": {
+      "scope": "direct_token_hold_not_pendle_pt",
+      "horizon_days": 153,
+      "organic_yield_apy_estimate": 0.0,
+      "organic_yield_apy_range_estimate": [
+        0.0,
+        0.0
+      ],
+      "organic_roi_over_horizon": 0.0,
+      "estimated_points_roi_over_horizon": 0.0027,
+      "estimated_points_annualized_return": 0.006441,
+      "points_program": "APYx Pips",
+      "points_roi_scenarios_over_horizon": {
+        "low": 0.00012,
+        "base": 0.0027,
+        "high": 0.0252
+      },
+      "expected_loss_prior": 0.025,
+      "exit_cost_assumption": 0.01,
+      "risk_adjusted_roi_before_points": -0.035,
+      "risk_adjusted_roi_after_base_points": -0.0323,
+      "risk_adjusted_annualized_return_after_base_points": -0.077056,
+      "underwriting_hurdle_net_annualized": 0.1,
+      "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+      "basis": "apxUSD is modeled as the non-yielding APYx base dollar exposure; APYx Pips use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old APYx PT-apxUSD quant prior; exit cost still mirrors the APYx PT exit-cost assumption.",
+      "confidence": "medium for APYx priors; low for route-specific points accrual until wallet/instrument eligibility is proven",
+      "evidence": [
+        "investment-analyst-report-points-pt-risk-return.md lines 49-57, 74-78, 272-275",
+        "ethereum-apxusd/research.md lines 160-168"
+      ],
+      "expected_loss_prior_scenarios": {
+        "low": 0.015,
+        "base": 0.025,
+        "high": 0.0385
+      },
+      "risk_adjusted_roi_scenarios_after_base_points": {
+        "low_loss": -0.0223,
+        "base": -0.0323,
+        "high_loss": -0.0458
+      }
+    }
+  },
+  "simple_token_return_estimate": {
+    "scope": "direct_token_hold_not_pendle_pt",
+    "horizon_days": 153,
+    "organic_yield_apy_estimate": 0.0,
+    "organic_yield_apy_range_estimate": [
+      0.0,
+      0.0
+    ],
+    "organic_roi_over_horizon": 0.0,
+    "estimated_points_roi_over_horizon": 0.0027,
+    "estimated_points_annualized_return": 0.006441,
+    "points_program": "APYx Pips",
+    "points_roi_scenarios_over_horizon": {
+      "low": 0.00012,
+      "base": 0.0027,
+      "high": 0.0252
+    },
+    "expected_loss_prior": 0.025,
+    "exit_cost_assumption": 0.01,
+    "risk_adjusted_roi_before_points": -0.035,
+    "risk_adjusted_roi_after_base_points": -0.0323,
+    "risk_adjusted_annualized_return_after_base_points": -0.077056,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+    "basis": "apxUSD is modeled as the non-yielding APYx base dollar exposure; APYx Pips use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old APYx PT-apxUSD quant prior; exit cost still mirrors the APYx PT exit-cost assumption.",
+    "confidence": "medium for APYx priors; low for route-specific points accrual until wallet/instrument eligibility is proven",
+    "evidence": [
+      "investment-analyst-report-points-pt-risk-return.md lines 49-57, 74-78, 272-275",
+      "ethereum-apxusd/research.md lines 160-168"
+    ],
+    "expected_loss_prior_scenarios": {
+      "low": 0.015,
+      "base": 0.025,
+      "high": 0.0385
+    },
+    "risk_adjusted_roi_scenarios_after_base_points": {
+      "low_loss": -0.0223,
+      "base": -0.0323,
+      "high_loss": -0.0458
+    }
   }
 }

@@ -32,6 +32,12 @@ For table/ranking UIs, use the `agent_display` block first:
 
 `rubric.score` / `rubric.decision_class` remain for backward compatibility and deterministic score validation. Do not use those two fields alone as the table decision: PT rows expose a separate fixed-return table score, and `review_required` is only a legacy score-bucket class.
 
+For non-PT/simple-token rows, summaries also expose `simple_token_return_estimate` at the top level and mirrored in `agent_display.simple_token_return_estimate`, plus a compact `agent_display.simple_token_return_display`. These estimates separate: organic return from holding the token (`organic_yield_apy_estimate`, `organic_roi_over_horizon`), modeled points value (`estimated_points_roi_over_horizon`, `estimated_points_annualized_return`, `points_roi_scenarios_over_horizon`), expected-loss scenarios (`expected_loss_prior`, `expected_loss_prior_scenarios`), and the net analyst hurdle line (`risk_adjusted_roi_before_points`, `risk_adjusted_roi_after_base_points`, `risk_adjusted_roi_scenarios_after_base_points`, `risk_adjusted_annualized_return_after_base_points`).
+
+The normalized base formula is `risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption`, then annualized linearly over `horizon_days` for table comparability. `expected_loss_prior_scenarios` keeps low/base/high loss cases so a conservative stress haircut is not mistaken for the only average estimate; `risk_adjusted_roi_scenarios_after_base_points` recomputes the same formula under the low-loss/base/high-loss cases while holding base points ROI constant.
+
+Source assumptions are precomputed from the local report packages and named inside each estimate `basis` / `evidence`; where no live quant pass or points program exists, the estimate is deliberately low-confidence and points ROI is `0`, not omitted.
+
 Example asset lookups:
 
 - `apxUSD`

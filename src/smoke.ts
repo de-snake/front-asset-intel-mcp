@@ -2,6 +2,13 @@ import { getAssetResearch, getAssetSummary } from "./registry.js";
 
 type SummaryDimension = { id: string; score: number; max_score: number; score_band: string; status: string };
 
+type SimpleTokenReturnEstimate = {
+  organic_roi_over_horizon?: number;
+  estimated_points_roi_over_horizon?: number;
+  risk_adjusted_roi_after_base_points?: number;
+  risk_adjusted_annualized_return_after_base_points?: number;
+};
+
 type AgentDisplay = {
   score_display?: string;
   score_sort?: number;
@@ -20,6 +27,8 @@ type AgentDisplay = {
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
     underwriting_hurdle_net_annualized?: number;
   };
+  simple_token_return_display?: string;
+  simple_token_return_estimate?: SimpleTokenReturnEstimate;
 };
 
 type Summary = {
@@ -32,6 +41,7 @@ type Summary = {
     risk_adjusted_roi_after_expected_loss_and_exit?: number;
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
   };
+  simple_token_return_estimate?: SimpleTokenReturnEstimate;
   quantitative_risk_return_layer?: {
     risk_adjusted_roi_after_expected_loss_and_exit?: number;
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
@@ -65,6 +75,15 @@ function pickSummary(summary: Summary): Record<string, unknown> {
   if (summary.return_profile) {
     selected.gross_roi = summary.return_profile.gross_roi;
     selected.compound_gross_apy = summary.return_profile.compound_gross_apy;
+  }
+
+  if (summary.simple_token_return_estimate) {
+    selected.simple_token_return_display = summary.agent_display?.simple_token_return_display;
+    selected.organic_roi_over_horizon = summary.simple_token_return_estimate.organic_roi_over_horizon;
+    selected.estimated_points_roi_over_horizon = summary.simple_token_return_estimate.estimated_points_roi_over_horizon;
+    selected.risk_adjusted_roi_after_base_points = summary.simple_token_return_estimate.risk_adjusted_roi_after_base_points;
+    selected.risk_adjusted_annualized_return_after_base_points =
+      summary.simple_token_return_estimate.risk_adjusted_annualized_return_after_base_points;
   }
 
   if (summary.quantitative_risk_return_layer) {

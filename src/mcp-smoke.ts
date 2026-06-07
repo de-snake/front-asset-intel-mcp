@@ -20,6 +20,13 @@ type SummaryDimension = {
   evidence_state: string;
 };
 
+type SimpleTokenReturnEstimate = {
+  organic_roi_over_horizon: number;
+  estimated_points_roi_over_horizon: number;
+  risk_adjusted_roi_after_base_points: number;
+  risk_adjusted_annualized_return_after_base_points: number;
+};
+
 type AgentDisplay = {
   score_display: string;
   score_sort: number;
@@ -37,6 +44,8 @@ type AgentDisplay = {
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
     underwriting_hurdle_net_annualized?: number;
   };
+  simple_token_return_display?: string;
+  simple_token_return_estimate?: SimpleTokenReturnEstimate;
 };
 
 type Summary = {
@@ -51,6 +60,7 @@ type Summary = {
     risk_adjusted_roi_after_expected_loss_and_exit?: number;
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
   };
+  simple_token_return_estimate?: SimpleTokenReturnEstimate;
   quantitative_risk_return_layer?: {
     risk_adjusted_roi_after_expected_loss_and_exit?: number;
     risk_adjusted_annualized_return_after_expected_loss_and_exit?: number;
@@ -125,12 +135,12 @@ send({ jsonrpc: "2.0", method: "notifications/initialized", params: {} });
 send({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} });
 
 const summaryLookups = [
-  { id: 3, label: "apxUSD", symbol: "apxUSD", expectedSymbol: "apxUSD", expectedScore: 49 },
-  { id: 4, label: "apyUSD", symbol: "apyUSD", expectedSymbol: "apyUSD", expectedScore: 35 },
-  { id: 5, label: "PRIME", symbol: "PRIME", expectedSymbol: "PRIME", expectedScore: 41 },
-  { id: 6, label: "deSPXA", symbol: "deSPXA", expectedSymbol: "deSPXA", expectedScore: 44 },
-  { id: 7, label: "USDat", symbol: "USDat", expectedSymbol: "USDat", expectedScore: 52 },
-  { id: 8, label: "sUSDat", symbol: "sUSDat", expectedSymbol: "sUSDat", expectedScore: 40 },
+  { id: 3, label: "apxUSD", symbol: "apxUSD", expectedSymbol: "apxUSD", expectedScore: 49, expectedOrganicRoi: 0, expectedPointsRoi: 0.0027, expectedRiskAdjustedRoi: -0.0323 },
+  { id: 4, label: "apyUSD", symbol: "apyUSD", expectedSymbol: "apyUSD", expectedScore: 35, expectedOrganicRoi: 0.028182, expectedPointsRoi: 0.0027, expectedRiskAdjustedRoi: -0.019118 },
+  { id: 5, label: "PRIME", symbol: "PRIME", expectedSymbol: "PRIME", expectedScore: 41, expectedOrganicRoi: 0.01979, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.04021 },
+  { id: 6, label: "deSPXA", symbol: "deSPXA", expectedSymbol: "deSPXA", expectedScore: 44, expectedOrganicRoi: 0.017655, expectedPointsRoi: 0, expectedRiskAdjustedRoi: -0.037345 },
+  { id: 7, label: "USDat", symbol: "USDat", expectedSymbol: "USDat", expectedScore: 52, expectedOrganicRoi: 0, expectedPointsRoi: 0.002063, expectedRiskAdjustedRoi: -0.006937 },
+  { id: 8, label: "sUSDat", symbol: "sUSDat", expectedSymbol: "sUSDat", expectedScore: 40, expectedOrganicRoi: 0.027145, expectedPointsRoi: 0.002063, expectedRiskAdjustedRoi: -0.033292 },
   {
     id: 9,
     label: "PT-apxUSD",
@@ -267,6 +277,25 @@ for (const lookup of summaryLookups) {
     assert(byId.oracle_accounting_alignment?.status === "cannot_underwrite", "apyUSD oracle status should block underwriting");
     assert(byId.incidents_social_stress?.evidence_state === "negative_evidence", "apyUSD incident evidence state should flag negative evidence");
   }
+  if (lookup.expectedOrganicRoi !== undefined) {
+    assert(summary.simple_token_return_estimate, `${lookup.label} simple token return estimate missing`);
+    assert(summary.agent_display.simple_token_return_estimate, `${lookup.label} table simple token return estimate missing`);
+    assert(
+      summary.agent_display.simple_token_return_display?.includes("Organic ROI") &&
+        summary.agent_display.simple_token_return_display.includes("points ROI") &&
+        summary.agent_display.simple_token_return_display.includes("risk-adjusted ROI"),
+      `${lookup.label} simple token return display missing ROI components`,
+    );
+    assert(summary.simple_token_return_estimate.organic_roi_over_horizon === lookup.expectedOrganicRoi, `${lookup.label} organic ROI estimate changed`);
+    assert(
+      summary.simple_token_return_estimate.estimated_points_roi_over_horizon === lookup.expectedPointsRoi,
+      `${lookup.label} points ROI estimate changed`,
+    );
+    assert(
+      summary.simple_token_return_estimate.risk_adjusted_roi_after_base_points === lookup.expectedRiskAdjustedRoi,
+      `${lookup.label} risk-adjusted ROI estimate changed`,
+    );
+  }
   if (lookup.expectedCompoundGrossApy !== undefined) {
     assert(
       summary.return_profile?.compound_gross_apy === lookup.expectedCompoundGrossApy,
@@ -342,6 +371,11 @@ console.log(
             table_score: summary.agent_display.score_sort,
             score_source: summary.agent_display.score_source,
             inherited_asset_quality_score: summary.agent_display.inherited_asset_quality_score,
+            organic_roi_over_horizon: summary.simple_token_return_estimate?.organic_roi_over_horizon,
+            estimated_points_roi_over_horizon: summary.simple_token_return_estimate?.estimated_points_roi_over_horizon,
+            risk_adjusted_roi_after_base_points: summary.simple_token_return_estimate?.risk_adjusted_roi_after_base_points,
+            risk_adjusted_annualized_return_after_base_points:
+              summary.simple_token_return_estimate?.risk_adjusted_annualized_return_after_base_points,
             risk_adjusted_annualized_return_after_expected_loss_and_exit:
               summary.quantitative_risk_return_layer?.risk_adjusted_annualized_return_after_expected_loss_and_exit,
           },

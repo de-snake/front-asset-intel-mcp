@@ -248,7 +248,9 @@
       "agent_display.underwriting_status",
       "agent_display.execution_automation_status",
       "agent_display.primary_blockers",
-      "agent_display.next_action"
+      "agent_display.next_action",
+      "agent_display.simple_token_return_display",
+      "agent_display.simple_token_return_estimate"
     ],
     "score_display": "35/100 asset-quality evidence",
     "score_sort": 35,
@@ -264,6 +266,89 @@
       "Oracle/accounting: Vault exchange-rate accounting can diverge from executable market value, apxUSD price, final USDC route, and receipt/eligibility state. Gearbox-specific oracle/support state is unresolved"
     ],
     "next_action": "Upgrade only if apxUSD collateral stress resolves, apyUSD market discount closes, receipt/claim state is confirmed, and wallet-specific APYx points EV exceeds 5.6168% of capital over 83 days.",
-    "table_note": "Direct apyUSD yield and PT-apyUSD fixed discount fail the old base-case risk adjustment before points."
+    "table_note": "Direct apyUSD yield and PT-apyUSD fixed discount fail the old base-case risk adjustment before points.",
+    "simple_token_return_display": "Organic ROI 2.82% over 83d + points ROI 0.27% - expected loss 4.00% (band 2.50%-6.10%) - exit 1.00% = risk-adjusted ROI -1.91% (band -4.01% to -0.41%; -8.41% annualized base)",
+    "simple_token_return_estimate": {
+      "scope": "direct_token_hold_not_pendle_pt",
+      "horizon_days": 83,
+      "organic_yield_apy_estimate": 0.13,
+      "organic_yield_apy_range_estimate": [
+        0.13,
+        0.13
+      ],
+      "organic_roi_over_horizon": 0.028182,
+      "estimated_points_roi_over_horizon": 0.0027,
+      "estimated_points_annualized_return": 0.011873,
+      "points_program": "APYx Pips",
+      "points_roi_scenarios_over_horizon": {
+        "low": 0.00012,
+        "base": 0.0027,
+        "high": 0.0252
+      },
+      "expected_loss_prior": 0.04,
+      "exit_cost_assumption": 0.01,
+      "risk_adjusted_roi_before_points": -0.021818,
+      "risk_adjusted_roi_after_base_points": -0.019118,
+      "risk_adjusted_annualized_return_after_base_points": -0.084073,
+      "underwriting_hurdle_net_annualized": 0.1,
+      "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+      "basis": "apyUSD organic yield uses the old 13% APY social/issuer-facing assumption. APYx Pips use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old 6.10% apyUSD/PT quant prior driven by apxUSD stress, wrapper receipt mechanics, exit fees/duration, and market discount.",
+      "confidence": "medium for organic APY as a source narrative; low for realized exit value and points accrual",
+      "evidence": [
+        "investment-analyst-report-points-pt-risk-return.md lines 24, 49-57, 79-82, 272-275",
+        "ethereum-apyusd/summary.asset_risk_v1.json quantitative_risk_return_layer"
+      ],
+      "expected_loss_prior_scenarios": {
+        "low": 0.025,
+        "base": 0.04,
+        "high": 0.061
+      },
+      "risk_adjusted_roi_scenarios_after_base_points": {
+        "low_loss": -0.004118,
+        "base": -0.019118,
+        "high_loss": -0.040118
+      }
+    }
+  },
+  "simple_token_return_estimate": {
+    "scope": "direct_token_hold_not_pendle_pt",
+    "horizon_days": 83,
+    "organic_yield_apy_estimate": 0.13,
+    "organic_yield_apy_range_estimate": [
+      0.13,
+      0.13
+    ],
+    "organic_roi_over_horizon": 0.028182,
+    "estimated_points_roi_over_horizon": 0.0027,
+    "estimated_points_annualized_return": 0.011873,
+    "points_program": "APYx Pips",
+    "points_roi_scenarios_over_horizon": {
+      "low": 0.00012,
+      "base": 0.0027,
+      "high": 0.0252
+    },
+    "expected_loss_prior": 0.04,
+    "exit_cost_assumption": 0.01,
+    "risk_adjusted_roi_before_points": -0.021818,
+    "risk_adjusted_roi_after_base_points": -0.019118,
+    "risk_adjusted_annualized_return_after_base_points": -0.084073,
+    "underwriting_hurdle_net_annualized": 0.1,
+    "method": "risk_adjusted_roi_after_base_points = organic_roi_over_horizon + estimated_points_roi_over_horizon - expected_loss_prior - exit_cost_assumption; annualized linearly over horizon_days for comparability with PT rows; expected_loss_prior_scenarios gives low/base/high expected-loss cases, and risk_adjusted_roi_scenarios_after_base_points recomputes the same formula with base points ROI under low-loss/base/high-loss cases.",
+    "basis": "apyUSD organic yield uses the old 13% APY social/issuer-facing assumption. APYx Pips use the old points-prior base case. The expected-loss base is de-pessimized for direct-token holding, while the high-loss case preserves the old 6.10% apyUSD/PT quant prior driven by apxUSD stress, wrapper receipt mechanics, exit fees/duration, and market discount.",
+    "confidence": "medium for organic APY as a source narrative; low for realized exit value and points accrual",
+    "evidence": [
+      "investment-analyst-report-points-pt-risk-return.md lines 24, 49-57, 79-82, 272-275",
+      "ethereum-apyusd/summary.asset_risk_v1.json quantitative_risk_return_layer"
+    ],
+    "expected_loss_prior_scenarios": {
+      "low": 0.025,
+      "base": 0.04,
+      "high": 0.061
+    },
+    "risk_adjusted_roi_scenarios_after_base_points": {
+      "low_loss": -0.004118,
+      "base": -0.019118,
+      "high_loss": -0.040118
+    }
   }
 }
