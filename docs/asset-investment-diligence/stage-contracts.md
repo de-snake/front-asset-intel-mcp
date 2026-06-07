@@ -265,9 +265,9 @@ Input contract:
 
 Output contract:
 
-- `investment-analysis/quantitative-underwriting-methodology.md`.
-- `investment-analysis/investment-analyst-report-points-pt-risk-return.md`.
-- `investment-analysis/index.md`.
+- `<run_artifact_root>/investment-analysis/quantitative-underwriting-methodology.md`.
+- `<run_artifact_root>/investment-analysis/investment-analyst-report-points-pt-risk-return.md`.
+- `<run_artifact_root>/investment-analysis/index.md`.
 
 Required calculations:
 

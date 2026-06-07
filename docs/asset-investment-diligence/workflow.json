@@ -160,9 +160,9 @@
       "delegate_to_subagent": false,
       "inputs": ["S2_reports", "S3_reports_optional", "S5_social_synthesis_optional", "investment_hurdles", "position_size", "horizon"],
       "outputs": [
-        "investment-analysis/quantitative-underwriting-methodology.md",
-        "investment-analysis/investment-analyst-report-points-pt-risk-return.md",
-        "investment-analysis/index.md"
+        "<run_artifact_root>/investment-analysis/quantitative-underwriting-methodology.md",
+        "<run_artifact_root>/investment-analysis/investment-analyst-report-points-pt-risk-return.md",
+        "<run_artifact_root>/investment-analysis/index.md"
       ],
       "handoff_summary_fields": ["risk_adjusted_returns", "expected_loss_priors", "points_break_even", "price_stability_scores", "decision_statuses", "live_inputs_needed"],
       "validation": ["PT ROI/APR formula present", "points EV formula present", "expected-loss model present", "risk-adjusted returns computed", "decision triggers named"]

@@ -68,7 +68,7 @@ A complete investment-decision run should end with:
 - PT technical report, analyst report, and verification inside each PT folder, if PTs are in scope;
 - social evidence reports under `x-research/`, if points/social are in scope;
 - social synthesis under `x-research/index.md`, if points/social are in scope;
-- quantitative methodology and investment analyst report under `investment-analysis/`;
+- quantitative methodology and investment analyst report under `<run_artifact_root>/investment-analysis/`;
 - final verification under `verification/final-investment-analysis-verification.md`.
 
 The user-facing answer should return the run folder path, final index path, token folders, PT folders, and final verification path.

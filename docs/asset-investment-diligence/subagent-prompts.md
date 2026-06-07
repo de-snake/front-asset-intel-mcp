@@ -231,9 +231,9 @@ Context:
 - Run artifact root: `[run_artifact_root]`.
 - Token directories: `[token_artifact_dirs]`.
 - PT market directories: `[pt_artifact_dirs]`.
-- Methodology output: `investment-analysis/quantitative-underwriting-methodology.md`.
-- Report output: `investment-analysis/investment-analyst-report-points-pt-risk-return.md`.
-- Index output: `investment-analysis/index.md`.
+- Methodology output: `[run_artifact_root]/investment-analysis/quantitative-underwriting-methodology.md`.
+- Report output: `[run_artifact_root]/investment-analysis/investment-analyst-report-points-pt-risk-return.md`.
+- Index output: `[run_artifact_root]/investment-analysis/index.md`.
 - Input token reports:
   - `[token_report_paths]`
 - Input PT reports, if applicable:

@@ -181,9 +181,9 @@ Required inputs:
 
 Required outputs under the run artifact root:
 
-- `investment-analysis/quantitative-underwriting-methodology.md`;
-- `investment-analysis/investment-analyst-report-points-pt-risk-return.md`;
-- `investment-analysis/index.md`.
+- `<run_artifact_root>/investment-analysis/quantitative-underwriting-methodology.md`;
+- `<run_artifact_root>/investment-analysis/investment-analyst-report-points-pt-risk-return.md`;
+- `<run_artifact_root>/investment-analysis/index.md`.
 
 Parent action after S6:
 

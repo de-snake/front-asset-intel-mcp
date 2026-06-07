@@ -120,9 +120,9 @@ Completed verification:
 
 Completed methodology and decision layer:
 
-- `investment-analysis/quantitative-underwriting-methodology.md`
-- `investment-analysis/investment-analyst-report-points-pt-risk-return.md`
-- `investment-analysis/index.md`
+- `<example_run_root>/investment-analysis/quantitative-underwriting-methodology.md`
+- `<example_run_root>/investment-analysis/investment-analyst-report-points-pt-risk-return.md`
+- `<example_run_root>/investment-analysis/index.md`
 
 Base-case outputs recorded in the analyst report:
 
