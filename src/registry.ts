@@ -2,6 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type {
+  AssetListItem,
   AssetLookupArgs,
   AssetManifest,
   AssetRegistryEntry,
@@ -9,6 +10,7 @@ import type {
   AssetReturnContext,
   AssetSummary,
   AssetSummaryDimension,
+  AvailableAssetsResult,
   DimensionPossibleGrade,
   QuantitativeRiskReturnLayer,
   RubricDefinition,
@@ -49,19 +51,138 @@ export async function listAssets(): Promise<AssetManifest[]> {
   return (await listAssetEntries()).map((entry) => entry.manifest);
 }
 
+function addLookupValue(values: Set<string>, value: string | undefined): void {
+  if (value?.trim()) values.add(value.trim());
+}
+
+function addressLookupValues(manifest: AssetManifest): string[] {
+  const values = new Set<string>();
+  for (const address of [manifest.address, manifest.market_address, manifest.pt_address]) {
+    addLookupValue(values, address);
+    if (address) addLookupValue(values, `${manifest.chain}:${address}`);
+  }
+  return Array.from(values);
+}
+
+function manifestLookupValues(manifest: AssetManifest): string[] {
+  const values = new Set<string>();
+  addLookupValue(values, manifest.asset_id);
+  addLookupValue(values, manifest.slug);
+  addLookupValue(values, manifest.symbol);
+  addLookupValue(values, manifest.display_name);
+
+  for (const value of addressLookupValues(manifest)) addLookupValue(values, value);
+  for (const alias of manifest.aliases ?? []) addLookupValue(values, alias);
+
+  return Array.from(values);
+}
+
 function manifestLookupKeys(manifest: AssetManifest): string[] {
-  const keys = new Set<string>();
-  keys.add(manifest.asset_id);
-  keys.add(manifest.slug);
-  keys.add(manifest.symbol);
-  keys.add(manifest.display_name);
+  return manifestLookupValues(manifest).map(normalizeLookupKey);
+}
 
-  if (manifest.address) keys.add(manifest.address);
-  if (manifest.market_address) keys.add(manifest.market_address);
-  if (manifest.pt_address) keys.add(manifest.pt_address);
-  for (const alias of manifest.aliases ?? []) keys.add(alias);
+function preferredAddressLookup(manifest: AssetManifest): string | undefined {
+  return manifest.address ?? manifest.market_address ?? manifest.pt_address;
+}
 
-  return Array.from(keys).map(normalizeLookupKey);
+function toAssetListItem(manifest: AssetManifest): AssetListItem {
+  const preferredAddress = preferredAddressLookup(manifest);
+  const recommended_calls: AssetListItem["recommended_calls"] = [
+    {
+      purpose: "Compact scoring / table / routing decision surface by known symbol",
+      tool: "get_asset_summary" as const,
+      arguments: { symbol: manifest.symbol },
+    },
+    {
+      purpose: "Full Markdown source report by known symbol",
+      tool: "get_asset_research" as const,
+      arguments: { symbol: manifest.symbol },
+    },
+  ];
+
+  if (preferredAddress) {
+    recommended_calls.push(
+      {
+        purpose: "Compact scoring / table / routing decision surface by known address",
+        tool: "get_asset_summary" as const,
+        arguments: { asset_id: preferredAddress },
+      },
+      {
+        purpose: "Full Markdown source report by known address",
+        tool: "get_asset_research" as const,
+        arguments: { asset_id: preferredAddress },
+      },
+    );
+  }
+
+  return {
+    asset_id: manifest.asset_id,
+    slug: manifest.slug,
+    asset_type: manifest.asset_type,
+    symbol: manifest.symbol,
+    display_name: manifest.display_name,
+    chain: manifest.chain,
+    chain_id: manifest.chain_id,
+    underlying_asset_id: manifest.underlying_asset_id,
+    addresses: {
+      token_address: manifest.address,
+      market_address: manifest.market_address,
+      pt_address: manifest.pt_address,
+      sy_address: manifest.sy_address,
+      yt_address: manifest.yt_address,
+    },
+    aliases: manifest.aliases ?? [],
+    accepted_lookup_values: manifestLookupValues(manifest),
+    recommended_calls,
+  };
+}
+
+export async function getAvailableAssets(): Promise<AvailableAssetsResult> {
+  const assets = (await listAssets()).map(toAssetListItem);
+  return {
+    endpoint: "list_available_assets",
+    available_asset_count: assets.length,
+    usage: {
+      purpose:
+        "Discovery endpoint for agents before calling asset intelligence tools. Use it to see which static, precomputed assets this MCP can answer about and which lookup strings are accepted.",
+      no_runtime_discovery:
+        "The server only serves local precomputed data. If an address or symbol is not listed here, get_asset_summary/get_asset_research cannot dynamically fetch or score it.",
+      summary_tool:
+        "Call get_asset_summary for compact JSON: rubric score, agent_display table fields, blockers, normalized return_context, and scoring-helper grade anchors.",
+      research_tool:
+        "Call get_asset_research for the full Markdown source report plus the same normalized return_context inline for auditability.",
+      if_agent_knows_symbol:
+        "Pass the known symbol or alias in the symbol argument, e.g. {\"symbol\":\"USDat\"} or {\"symbol\":\"PT-USDat\"}.",
+      if_agent_knows_address:
+        "Pass the known token address, Pendle market address, PT address, chain-prefixed address, canonical asset_id, or slug in the asset_id argument, e.g. {\"asset_id\":\"0x9afe7a057a09cf5da748d952078c9c99938b4329\"}.",
+      accepted_address_fields: ["address", "market_address", "pt_address"],
+      lookup_resolution:
+        "Lookup is case-insensitive and exact over asset_id, slug, symbol, display_name, aliases, token address, market address, PT address, and chain-prefixed forms like ethereum:0x....",
+      examples: [
+        {
+          purpose: "Summary by symbol when the agent already knows the ticker",
+          tool: "get_asset_summary",
+          arguments: { symbol: "USDat" },
+        },
+        {
+          purpose: "Research by symbol when source context is needed",
+          tool: "get_asset_research",
+          arguments: { symbol: "USDat" },
+        },
+        {
+          purpose: "Summary by known raw token/market/PT address",
+          tool: "get_asset_summary",
+          arguments: { asset_id: "0x9afe7a057a09cf5da748d952078c9c99938b4329" },
+        },
+        {
+          purpose: "Research by known chain-prefixed asset id/address",
+          tool: "get_asset_research",
+          arguments: { asset_id: "ethereum:0x23238f20b894f29041f48d88ee91131c395aaa71" },
+        },
+      ],
+    },
+    assets,
+  };
 }
 
 export async function resolveAsset(args: AssetLookupArgs): Promise<AssetRegistryEntry> {

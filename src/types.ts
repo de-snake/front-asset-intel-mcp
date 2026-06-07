@@ -26,6 +26,54 @@ export interface AssetLookupArgs {
   symbol?: string;
 }
 
+export type PublicAssetToolName = "get_asset_summary" | "get_asset_research";
+
+export interface AssetMethodCallExample {
+  purpose: string;
+  tool: PublicAssetToolName;
+  arguments: AssetLookupArgs;
+}
+
+export interface AssetMethodUsageGuide {
+  purpose: string;
+  no_runtime_discovery: string;
+  summary_tool: string;
+  research_tool: string;
+  if_agent_knows_symbol: string;
+  if_agent_knows_address: string;
+  accepted_address_fields: string[];
+  lookup_resolution: string;
+  examples: AssetMethodCallExample[];
+}
+
+export interface AssetListItem {
+  asset_id: string;
+  slug: string;
+  asset_type: AssetType;
+  symbol: string;
+  display_name: string;
+  chain: string;
+  chain_id: number;
+  underlying_asset_id?: string;
+  addresses: {
+    token_address?: string;
+    market_address?: string;
+    pt_address?: string;
+    sy_address?: string;
+    yt_address?: string;
+  };
+  aliases: string[];
+  accepted_lookup_values: string[];
+  recommended_calls: AssetMethodCallExample[];
+}
+
+export interface AvailableAssetsResult {
+  endpoint: "list_available_assets";
+  available_asset_count: number;
+  usage: AssetMethodUsageGuide;
+  assets: AssetListItem[];
+}
+
 export type EvidencePointer = string | { source: string; quote?: string };
 
 export interface RubricScoringOption {
